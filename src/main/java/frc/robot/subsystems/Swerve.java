@@ -27,7 +27,6 @@ import frc.lib.config.SwerveModuleConstants;
 public class Swerve extends SubsystemBase {
   private SwerveDrivePoseEstimator PoseEstimator;
 
-  private double[] pose;
 
   private final Pigeon2 gyro;
 
@@ -70,7 +69,7 @@ public class Swerve extends SubsystemBase {
             4.5, // Max module speed, in m/s
             0.4, // Drive base radius in meters. Distance from robot center to furthest module.
             new ReplanningConfig() // Default path replanning config. See the API for the options here
-        ),
+        ), () -> {return false;},
         this // Reference to this subsystem to set requirements
     );
     PoseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), positions, new Pose2d(15.8, 8.0, getYaw()));
@@ -153,10 +152,10 @@ public class Swerve extends SubsystemBase {
 
   @Override
   public void periodic() {
-    pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
-    double poseX = pose[0];
-    double poseY = pose[1];
-    Rotation2d poseR = Rotation2d.fromDegrees(pose[5]);
+    double[] pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
+    double poseX = -pose[0] + 8.27;
+    double poseY = -pose[1] + 4.105;
+    Rotation2d poseR = Rotation2d.fromDegrees(pose[5] - 180);
     double timeStamp = Timer.getFPGATimestamp() - (pose[6] / 1000.0);
 
     if (Math.abs(pose[0]) >= 0.1) {
