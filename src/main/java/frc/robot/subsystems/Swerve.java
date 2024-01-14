@@ -152,16 +152,22 @@ public class Swerve extends SubsystemBase {
 
   @Override
   public void periodic() {
-    double[] pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
-    double poseX = -pose[0] + 8.27;
-    double poseY = -pose[1] + 4.105;
-    Rotation2d poseR = Rotation2d.fromDegrees(pose[5] - 180);
-    double timeStamp = Timer.getFPGATimestamp() - (pose[6] / 1000.0);
 
-    if (Math.abs(pose[0]) >= 0.1) {
-      PoseEstimator.addVisionMeasurement(new Pose2d(poseX, poseY, poseR), timeStamp);
-      //PoseEstimator.resetPosition(poseR, getPositions(), new Pose2d(poseX, poseY, poseR));
+    double limelightid = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getDouble(-1.0);
+    if(limelightid<=16 && limelightid>=1){
+      double[] pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
+      double poseX = -pose[0] + 8.27;
+      double poseY = -pose[1] + 4.105;
+      Rotation2d poseR = Rotation2d.fromDegrees(pose[5] - 180);
+      double timeStamp = Timer.getFPGATimestamp() - (pose[6] / 1000.0);
+
+      if (Math.abs(pose[0]) >= 0.1) {
+        PoseEstimator.addVisionMeasurement(new Pose2d(poseX, poseY, poseR), timeStamp);
+        //PoseEstimator.resetPosition(poseR, getPositions(), new Pose2d(poseX, poseY, poseR));
+      }
     }
+
+   
 
     PoseEstimator.update(getYaw(), getPositions());
 
