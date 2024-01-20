@@ -127,7 +127,8 @@ public final class Constants {
   public static final class Subsystems {
     public static final int leftSide = 15;
     public static final int rightSide = 14;
-
+    public static final int leftSideIndex = 17;
+    public static final int rightSideIndex = 16;
   }
 
   public static final class AutoConstants {

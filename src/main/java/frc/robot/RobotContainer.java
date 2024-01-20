@@ -42,6 +42,7 @@ public class RobotContainer {
   /* Driver Buttons */
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
   private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton indexButton = new JoystickButton(driver, XboxController.Button.kB.value);
   private final JoystickButton goStraight = new JoystickButton(driver, XboxController.Button.kX.value);
 
   /* Subsystems */
@@ -84,7 +85,10 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     /* Driver Buttons */
-    goStraight.whileTrue(new InstantCommand(m_Shooter::Fire)).onFalse(new InstantCommand(m_Shooter::stop));
+    indexButton.whileTrue(new InstantCommand(m_Shooter::Index));
+    indexButton.onFalse(new InstantCommand(m_Shooter::stopIndex));
+    goStraight.onTrue(new InstantCommand(m_Shooter::Fire));
+    //goStraight.whileTrue(new InstantCommand(m_Shooter::Fire)).onFalse(new InstantCommand(m_Shooter::stop));
     zeroGyro.whileTrue(new InstantCommand(m_Shooter::In)).onFalse(new InstantCommand(m_Shooter::stop));
 
   }
