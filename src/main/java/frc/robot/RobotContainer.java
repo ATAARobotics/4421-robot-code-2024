@@ -43,16 +43,22 @@ public class RobotContainer {
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
   private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
   private final JoystickButton goStraight = new JoystickButton(driver, XboxController.Button.kX.value);
+  private final JoystickButton shoot = new JoystickButton(driver, XboxController.Button.kA.value);
 
   /* Subsystems */
   public final Swerve s_Swerve;
+  public Shooter s_Shooter;
   public SendableChooser<Command> autoChooser;
   public Command AutoCommand;
+  public Lighting s_Lighting;
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() { 
     s_Swerve = new Swerve();
+    s_Lighting = new Lighting(s_Swerve);
+    s_Shooter = new Shooter();
     s_Swerve.setDefaultCommand(
         new TeleopSwerve(
             s_Swerve,
@@ -89,6 +95,9 @@ public class RobotContainer {
             () -> 0,
             () -> 0,
             () -> robotCentric.getAsBoolean()));
+    shoot.onTrue(new InstantCommand(() -> s_Shooter.setSpeed(1.0)));
+    shoot.onFalse(new InstantCommand(() -> s_Shooter.setSpeed(0.0)));
+
   }
 
   /**
