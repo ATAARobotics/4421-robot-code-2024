@@ -87,9 +87,7 @@ public class RobotContainer {
     /* Driver Buttons */
     indexButton.whileTrue(new InstantCommand(m_Shooter::Index));
     indexButton.onFalse(new InstantCommand(m_Shooter::stopIndex));
-    goStraight.onTrue(new InstantCommand(m_Shooter::Fire));
     //goStraight.whileTrue(new InstantCommand(m_Shooter::Fire)).onFalse(new InstantCommand(m_Shooter::stop));
-    zeroGyro.whileTrue(new InstantCommand(m_Shooter::In)).onFalse(new InstantCommand(m_Shooter::stop));
 
   }
 
