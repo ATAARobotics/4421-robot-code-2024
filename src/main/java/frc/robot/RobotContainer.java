@@ -42,17 +42,21 @@ public class RobotContainer {
   /* Driver Buttons */
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
   private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton indexButton = new JoystickButton(driver, XboxController.Button.kB.value);
   private final JoystickButton goStraight = new JoystickButton(driver, XboxController.Button.kX.value);
 
   /* Subsystems */
   public final Swerve s_Swerve;
+  public final Shooter m_Shooter;
   public SendableChooser<Command> autoChooser;
   public Command AutoCommand;
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() { 
     s_Swerve = new Swerve();
+    m_Shooter = new Shooter();
     s_Swerve.setDefaultCommand(
         new TeleopSwerve(
             s_Swerve,
@@ -81,14 +85,10 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     /* Driver Buttons */
-    zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-    goStraight.whileTrue(
-        new TeleopSwerve(
-            s_Swerve,
-            () -> 0.25,
-            () -> 0,
-            () -> 0,
-            () -> robotCentric.getAsBoolean()));
+    indexButton.whileTrue(new InstantCommand(m_Shooter::Index));
+    indexButton.onFalse(new InstantCommand(m_Shooter::stopIndex));
+    //goStraight.whileTrue(new InstantCommand(m_Shooter::Fire)).onFalse(new InstantCommand(m_Shooter::stop));
+
   }
 
   /**

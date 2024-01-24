@@ -70,7 +70,7 @@ public class Swerve extends SubsystemBase {
             4.5, // Max module speed, in m/s
             0.4, // Drive base radius in meters. Distance from robot center to furthest module.
             new ReplanningConfig() // Default path replanning config. See the API for the options here
-        ),
+        ), () -> false,
         this // Reference to this subsystem to set requirements
     );
     PoseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), positions, new Pose2d(15.8, 8.0, getYaw()));
