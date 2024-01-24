@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkBase.ControlType;
 
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -34,65 +35,41 @@ public class Shooter extends SubsystemBase{
 
         SmartDashboard.putNumber("left velocity", leftShooter.getEncoder().getVelocity());
         SmartDashboard.putNumber("right velocity", rightShooter.getEncoder().getVelocity());
+        SmartDashboard.putNumber("left power", leftShooter.getAppliedOutput());
+        SmartDashboard.putNumber("right power", rightShooter.getAppliedOutput());
 
         
-        SmartDashboard.setDefaultNumber("Left Shooter", 0.5);
-        SmartDashboard.setDefaultNumber("Right Shooter", 0.5);
-        SmartDashboard.setDefaultNumber("Left Index", 0.5);
-        SmartDashboard.setDefaultNumber("Right Index", 0.5);
+        leftShooterPID.setP(Constants.Subsystems.shooterP);
+        leftShooterPID.setI(Constants.Subsystems.shooterI);
+        leftShooterPID.setD(Constants.Subsystems.shooterD);
+        leftShooterPID.setFF(Constants.Subsystems.shooterFF);
+        leftShooterPID.setIZone(2000);
 
-        SmartDashboard.setDefaultNumber("left shooter p", 1);
-        SmartDashboard.setDefaultNumber("left shooter i", 0);
-        SmartDashboard.setDefaultNumber("left shooter d", 0);
-        SmartDashboard.setDefaultNumber("left shooter ff", 0);
-
-        SmartDashboard.setDefaultNumber("right shooter p", 1);
-        SmartDashboard.setDefaultNumber("right shooter i", 0);
-        SmartDashboard.setDefaultNumber("right shooter d", 0);
-        SmartDashboard.setDefaultNumber("right shooter ff", 0);
-
-
-        
-        leftShooterPID.setP(SmartDashboard.getNumber("left shooter p", 1));
-        leftShooterPID.setI(SmartDashboard.getNumber("left shooter i", 0));
-        leftShooterPID.setD(SmartDashboard.getNumber("left shooter d", 0));
-        leftShooterPID.setFF(SmartDashboard.getNumber("left shooter ff", 0));
-
-        rightShooterPID.setP(SmartDashboard.getNumber("right shooter p", 1));
-        rightShooterPID.setI(SmartDashboard.getNumber("right shooter i", 0));
-        rightShooterPID.setD(SmartDashboard.getNumber("right shooter d", 0));
-        rightShooterPID.setFF(SmartDashboard.getNumber("right shooter ff", 0));
-
-
-        
+        rightShooterPID.setP(Constants.Subsystems.shooterP);
+        rightShooterPID.setI(Constants.Subsystems.shooterI);
+        rightShooterPID.setD(Constants.Subsystems.shooterD);
+        rightShooterPID.setFF(Constants.Subsystems.shooterFF);
+        rightShooterPID.setIZone(2000);
     }
+
 
     @Override
     public void periodic(){
         if(isFiring){
             // leftShooter.set(SmartDashboard.getNumber("Left Shooter", 0));
             // rightShooter.set(SmartDashboard.getNumber("Right Shooter", 0));
-
-            leftShooterPID.setReference(4000, ControlType.kVelocity);
-            rightShooterPID.setReference(4000, ControlType.kVelocity);
+ 
+            leftShooterPID.setReference(SmartDashboard.getNumber("Left Shooter Ref", 0), ControlType.kVelocity);
+            rightShooterPID.setReference(SmartDashboard.getNumber("Right Shooter Ref", 0), ControlType.kVelocity);
         }else{
             leftShooter.stopMotor();
             rightShooter.stopMotor();
         }
 
-        leftShooterPID.setP(SmartDashboard.getNumber("left shooter p", 0));
-        leftShooterPID.setI(SmartDashboard.getNumber("left shooter i", 0));
-        leftShooterPID.setD(SmartDashboard.getNumber("left shooter d", 0));
-        leftShooterPID.setFF(SmartDashboard.getNumber("left shooter ff", 0));
-
-        rightShooterPID.setP(SmartDashboard.getNumber("right shooter p", 0));
-        rightShooterPID.setI(SmartDashboard.getNumber("right shooter i", 0));
-        rightShooterPID.setD(SmartDashboard.getNumber("right shooter d", 0));
-        rightShooterPID.setFF(SmartDashboard.getNumber("right shooter ff", 0));
-    
-    
         SmartDashboard.putNumber("left velocity", leftShooter.getEncoder().getVelocity());
         SmartDashboard.putNumber("right velocity", rightShooter.getEncoder().getVelocity());
+        SmartDashboard.putNumber("left power", leftShooter.getAppliedOutput());
+        SmartDashboard.putNumber("right power", rightShooter.getAppliedOutput());
     }
 
     public void Fire(){
@@ -108,12 +85,11 @@ public class Shooter extends SubsystemBase{
     }
 
     public void In(){
-        //leftShooterPID.setReference(10000, ControlType.kVelocity);
-        //rightShooterPID.setReference(10000, ControlType.kVelocity);
         leftShooter.set(-0.2);
         rightShooter.set(-0.2);
     }
     public void stop(){
+        
         rightShooter.stopMotor();
         leftShooter.stopMotor();
         isFiring=false;
