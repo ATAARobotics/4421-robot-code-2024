@@ -125,6 +125,14 @@ public final class Constants {
   }
 
   public static final class Subsystems {
+    public static final int leftSide = 15;
+    public static final int rightSide = 14;
+    public static final int leftSideIndex = 17;
+    public static final int rightSideIndex = 16;
+    public static final double shooterP = 0.0007;
+    public static final double shooterI = 0.000001;
+    public static final double shooterD = 0.005;
+    public static final double shooterFF = 0.0001; 
     public static final int intake = 40;
   }
 

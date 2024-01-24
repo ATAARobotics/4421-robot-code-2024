@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.HashMap;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -68,6 +69,9 @@ public class RobotContainer {
     
     // Configure the button bindings
     autoChooser = AutoBuilder.buildAutoChooser();
+    
+    // Register pathplanner commands
+    NamedCommands.registerCommand("Fire Shooter", new ShooterFire(m_Shooter));
 
     // Another option that allows you to specify the default auto by its name
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
