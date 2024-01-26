@@ -16,6 +16,13 @@ public class Shooter extends SubsystemBase{
     public CANSparkFlex intake;
     private boolean isFiring = false;
 
+    public CANSparkFlex leftShooter;
+    public CANSparkFlex rightShooter;
+    public CANSparkFlex leftIndex;
+    public CANSparkFlex rightIndex;
+    public SparkPIDController leftShooterPID;
+    public SparkPIDController rightShooterPID;
+
     public Shooter(){
         leftShooter = new CANSparkFlex(Constants.Subsystems.leftSide, CANSparkLowLevel.MotorType.kBrushless);
         rightShooter = new CANSparkFlex(Constants.Subsystems.rightSide, CANSparkLowLevel.MotorType.kBrushless);
@@ -47,6 +54,11 @@ public class Shooter extends SubsystemBase{
         rightShooterPID.setIZone(2000);
         intake = new CANSparkFlex(Constants.Subsystems.intake, CANSparkLowLevel.MotorType.kBrushless);
         SmartDashboard.setDefaultNumber("Intake", 0.5);
+
+        SmartDashboard.putNumber("Left Shooter Ref", 5500);
+        SmartDashboard.putNumber("Right Shooter Ref", 5500);
+        SmartDashboard.putNumber("Left Index", 0.15);
+        SmartDashboard.putNumber("Right Index", 0.15);
     }
 
 
@@ -56,6 +68,10 @@ public class Shooter extends SubsystemBase{
             leftShooterPID.setReference(SmartDashboard.getNumber("Left Shooter Ref", 0), ControlType.kVelocity);
             rightShooterPID.setReference(SmartDashboard.getNumber("Right Shooter Ref", 0), ControlType.kVelocity);
         }else{
+            leftShooterPID.setReference(0, ControlType.kVelocity);
+            rightShooterPID.setReference(0, ControlType.kVelocity);
+            rightShooter.stopMotor();
+            leftShooter.stopMotor();
         }
 
         SmartDashboard.putNumber("left velocity", leftShooter.getEncoder().getVelocity());
@@ -68,16 +84,21 @@ public class Shooter extends SubsystemBase{
         isFiring = !isFiring;
     }
     public void Index(){
-        intake.set(SmartDashboard.getNumber("Intake", 0));
+        leftIndex.set(SmartDashboard.getNumber("Left Index", 0));
+        rightIndex.set(SmartDashboard.getNumber("Right Index", 0));
     }
     public void stopIndex(){
+        leftIndex.stopMotor();
+        rightIndex.stopMotor();
+    }
+
+    public void IntakeIn(){
+        intake.set(SmartDashboard.getNumber("Intake", 0));
+    }
+    public void IntakeStop(){
         intake.stopMotor();
     }
 
-    public void In(){
-        leftShooter.set(-0.2);
-        rightShooter.set(-0.2);
-    }
     public void stop(){ 
         rightShooter.stopMotor();
         leftShooter.stopMotor();

@@ -43,8 +43,10 @@ public class RobotContainer {
   /* Driver Buttons */
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
   private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-  private final JoystickButton indexButton = new JoystickButton(driver, XboxController.Button.kB.value);
-  private final JoystickButton goStraight = new JoystickButton(driver, XboxController.Button.kX.value);
+  private final JoystickButton intake = new JoystickButton(driver, XboxController.Button.kA.value);
+  private final JoystickButton runShooter = new JoystickButton(driver, XboxController.Button.kX.value);
+  private final JoystickButton runIndex = new JoystickButton(driver, XboxController.Button.kB.value);
+
 
   /* Subsystems */
   public final Swerve s_Swerve;
@@ -89,9 +91,11 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     /* Driver Buttons */
-    indexButton.whileTrue(new InstantCommand(m_Shooter::Index));
-    indexButton.onFalse(new InstantCommand(m_Shooter::stopIndex));
-    //goStraight.whileTrue(new InstantCommand(m_Shooter::Fire)).onFalse(new InstantCommand(m_Shooter::stop));
+    intake.whileTrue(new InstantCommand(m_Shooter::IntakeIn));
+    intake.onFalse(new InstantCommand(m_Shooter::IntakeStop));
+    runIndex.whileTrue(new InstantCommand(m_Shooter::Index));
+    runIndex.onFalse(new InstantCommand(m_Shooter::stopIndex));
+    runShooter.whileTrue(new InstantCommand(m_Shooter::Fire));
 
   }
 
