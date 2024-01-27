@@ -53,7 +53,7 @@ public class Shooter extends SubsystemBase{
         rightShooterPID.setFF(Constants.Subsystems.shooterFF);
         rightShooterPID.setIZone(2000);
         intake = new CANSparkFlex(Constants.Subsystems.intake, CANSparkLowLevel.MotorType.kBrushless);
-        SmartDashboard.setDefaultNumber("Intake", 0.5);
+        SmartDashboard.setDefaultNumber("Intake", -0.5);
 
         SmartDashboard.putNumber("Left Shooter Ref", 5500);
         SmartDashboard.putNumber("Right Shooter Ref", 5500);
@@ -68,8 +68,7 @@ public class Shooter extends SubsystemBase{
             leftShooterPID.setReference(SmartDashboard.getNumber("Left Shooter Ref", 0), ControlType.kVelocity);
             rightShooterPID.setReference(SmartDashboard.getNumber("Right Shooter Ref", 0), ControlType.kVelocity);
         }else{
-            leftShooterPID.setReference(0, ControlType.kVelocity);
-            rightShooterPID.setReference(0, ControlType.kVelocity);
+
             rightShooter.stopMotor();
             leftShooter.stopMotor();
         }
