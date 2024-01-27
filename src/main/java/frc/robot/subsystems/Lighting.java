@@ -44,53 +44,37 @@ public class Lighting extends SubsystemBase {
     
     @Override
     public void periodic() {
-
-        if(Robot.isTeleop) {
-
-            boolean hasNote = NetworkTableInstance.getDefault().getTable("sense").getEntry("note").getBoolean(false);
-            if(hasNote) {
-                ledController.setLEDs(0, 255, 0);
-            }
-            else {
-                ledController.setLEDs(0, 255, 255);
-            }
-        } 
-        else {
-            s_Swerve.getPose();
-
-            xDifference = targetX - s_Swerve.getPose().getX();
+            
+            double[] pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
+            double poseX = -pose[0] + 8.27;
+            double poseY = -pose[1] + 4.105;
+            Rotation2d poseR = Rotation2d.fromDegrees(pose[5] - 180);
+            double timeStamp = Timer.getFPGATimestamp() - (pose[6] / 1000.0);
+            xDifference = targetX - poseX;
+            yDifference = targetY - poseY;
+        
+            double distance = Math.sqrt(Math.pow(xDifference, 2) + Math.pow(yDifference, 2));
     
-            if (Math.abs(xDifference) < 2.0) {
-                int xColor = (int) Math.round(Math.abs(xDifference * 127));
-                ledController.setLEDs(xColor, 255 - xColor, 0, 10, 0, 45);
-            }
-            else {
-                ledController.setLEDs(200, 200, 200);
-            }
+            angleDifference = targetAngle - poseR.getDegrees();
     
-            yDifference = targetY - s_Swerve.getPose().getY();
-    
-            if (Math.abs(yDifference) < 2.0) {
-                int yColor = (int) Math.round(Math.abs(yDifference * 127));
-                ledController.setLEDs(yColor, 255 - yColor, 0, 10, 46, 90);
-            }
-            else {
-                ledController.setLEDs(200, 200, 200);
-            }
-    
-            angleDifference = targetAngle - s_Swerve.getPose().getRotation().getDegrees();
-    
+            int distColor;
             if (Math.abs(angleDifference) < 90) {
-                int angleColor = (int) Math.round(Math.abs(angleDifference * 2.83));
-                ledController.setLEDs(angleColor, 255 - angleColor, 0, 10, 91, 135);
+                if (Math.abs(distance) < 2.0) {
+                    distColor = (int) Math.round(Math.abs(distance * 127));
+                    
+                }
+                else {
+                    distColor = 2;
+                }
+                int angleInt = (int) Math.round(Math.abs(angleDifference * 1.915));
+                ledController.setLEDs(distColor, 255 - distColor, 0, 10, 0, angleInt + 65);
             }
             else {
-                ledController.setLEDs(200, 200, 200);
+                ledController.setLEDs(200, 200, 200, 0, 0, 65);
             }
         }
 
        
-    }
 
     
 
