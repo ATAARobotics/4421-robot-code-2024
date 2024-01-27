@@ -37,6 +37,8 @@ public class Lighting extends SubsystemBase {
         configAll.vBatOutputMode = VBatOutputMode.Off;
         ledController.configAllSettings(configAll, 100);
         ledController.setLEDs(200, 200, 200);
+
+        ledController.setLEDs(0, 0, 0);
         
         this.s_Swerve = s_Swerve;
         
@@ -57,21 +59,32 @@ public class Lighting extends SubsystemBase {
     
             angleDifference = targetAngle - poseR.getDegrees();
     
-            int distColor;
-            if (Math.abs(angleDifference) < 90) {
-                if (Math.abs(distance) < 2.0) {
-                    distColor = (int) Math.round(Math.abs(distance * 127));
+            int distColor = 0;
+            int angleInt = 0;
+            // if (Math.abs(angleDifference) < 90) {
+            //     if (Math.abs(distance) < 2.0) {
+            //         distColor = (int) Math.round(Math.abs(distance * 127));
                     
-                }
-                else {
-                    distColor = 2;
-                }
-                int angleInt = (int) Math.round(Math.abs(angleDifference * 1.915));
-                ledController.setLEDs(distColor, 255 - distColor, 0, 10, 0, angleInt + 65);
+            //     }
+            //     else {
+            //         distColor = 2;
+            //     }
+            //     int angleInt = (int) Math.round(Math.abs(angleDifference * 1.915));
+            //     ledController.setLEDs(distColor, 255 - distColor, 0, 10, 0, angleInt + 65);
+            // }
+            // else {
+            //     ledController.setLEDs(200, 200, 200, 0, 0, 65);
+            // }
+
+            if (distance < 4.0) {
+                distColor = (int) Math.round(Math.abs(distance * 63));
             }
-            else {
-                ledController.setLEDs(200, 200, 200, 0, 0, 65);
+
+            if (Math.abs(angleDifference) < 90) {
+                angleInt = (int) Math.round(Math.abs(angleDifference * 1.42));
             }
+
+            ledController.setLEDs(distColor, 255 - distColor, 0, 10, 0, angleInt + 64);
         }
 
        
