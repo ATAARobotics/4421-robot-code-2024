@@ -153,16 +153,16 @@ public class Swerve extends SubsystemBase {
 
   @Override
   public void periodic() {
-    pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
-    double poseX = pose[0];
-    double poseY = pose[1];
-    Rotation2d poseR = Rotation2d.fromDegrees(pose[5]);
-    double timeStamp = Timer.getFPGATimestamp() - (pose[6] / 1000.0);
+    // pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
+    // double poseX = pose[0];
+    // double poseY = pose[1];
+    // Rotation2d poseR = Rotation2d.fromDegrees(pose[5]);
+    // double timeStamp = Timer.getFPGATimestamp() - (pose[6] / 1000.0);
 
-    if (Math.abs(pose[0]) >= 0.1) {
-      PoseEstimator.addVisionMeasurement(new Pose2d(poseX, poseY, poseR), timeStamp);
-      //PoseEstimator.resetPosition(poseR, getPositions(), new Pose2d(poseX, poseY, poseR));
-    }
+    // if (Math.abs(pose[0]) >= 0.1) {
+    //   PoseEstimator.addVisionMeasurement(new Pose2d(poseX, poseY, poseR), timeStamp);
+    //   //PoseEstimator.resetPosition(poseR, getPositions(), new Pose2d(poseX, poseY, poseR));
+    // }
 
     PoseEstimator.update(getYaw(), getPositions());
 

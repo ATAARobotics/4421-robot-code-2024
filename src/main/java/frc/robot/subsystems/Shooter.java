@@ -13,33 +13,33 @@ import frc.robot.Constants;
 
 
 public class Shooter extends SubsystemBase{
-    public CANSparkFlex intake;
     private boolean isFiring = false;
 
     public CANSparkFlex leftShooter;
     public CANSparkFlex rightShooter;
-    public CANSparkFlex leftIndex;
-    public CANSparkFlex rightIndex;
+    // public CANSparkFlex indexRollder;
     public SparkPIDController leftShooterPID;
     public SparkPIDController rightShooterPID;
 
     public Shooter(){
         leftShooter = new CANSparkFlex(Constants.Subsystems.leftSide, CANSparkLowLevel.MotorType.kBrushless);
         rightShooter = new CANSparkFlex(Constants.Subsystems.rightSide, CANSparkLowLevel.MotorType.kBrushless);
-        leftIndex = new CANSparkFlex(Constants.Subsystems.leftSideIndex, CANSparkLowLevel.MotorType.kBrushless);
-        rightIndex = new CANSparkFlex(Constants.Subsystems.rightSideIndex, CANSparkLowLevel.MotorType.kBrushless);
-        
-        leftShooter.setInverted(true);
-        leftIndex.setInverted(true);
+        // indexRoller = new CANSparkFlex(0, CANSparkLowLevel.MotorType.kBrushed);
+        // leftIndex = new CANSparkFlex(Constants.Subsystems.leftSideIndex, CANSparkLowLevel.MotorType.kBrushless);
+        // rightIndex = new CANSparkFlex(Constants.Subsystems.rightSideIndex, CANSparkLowLevel.MotorType.kBrushless);
+    
 
         leftShooterPID = leftShooter.getPIDController();
         rightShooterPID = rightShooter.getPIDController();
 
-        SmartDashboard.putNumber("left velocity", leftShooter.getEncoder().getVelocity());
-        SmartDashboard.putNumber("right velocity", rightShooter.getEncoder().getVelocity());
-        SmartDashboard.putNumber("left power", leftShooter.getAppliedOutput());
-        SmartDashboard.putNumber("right power", rightShooter.getAppliedOutput());
+        SmartDashboard.setDefaultNumber("left power", 0);
+        SmartDashboard.setDefaultNumber("right power",0);
 
+        SmartDashboard.putNumber("left rpm", 0);
+        SmartDashboard.putNumber("right rpm", 0);
+        SmartDashboard.putNumber("left power% used", 0);
+        SmartDashboard.putNumber("right power% used", 0);
+        // SmartDashboard.setDefaultNumber("index power", 0);
         
         leftShooterPID.setP(Constants.Subsystems.shooterP);
         leftShooterPID.setI(Constants.Subsystems.shooterI);
@@ -52,52 +52,45 @@ public class Shooter extends SubsystemBase{
         rightShooterPID.setD(Constants.Subsystems.shooterD);
         rightShooterPID.setFF(Constants.Subsystems.shooterFF);
         rightShooterPID.setIZone(2000);
-        intake = new CANSparkFlex(Constants.Subsystems.intake, CANSparkLowLevel.MotorType.kBrushless);
-        SmartDashboard.setDefaultNumber("Intake", 0.5);
-
-        SmartDashboard.putNumber("Left Shooter Ref", 5500);
-        SmartDashboard.putNumber("Right Shooter Ref", 5500);
-        SmartDashboard.putNumber("Left Index", 0.15);
-        SmartDashboard.putNumber("Right Index", 0.15);
+        // intake = new CANSparkFlex(Constants.Subsystems.intake, CANSparkLowLevel.MotorType.kBrushless);
     }
 
 
     @Override
     public void periodic(){
         if(isFiring){
-            leftShooterPID.setReference(SmartDashboard.getNumber("Left Shooter Ref", 0), ControlType.kVelocity);
-            rightShooterPID.setReference(SmartDashboard.getNumber("Right Shooter Ref", 0), ControlType.kVelocity);
+            SmartDashboard.putNumber("right rpm", rightShooter.getEncoder().getVelocity());
+            SmartDashboard.putNumber("left rpm", leftShooter.getEncoder().getVelocity());
+            SmartDashboard.putNumber("right power% used", rightShooter.getAppliedOutput());
+            SmartDashboard.putNumber("left power% used", leftShooter.getAppliedOutput());
+
+
+            double lspower = SmartDashboard.getNumber("left power", 0);
+            double rspower = SmartDashboard.getNumber("right power", 0);
+            leftShooterPID.setReference(lspower, ControlType.kVelocity);
+            rightShooterPID.setReference(rspower, ControlType.kVelocity);
+
+            // leftShooter.set(lspower);
+            // rightShooter.set(rspower);
         }else{
             leftShooterPID.setReference(0, ControlType.kVelocity);
             rightShooterPID.setReference(0, ControlType.kVelocity);
             rightShooter.stopMotor();
             leftShooter.stopMotor();
         }
-
-        SmartDashboard.putNumber("left velocity", leftShooter.getEncoder().getVelocity());
-        SmartDashboard.putNumber("right velocity", rightShooter.getEncoder().getVelocity());
-        SmartDashboard.putNumber("left power", leftShooter.getAppliedOutput());
-        SmartDashboard.putNumber("right power", rightShooter.getAppliedOutput());
     }
 
     public void Fire(){
         isFiring = !isFiring;
     }
-    public void Index(){
-        leftIndex.set(SmartDashboard.getNumber("Left Index", 0));
-        rightIndex.set(SmartDashboard.getNumber("Right Index", 0));
-    }
-    public void stopIndex(){
-        leftIndex.stopMotor();
-        rightIndex.stopMotor();
-    }
 
-    public void IntakeIn(){
-        intake.set(SmartDashboard.getNumber("Intake", 0));
-    }
-    public void IntakeStop(){
-        intake.stopMotor();
-    }
+    // public void Index(){
+    //     double ipower = SmartDashboard.getNumber("index power", 0);
+    //     indexRollder.set(ipower);
+    // }
+    // public void stopIndex(){
+    //     indexRollder.stopMotor();
+    // }
 
     public void stop(){ 
         rightShooter.stopMotor();

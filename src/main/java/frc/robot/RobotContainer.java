@@ -47,9 +47,8 @@ public class RobotContainer {
   private final JoystickButton runShooter = new JoystickButton(driver, XboxController.Button.kX.value);
   private final JoystickButton runIndex = new JoystickButton(driver, XboxController.Button.kB.value);
 
-
   /* Subsystems */
-  public final Swerve s_Swerve;
+  // public final Swerve s_Swerve;
   public final Shooter m_Shooter;
   public SendableChooser<Command> autoChooser;
   public Command AutoCommand;
@@ -58,26 +57,26 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() { 
-    s_Swerve = new Swerve();
+    // s_Swerve = new Swerve();
     m_Shooter = new Shooter();
-    s_Swerve.setDefaultCommand(
-        new TeleopSwerve(
-            s_Swerve,
-            () -> -driver.getRawAxis(translationAxis),
-            () -> -driver.getRawAxis(strafeAxis),
-            () -> -driver.getRawAxis(rotationAxis),
-            () -> robotCentric.getAsBoolean()));
+    // s_Swerve.setDefaultCommand(
+    //     new TeleopSwerve(
+    //         s_Swerve,
+    //         () -> -driver.getRawAxis(translationAxis),
+    //         () -> -driver.getRawAxis(strafeAxis),
+    //         () -> -driver.getRawAxis(rotationAxis),
+    //         () -> robotCentric.getAsBoolean()));
 
     
     // Configure the button bindings
-    autoChooser = AutoBuilder.buildAutoChooser();
+    // autoChooser = AutoBuilder.buildAutoChooser();
     
     // Register pathplanner commands
     NamedCommands.registerCommand("Fire Shooter", new ShooterFire(m_Shooter));
 
     // Another option that allows you to specify the default auto by its name
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+    // SmartDashboard.putData("Auto Chooser", autoChooser);
     configureButtonBindings();
   }
 
@@ -91,12 +90,9 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     /* Driver Buttons */
-    intake.whileTrue(new InstantCommand(m_Shooter::IntakeIn));
-    intake.onFalse(new InstantCommand(m_Shooter::IntakeStop));
-    runIndex.whileTrue(new InstantCommand(m_Shooter::Index));
-    runIndex.onFalse(new InstantCommand(m_Shooter::stopIndex));
-    runShooter.whileTrue(new InstantCommand(m_Shooter::Fire));
-
+    runShooter.onTrue(new InstantCommand(m_Shooter::Fire));
+    // runIndex.whileTrue(new InstantCommand(m_Shooter::Index));
+    // runIndex.onFalse(new InstantCommand(m_Shooter::stopIndex));
   }
 
   /**
@@ -107,8 +103,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
   }
-  public Swerve getSwerve(){
-    return s_Swerve;
-  }
+  // public Swerve getSwerve(){
+  //   return s_Swerve;
+  // }
 }
   
