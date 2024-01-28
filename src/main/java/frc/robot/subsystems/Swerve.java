@@ -70,7 +70,7 @@ public class Swerve extends SubsystemBase {
             4.5, // Max module speed, in m/s
             0.4, // Drive base radius in meters. Distance from robot center to furthest module.
             new ReplanningConfig() // Default path replanning config. See the API for the options here
-        ), () -> false,
+        ), () -> true,
         this // Reference to this subsystem to set requirements
     );
     PoseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), positions, new Pose2d(15.8, 8.0, getYaw()));
@@ -153,20 +153,20 @@ public class Swerve extends SubsystemBase {
 
   @Override
   public void periodic() {
-    pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
-    double poseX = pose[0];
-    double poseY = pose[1];
-    Rotation2d poseR = Rotation2d.fromDegrees(pose[5]);
-    double timeStamp = Timer.getFPGATimestamp() - (pose[6] / 1000.0);
+    // pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
+    // double poseX = pose[0];
+    // double poseY = pose[1];
+    // Rotation2d poseR = Rotation2d.fromDegrees(pose[5]);
+    // double timeStamp = Timer.getFPGATimestamp() - (pose[6] / 1000.0);
 
-    if (Math.abs(pose[0]) >= 0.1) {
-      PoseEstimator.addVisionMeasurement(new Pose2d(poseX, poseY, poseR), timeStamp);
-      //PoseEstimator.resetPosition(poseR, getPositions(), new Pose2d(poseX, poseY, poseR));
-    }
+    // if (Math.abs(pose[0]) >= 0.1) {
+    //   PoseEstimator.addVisionMeasurement(new Pose2d(poseX, poseY, poseR), timeStamp);
+    //   //PoseEstimator.resetPosition(poseR, getPositions(), new Pose2d(poseX, poseY, poseR));
+    // }
 
-    PoseEstimator.update(getYaw(), getPositions());
+    // PoseEstimator.update(getYaw(), getPositions());
 
-    field.setRobotPose(getPose());
+    // field.setRobotPose(getPose());
     for (SwerveModule mod : mSwerveMods) {
       SmartDashboard.putNumber(
         // mod.getAngleOffset().getDegrees() is used to add angle offset to canCoder values

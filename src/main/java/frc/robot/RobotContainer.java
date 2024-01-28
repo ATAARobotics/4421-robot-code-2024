@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
@@ -60,6 +61,12 @@ public class RobotContainer {
   public RobotContainer() { 
     s_Swerve = new Swerve();
     m_Shooter = new Shooter();
+    // Register pathplanner commands
+    NamedCommands.registerCommand("Fire Shooter", new InstantCommand(m_Shooter::Fire));
+    NamedCommands.registerCommand("Intake", new InstantCommand(m_Shooter::IntakeIn));
+    NamedCommands.registerCommand("Index", new InstantCommand(m_Shooter::Index));
+    NamedCommands.registerCommand("Stop Index", new InstantCommand(m_Shooter::stopIndex));
+
     s_Swerve.setDefaultCommand(
         new TeleopSwerve(
             s_Swerve,
@@ -72,8 +79,7 @@ public class RobotContainer {
     // Configure the button bindings
     autoChooser = AutoBuilder.buildAutoChooser();
     
-    // Register pathplanner commands
-    NamedCommands.registerCommand("Fire Shooter", new ShooterFire(m_Shooter));
+
 
     // Another option that allows you to specify the default auto by its name
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
@@ -91,11 +97,10 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     /* Driver Buttons */
-    intake.whileTrue(new InstantCommand(m_Shooter::IntakeIn));
-    intake.onFalse(new InstantCommand(m_Shooter::IntakeStop));
-    runIndex.whileTrue(new InstantCommand(m_Shooter::Index));
+    intake.onTrue(new InstantCommand(m_Shooter::IntakeIn));
+    runIndex.whileTrue(new RunCommand(m_Shooter::Index));
     runIndex.onFalse(new InstantCommand(m_Shooter::stopIndex));
-    runShooter.whileTrue(new InstantCommand(m_Shooter::Fire));
+    runShooter.onTrue(new InstantCommand(m_Shooter::Fire));
 
   }
 
