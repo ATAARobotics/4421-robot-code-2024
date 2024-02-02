@@ -35,6 +35,9 @@ public class Swerve extends SubsystemBase {
 
   private Field2d field;
 
+  private Pose2d lastPose;
+  private Pose2d vecPose;
+  private double lastTimeStamp = 0;
   public Swerve() {
     gyro = new Pigeon2(Constants.Swerve.pigeonID);
     gyro.configFactoryDefault();
@@ -74,6 +77,7 @@ public class Swerve extends SubsystemBase {
         this // Reference to this subsystem to set requirements
     );
     PoseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), positions, new Pose2d(15.8, 8.0, getYaw()));
+    lastPose = PoseEstimator.getEstimatedPosition();
   }
 
   public void drive(
@@ -165,6 +169,8 @@ public class Swerve extends SubsystemBase {
     }
 
     PoseEstimator.update(getYaw(), getPositions());
+    vecPose = new Pose2d((PoseEstimator.getEstimatedPosition().getX() - lastPose.getX())/ (Timer.getFPGATimestamp()-lastTimeStamp), (PoseEstimator.getEstimatedPosition().getY() - lastPose.getY())/(Timer.getFPGATimestamp()-lastTimeStamp), PoseEstimator.getEstimatedPosition().getRotation());
+    lastTimeStamp = Timer.getFPGATimestamp();
 
     field.setRobotPose(getPose());
     for (SwerveModule mod : mSwerveMods) {
@@ -179,4 +185,7 @@ public class Swerve extends SubsystemBase {
           "Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond );
     }
   }
+ public Pose2d getVelocity(){
+    return vecPose;
+ }
 }
