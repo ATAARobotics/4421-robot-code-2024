@@ -91,8 +91,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     /* Driver Buttons */
     runShooter.onTrue(new InstantCommand(m_Shooter::Fire));
-    // runIndex.whileTrue(new InstantCommand(m_Shooter::Index));
-    // runIndex.onFalse(new InstantCommand(m_Shooter::stopIndex));
+    runIndex.whileTrue(new InstantCommand(m_Shooter::Index));
+    runIndex.onFalse(new InstantCommand(m_Shooter::stopIndex));
   }
 
   /**

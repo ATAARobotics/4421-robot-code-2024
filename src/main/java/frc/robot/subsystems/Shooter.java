@@ -17,14 +17,14 @@ public class Shooter extends SubsystemBase{
 
     public CANSparkFlex leftShooter;
     public CANSparkFlex rightShooter;
-    // public CANSparkFlex indexRollder;
+    public CANSparkFlex indexRollder;
     public SparkPIDController leftShooterPID;
     public SparkPIDController rightShooterPID;
 
     public Shooter(){
         leftShooter = new CANSparkFlex(Constants.Subsystems.leftSide, CANSparkLowLevel.MotorType.kBrushless);
         rightShooter = new CANSparkFlex(Constants.Subsystems.rightSide, CANSparkLowLevel.MotorType.kBrushless);
-        // indexRoller = new CANSparkFlex(0, CANSparkLowLevel.MotorType.kBrushed);
+        indexRollder = new CANSparkFlex(17, CANSparkLowLevel.MotorType.kBrushless);
         // leftIndex = new CANSparkFlex(Constants.Subsystems.leftSideIndex, CANSparkLowLevel.MotorType.kBrushless);
         // rightIndex = new CANSparkFlex(Constants.Subsystems.rightSideIndex, CANSparkLowLevel.MotorType.kBrushless);
     
@@ -39,7 +39,7 @@ public class Shooter extends SubsystemBase{
         SmartDashboard.putNumber("right rpm", 0);
         SmartDashboard.putNumber("left power% used", 0);
         SmartDashboard.putNumber("right power% used", 0);
-        // SmartDashboard.setDefaultNumber("index power", 0);
+        SmartDashboard.setDefaultNumber("index power", 0);
         
         leftShooterPID.setP(Constants.Subsystems.shooterP);
         leftShooterPID.setI(Constants.Subsystems.shooterI);
@@ -65,8 +65,8 @@ public class Shooter extends SubsystemBase{
             SmartDashboard.putNumber("left power% used", leftShooter.getAppliedOutput());
 
 
-            double lspower = SmartDashboard.getNumber("left power", 0);
-            double rspower = SmartDashboard.getNumber("right power", 0);
+            double lspower = SmartDashboard.getNumber("left power", 4000);
+            double rspower = SmartDashboard.getNumber("right power", 4000);
             leftShooterPID.setReference(lspower, ControlType.kVelocity);
             rightShooterPID.setReference(rspower, ControlType.kVelocity);
 
@@ -84,13 +84,13 @@ public class Shooter extends SubsystemBase{
         isFiring = !isFiring;
     }
 
-    // public void Index(){
-    //     double ipower = SmartDashboard.getNumber("index power", 0);
-    //     indexRollder.set(ipower);
-    // }
-    // public void stopIndex(){
-    //     indexRollder.stopMotor();
-    // }
+    public void Index(){
+        double ipower = SmartDashboard.getNumber("index power", 0.15);
+        indexRollder.set(ipower);
+    }
+    public void stopIndex(){
+        indexRollder.stopMotor();
+    }
 
     public void stop(){ 
         rightShooter.stopMotor();
