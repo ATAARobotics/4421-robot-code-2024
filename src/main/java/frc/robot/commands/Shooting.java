@@ -6,12 +6,14 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.*;
 
 public class Shooting extends Command {
     private Pose3d robotPose;
-    private Translation3d goalPose = new Translation3d(12 , 12, 0);
+    private Translation3d BluegoalPose = new Translation3d(-0.1651, 5.5408, 2.2);
+    private Translation3d RedgoalPose = new Translation3d(16.706342, 5.5408, 2.2);
     private Pose3d goalVelociety;
     private double robotAngle;
     private double shooterAngle;
@@ -20,10 +22,61 @@ public class Shooting extends Command {
     private Swerve mSwerve;
     
     private PIDController rotController = new PIDController(1.0, 0.15, 0);
-    public Shooting(Shooter m_shooter, Swerve m_swerve){
-        mShooter = m_shooter;
-        mSwerve = m_swerve;
-    }
+//     public Shooting(Shooter m_shooter, Swerve m_swerve){
+//         mShooter = m_shooter;
+//         mSwerve = m_swerve;
+//     }
+     public Shooting(){
+         // # g = 9.81
+          // # A = proj_pos.x
+          // # B = proj_pos.y
+          // # C = proj_ pos.z
+          // # M = target_pos.X
+          // # N = target_pos.y
+          // # O = target_pos.z
+          // # P = target_velocity.x
+          // # Q = target_velocity.y
+          // # R = target_velocity.z
+          // # S = proj_speed;
+          double G = 9.81;
+          // double A = mSwerve.getPose().getX();
+          // double B = mSwerve.getPose().getY();
+          double A = 13.556742;
+          double B = 5.9472;
+          double C = 0.4572;
+          //TODO change goal pose to be set based on color
+          double M = RedgoalPose.getX();
+          double N = RedgoalPose.getY();
+          double O = RedgoalPose.getY();
+
+          // double P = -mSwerve.getVelocity().getX();
+          // double Q = -mSwerve.getVelocity().getY();
+          double P = 0;
+          double Q = 0;
+          double R = 0;
+          double S = 30;
+
+          double H = M - A;
+          double J = O - C;
+          double K = N - B;
+          double L = -0.5 * G;
+
+          double c0 = L*L;
+          double c1 = -2*Q*L;
+          double c2 = Q*Q - 2*K*L - S*S + P*P + R*R;
+          double c3 = 2*K*Q + 2*H*P + 2*J*R;
+          double c4 = K*K + H*H + J*J;
+          System.out.println("1: " +c0 +"  2: "+ c1 + " 3: " + c2 + " 4: " + c3 + " 5: " + c4);
+
+          double t = solveRealQuarticRoots(c0, c1, c2, c3, c4)[0];
+          double d = ((H+P*t)/t);
+          double e = ((K+Q*t-L*t*t)/t);
+          double f = ((J+R*t)/t);
+          
+          System.out.println("d: " + d);
+          System.out.println("e: " + e);
+          System.out.println("f: " + f);
+     }
 
     @Override
     public void initialize(){
@@ -32,50 +85,55 @@ public class Shooting extends Command {
 
     @Override
     public void execute(){
-        mSwerve.getVelocity();
-        mSwerve.getPose();
-        // # g = 9.81
-        // # A = proj_pos.x
-        // # B = proj_pos.y
-        // # C = proj_ pos.z
-        // # M = target_pos.X
-        // # N = target_pos.y
-        // # O = target_pos.z
-        // # P = target_velocity.x
-        // # Q = target_velocity.y
-        // # R = target_velocity.z
-        // # S = proj_speed;
-        double G = 9.81;
-        double A = mSwerve.getPose().getX();
-        double B = mSwerve.getPose().getY();
-        double C = 1;
-        double M = goalPose.getX();
-        double N = goalPose.getY();
-        double O = goalPose.getY();
-        double P = -mSwerve.getVelocity().getX();
-        double Q = -mSwerve.getVelocity().getY();
-        double R = 0;
-        double S = 30;
-        
-        double H = M - A;
-        double J = O - C;
-        double K = N - B;
-        double L = -0.5 * G;
-        
-        double c0 = L*L;
-        double c1 = -2*Q*L;
-        double c2 = Q*Q - 2*K*L - S*S + P*P + R*R;
-        double c3 = 2*K*Q + 2*H*P + 2*J*R;
-        double c4 = K*K + H*H + J*J;
-        
-        double t = solveRealQuarticRoots(c0, c1, c2, c3, c4)[-1];
-        double d = ((H+P*t)/t);
-        double e = ((K+Q*t-L*t*t)/t);
-        double f = ((J+R*t)/t);
+          // # g = 9.81
+          // # A = proj_pos.x
+          // # B = proj_pos.y
+          // # C = proj_ pos.z
+          // # M = target_pos.X
+          // # N = target_pos.y
+          // # O = target_pos.z
+          // # P = target_velocity.x
+          // # Q = target_velocity.y
+          // # R = target_velocity.z
+          // # S = proj_speed;
+          double G = 9.81;
+          // double A = mSwerve.getPose().getX();
+          // double B = mSwerve.getPose().getY();
+          double A = 13.556742;
+          double B = 5.9472;
+          double C = 0.4572;
+          //TODO change goal pose to be set based on color
+          double M = RedgoalPose.getX();
+          double N = RedgoalPose.getY();
+          double O = RedgoalPose.getY();
 
-        
-        double rot = rotController.calculate(mSwerve.getYaw().getRadians());
-        mSwerve.drive(new Translation2d(0, 0), rot, true, false);
+          // double P = -mSwerve.getVelocity().getX();
+          // double Q = -mSwerve.getVelocity().getY();
+          double P = 0;
+          double Q = 0;
+          double R = 0;
+          double S = 30;
+
+          double H = M - A;
+          double J = O - C;
+          double K = N - B;
+          double L = -0.5 * G;
+
+          double c0 = L*L;
+          double c1 = -2*Q*L;
+          double c2 = Q*Q - 2*K*L - S*S + P*P + R*R;
+          double c3 = 2*K*Q + 2*H*P + 2*J*R;
+          double c4 = K*K + H*H + J*J;
+          System.out.println("1: " +c0 +"  2: "+ c1 + " 3: " + c2 + " 4: " + c3 + " 5: " + c4);
+          double t = solveRealQuarticRoots(c0, c1, c2, c3, c4)[-1];
+          double d = ((H+P*t)/t);
+          double e = ((K+Q*t-L*t*t)/t);
+          double f = ((J+R*t)/t);
+          
+          System.out.println("d: " + d);
+          System.out.println("e: " + e);
+          System.out.println("f: " + f);
+
     }
 
     public static double[] solveRealQuarticRoots(double a, double b, double c, double d, double e) {

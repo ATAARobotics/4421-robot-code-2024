@@ -49,7 +49,7 @@ public class RobotContainer {
 
 
   /* Subsystems */
-  public final Swerve s_Swerve;
+  // public final Swerve s_Swerve;
   public final Shooter m_Shooter;
   public SendableChooser<Command> autoChooser;
   public Command AutoCommand;
@@ -58,15 +58,17 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() { 
-    s_Swerve = new Swerve();
+    new Shooting().schedule();
+    System.out.println("damn it");
+    // s_Swerve = new Swerve();
     m_Shooter = new Shooter();
-    s_Swerve.setDefaultCommand(
-        new TeleopSwerve(
-            s_Swerve,
-            () -> -driver.getRawAxis(translationAxis),
-            () -> -driver.getRawAxis(strafeAxis),
-            () -> -driver.getRawAxis(rotationAxis),
-            () -> robotCentric.getAsBoolean()));
+    // s_Swerve.setDefaultCommand(
+    //     new TeleopSwerve(
+    //         s_Swerve,
+    //         () -> -driver.getRawAxis(translationAxis),
+    //         () -> -driver.getRawAxis(strafeAxis),
+    //         () -> -driver.getRawAxis(rotationAxis),
+    //         () -> robotCentric.getAsBoolean()));
 
     
     // Configure the button bindings
@@ -107,8 +109,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
   }
-  public Swerve getSwerve(){
-    return s_Swerve;
-  }
+  // public Swerve getSwerve(){
+  //   return s_Swerve;
+  // }
 }
   
