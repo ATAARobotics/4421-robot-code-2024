@@ -56,7 +56,7 @@ public class RobotContainer {
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
-  public RobotContainer() { 
+  public RobotContainer() {
     // s_Swerve = new Swerve();
     m_Shooter = new Shooter();
     // s_Swerve.setDefaultCommand(
@@ -72,7 +72,7 @@ public class RobotContainer {
     // autoChooser = AutoBuilder.buildAutoChooser();
     
     // Register pathplanner commands
-    NamedCommands.registerCommand("Fire Shooter", new ShooterFire(m_Shooter));
+    // NamedCommands.registerCommand("Fire Shooter", new ShooterFire(m_Shooter));
 
     // Another option that allows you to specify the default auto by its name
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
@@ -91,7 +91,10 @@ public class RobotContainer {
   private void configureButtonBindings() {
     /* Driver Buttons */
     runShooter.onTrue(new InstantCommand(m_Shooter::Fire));
-    // runIndex.whileTrue(new InstantCommand(m_Shooter::Index));
+    runIndex.onTrue(new InstantCommand(m_Shooter::Index));
+    runIndex.onFalse(new InstantCommand(m_Shooter::stopIndex));
+    intake.onTrue(new InstantCommand(m_Shooter::reverseFire));
+       // runIndex.whileTrue(new InstantCommand(m_Shooter::Index));
     // runIndex.onFalse(new InstantCommand(m_Shooter::stopIndex));
   }
 
