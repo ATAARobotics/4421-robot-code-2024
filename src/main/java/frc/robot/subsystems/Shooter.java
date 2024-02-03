@@ -56,7 +56,7 @@ public class Shooter extends SubsystemBase{
         SmartDashboard.putNumber("right check rpm", 0);
         SmartDashboard.putNumber("left power% used", 0);
         SmartDashboard.putNumber("right power% used", 0);
-        // SmartDashboard.setDefaultNumber("index power", 0);
+        SmartDashboard.setDefaultNumber("index power", 0);
         
         leftShooterPID.setP(Constants.Subsystems.shooterP);
         leftShooterPID.setI(Constants.Subsystems.shooterI);
