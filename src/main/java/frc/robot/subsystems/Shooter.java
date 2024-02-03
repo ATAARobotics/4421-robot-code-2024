@@ -92,7 +92,7 @@ public class Shooter extends SubsystemBase{
     }
 
     public void IntakeIn(){
-        intake.set(SmartDashboard.getNumber("Intake", 0));
+        intake.set(-SmartDashboard.getNumber("Intake", 0));
     }
     public void IntakeStop(){
         intake.stopMotor();
