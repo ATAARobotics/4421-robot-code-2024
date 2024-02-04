@@ -193,4 +193,7 @@ public class Swerve extends SubsystemBase {
           "Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond );
     }
   }
+  public Pose2d getVelocity(){
+    return new Pose2d((PoseEstimator.getEstimatedPosition().getX() - lastPose.getX())/ (Timer.getFPGATimestamp()-lastTimeStamp), (PoseEstimator.getEstimatedPosition().getY() - lastPose.getY())/(Timer.getFPGATimestamp()-lastTimeStamp), PoseEstimator.getEstimatedPosition().getRotation());
+ }
 }
