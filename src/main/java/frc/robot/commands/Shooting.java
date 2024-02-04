@@ -42,23 +42,26 @@ public class Shooting extends Command {
           // double A = mSwerve.getPose().getX();
           // double B = mSwerve.getPose().getY();
           double A = 13.556742;
-          double B = 5.9472;
+          // double B = 5.9472;
+          // double B = 5.5408;
+          double B = 0.0;
           double C = 0.4572;
           //TODO change goal pose to be set based on color
           double M = RedgoalPose.getX();
-          double N = RedgoalPose.getY();
-          double O = RedgoalPose.getY();
+          // double N = RedgoalPose.getY();
+          double N = 0.0;
+          double O = RedgoalPose.getZ();
 
           // double P = -mSwerve.getVelocity().getX();
           // double Q = -mSwerve.getVelocity().getY();
           double P = 0;
           double Q = 0;
           double R = 0;
-          double S = 30;
+          double S = 15.2;
 
           double H = M - A;
-          double J = O - C;
           double K = N - B;
+          double J = O - C;
           double L = -0.5 * G;
 
           double c0 = L*L;
@@ -68,10 +71,22 @@ public class Shooting extends Command {
           double c4 = K*K + H*H + J*J;
           System.out.println("1: " +c0 +"  2: "+ c1 + " 3: " + c2 + " 4: " + c3 + " 5: " + c4);
 
-          double t = solveRealQuarticRoots(c0, c1, c2, c3, c4)[0];
+          double[] ts = solveQuartic(c4, c3, c2, c1, c0);
+          double t = 100;
+          for (int i=0; i<ts.length; i++){
+               if (ts[i] >= 0 & ts[i]<t){
+                    t = ts[i];
+               }
+          }
+          System.out.println("Root: " + t);
+
           double d = ((H+P*t)/t);
           double e = ((K+Q*t-L*t*t)/t);
           double f = ((J+R*t)/t);
+
+          double angle = Math.atan2(f, Math.sqrt(Math.pow(e,2) + Math.pow(e,2)));
+
+          System.out.println(Math.toDegrees(angle));
           
           System.out.println("d: " + d);
           System.out.println("e: " + e);
@@ -112,7 +127,7 @@ public class Shooting extends Command {
           double P = 0;
           double Q = 0;
           double R = 0;
-          double S = 30;
+          double S = 5;
 
           double H = M - A;
           double J = O - C;
@@ -125,7 +140,7 @@ public class Shooting extends Command {
           double c3 = 2*K*Q + 2*H*P + 2*J*R;
           double c4 = K*K + H*H + J*J;
           System.out.println("1: " +c0 +"  2: "+ c1 + " 3: " + c2 + " 4: " + c3 + " 5: " + c4);
-          double t = solveRealQuarticRoots(c0, c1, c2, c3, c4)[-1];
+          double t = solveQuartic(c4, c3, c2, c1, c0)[-1];
           double d = ((H+P*t)/t);
           double e = ((K+Q*t-L*t*t)/t);
           double f = ((J+R*t)/t);
@@ -136,58 +151,103 @@ public class Shooting extends Command {
 
     }
 
-    public static double[] solveRealQuarticRoots(double a, double b, double c, double d, double e) {
-        double s1 = 2 * c * c * c - 9 * b * c * d + 27 * (a * d * d + b * b * e) - 72 * a * c * e, q1 = c * c - 3 * b * d + 12 * a * e;
-        double discrim1 = -4 * q1 * q1 * q1 + s1 * s1;
-        if(discrim1 >0) {
-            double s2 = s1 + Math.sqrt(discrim1);
-            double q2 = Math.cbrt(s2 / 2);
-            double s3 = q1 / (3 * a * q2) + q2 / (3 * a);
-            double discrim2 = (b * b) / (4 * a * a) - (2 * c) / (3 * a) + s3;
-            if(discrim2>0) {
-                double s4 = Math.sqrt(discrim2);
-                double s5 = (b * b) / (2 * a * a) - (4 * c) / (3 * a) - s3;
-                double s6 = (-(b * b * b) / (a * a * a) + (4 * b * c) / (a * a) - (8 * d) / a) / (4 * s4);
-                double discrim3 = (s5 - s6), discrim4 = (s5 + s6);
-                // actual root values, may not be set
-                double r1 = 0, r2 = 0, r3 =0, r4=0; 
-    
-                if(discrim3 > 0) {
-                     double sqrt1 = Math.sqrt(s5-s6);
-                     r1 = -b / (4 * a) - s4/2 + sqrt1 / 2;
-                     r2 = -b / (4 * a) - s4/2 - sqrt1 / 2;
-                } else if(discrim3 == 0) {
-                     // repeated root case
-                     r1 = -b / (4 * a) - s4/2;
-                }
-                if(discrim4 > 0) {
-                     double sqrt2 = Math.sqrt(s5+s6);
-                     r3 = -b / (4 * a) + s4/2 + sqrt2 / 2;
-                     r4 = -b / (4 * a) + s4/2 - sqrt2 / 2;
-                } else if(discrim4 ==0) {
-                     r3 = -b / (4 * a) + s4/2;
-                }
-                if(discrim3 > 0 && discrim4 > 0) {
-                    return new double[]{r1,r2,r3,r4};
-                }
-                else if( discrim3 > 0 && discrim4 == 0 )
-                     return new double[]{r1,r2,r3};
-                else if( discrim3 > 0 && discrim4 < 0 )
-                     return new double[]{r1,r2};
-                else if( discrim3 == 0 && discrim4 > 0 )
-                     return new double[]{r1,r3,r4};
-                else if( discrim3 == 0 && discrim4 == 0 )
-                     return new double[]{r1,r3};
-                else if( discrim3 == 0 && discrim4 < 0 )
-                     return new double[]{r1};
-                else if( discrim3 < 0 && discrim4 > 0 )
-                     return new double[]{r3,r4};
-                else if( discrim3 < 0 && discrim4 == 0 )
-                     return new double[]{r3};
-                else if( discrim3 < 0 && discrim4 < 0 )
-                     return new double[0];
-           } 
-       }
-       return new double[0];
-    }
+    public static double[] solveQuartic(double a, double b, double c, double d, double e) {
+          double inva = 1 / a;
+          double c1 = b * inva;
+          double c2 = c * inva;
+          double c3 = d * inva;
+          double c4 = e * inva;
+          // cubic resolvant
+          double c12 = c1 * c1;
+          double p = -0.375 * c12 + c2;
+          double q = 0.125 * c12 * c1 - 0.5 * c1 * c2 + c3;
+          double r = -0.01171875 * c12 * c12 + 0.0625 * c12 * c2 - 0.25 * c1 * c3 + c4;
+          double z = solveCubicForQuartic(-0.5 * p, -r, 0.5 * r * p - 0.125 * q * q);
+          double d1 = 2.0 * z - p;
+          if (d1 < 0) {
+          if (d1 > 1.0e-10)
+               d1 = 0;
+          else
+               return null;
+          }
+          double d2;
+          if (d1 < 1.0e-10) {
+          d2 = z * z - r;
+          if (d2 < 0)
+               return null;
+          d2 = Math.sqrt(d2);
+          } else {
+          d1 = Math.sqrt(d1);
+          d2 = 0.5 * q / d1;
+          }
+          // setup usefull values for the quadratic factors
+          double q1 = d1 * d1;
+          double q2 = -0.25 * c1;
+          double pm = q1 - 4 * (z - d2);
+          double pp = q1 - 4 * (z + d2);
+          if (pm >= 0 && pp >= 0) {
+          // 4 roots (!)
+          pm = Math.sqrt(pm);
+          pp = Math.sqrt(pp);
+          double[] results = new double[4];
+          results[0] = -0.5 * (d1 + pm) + q2;
+          results[1] = -0.5 * (d1 - pm) + q2;
+          results[2] = 0.5 * (d1 + pp) + q2;
+          results[3] = 0.5 * (d1 - pp) + q2;
+          // tiny insertion sort
+          for (int i = 1; i < 4; i++) {
+               for (int j = i; j > 0 && results[j - 1] > results[j]; j--) {
+                    double t = results[j];
+                    results[j] = results[j - 1];
+                    results[j - 1] = t;
+               }
+          }
+          return results;
+          } else if (pm >= 0) {
+          pm = Math.sqrt(pm);
+          double[] results = new double[2];
+          results[0] = -0.5 * (d1 + pm) + q2;
+          results[1] = -0.5 * (d1 - pm) + q2;
+          return results;
+          } else if (pp >= 0) {
+          pp = Math.sqrt(pp);
+          double[] results = new double[2];
+          results[0] = 0.5 * (d1 - pp) + q2;
+          results[1] = 0.5 * (d1 + pp) + q2;
+          return results;
+          }
+          return null;
+     }
+
+     /**
+      * Return only one root for the specified cubic equation. This routine is
+     * only meant to be called by the quartic solver. It assumes the cubic is of
+     * the form: x^3+px^2+qx+r.
+     * 
+     * @param p
+     * @param q
+     * @param r
+     * @return
+     */
+     private static final double solveCubicForQuartic(double p, double q, double r) {
+          double A2 = p * p;
+          double Q = (A2 - 3.0 * q) / 9.0;
+          double R = (p * (A2 - 4.5 * q) + 13.5 * r) / 27.0;
+          double Q3 = Q * Q * Q;
+          double R2 = R * R;
+          double d = Q3 - R2;
+          double an = p / 3.0;
+          if (d >= 0) {
+          d = R / Math.sqrt(Q3);
+          double theta = Math.acos(d) / 3.0;
+          double sQ = -2.0 * Math.sqrt(Q);
+          return sQ * Math.cos(theta) - an;
+          } else {
+          double sQ = Math.pow(Math.sqrt(R2 - Q3) + Math.abs(R), 1.0 / 3.0);
+          if (R < 0)
+               return (sQ + Q / sQ) - an;
+          else
+               return -(sQ + Q / sQ) - an;
+          }
+     }
 }
