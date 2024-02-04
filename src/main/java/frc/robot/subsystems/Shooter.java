@@ -14,11 +14,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 
+
+
 public class Shooter extends SubsystemBase{
     public CANSparkFlex intake;
     private boolean isFiring = false;
     private boolean isIntaking = false;
     private boolean indexing = false;
+
+    private boolean finishedIntake = false;
 
 
     public CANSparkFlex leftShooter;
@@ -28,7 +32,17 @@ public class Shooter extends SubsystemBase{
     public SparkPIDController leftShooterPID;
     public SparkPIDController rightShooterPID;
 
-    private DigitalInput IndexStopLeft;
+    private DigitalInput IndexStop;
+
+    private enum IntakeLevels{
+        NotRunning,
+        Running, 
+        SeeSensor,
+        Reverse,
+        Shooting
+    }
+
+    private IntakeLevels IntakeLevel = IntakeLevels.NotRunning;
 
     public Shooter(){
         leftShooter = new CANSparkFlex(Constants.Subsystems.leftSide, CANSparkLowLevel.MotorType.kBrushless);
@@ -36,7 +50,7 @@ public class Shooter extends SubsystemBase{
         leftIndex = new CANSparkFlex(Constants.Subsystems.leftSideIndex, CANSparkLowLevel.MotorType.kBrushless);
         rightIndex = new CANSparkFlex(Constants.Subsystems.rightSideIndex, CANSparkLowLevel.MotorType.kBrushless);
         
-        IndexStopLeft = new DigitalInput(0);
+        IndexStop = new DigitalInput(0);
 
         leftShooter.setInverted(true);
         leftIndex.setInverted(true);
@@ -79,21 +93,46 @@ public class Shooter extends SubsystemBase{
             leftShooterPID.setReference(SmartDashboard.getNumber("Left Shooter Ref", 0), ControlType.kVelocity);
             rightShooterPID.setReference(SmartDashboard.getNumber("Right Shooter Ref", 0), ControlType.kVelocity);
         }else{
-
             rightShooter.stopMotor();
             leftShooter.stopMotor();
         }
-        if(isIntaking && IndexStopLeft.get()){
-            leftIndex.set(SmartDashboard.getNumber("Left Index", 0));
-            rightIndex.set(SmartDashboard.getNumber("Right Index", 0));
-            intake.set(SmartDashboard.getNumber("Intake", 0));
-        } else{
-            if(!indexing){
+        switch (IntakeLevel){
+            case NotRunning:
                 leftIndex.stopMotor();
                 rightIndex.stopMotor();
-            }
-            intake.stopMotor();
-            isIntaking = false;
+                intake.stopMotor();
+                break;
+            case Reverse:
+                if(IndexStop.get()){
+                    leftIndex.set(-0.1);
+                    rightIndex.set(-0.1);
+                    intake.set(0);
+                } else{
+                    IntakeLevel = IntakeLevels.NotRunning;
+                }
+                break;               
+            case SeeSensor:
+                if(!IndexStop.get()){
+                    leftIndex.set(0.5);
+                    rightIndex.set(0.5);
+                    intake.set(0);
+                } else{
+                    IntakeLevel = IntakeLevels.Reverse;
+                }
+                break;
+            case Running:
+                if(IndexStop.get()){
+                    leftIndex.set(0.25);
+                    rightIndex.set(0.25);
+                    intake.set(-0.75);
+                } else{
+                    IntakeLevel = IntakeLevels.SeeSensor;
+                }
+                break;  
+            case Shooting:
+                break;
+            default:
+                break;
         }
 
         SmartDashboard.putNumber("left velocity", leftShooter.getEncoder().getVelocity());
@@ -107,18 +146,23 @@ public class Shooter extends SubsystemBase{
         isFiring = !isFiring;
     }
     public void Index(){
-        indexing = true;
+        IntakeLevel = IntakeLevels.Shooting;
         leftIndex.set(SmartDashboard.getNumber("Left Index", 0));
         rightIndex.set(SmartDashboard.getNumber("Right Index", 0));
     }
     public void stopIndex(){
-        indexing = false;
+        IntakeLevel = IntakeLevels.NotRunning;
         leftIndex.stopMotor();
         rightIndex.stopMotor();
     }
 
     public void IntakeIn(){
-        isIntaking = !isIntaking;
+        if (IntakeLevel == IntakeLevels.NotRunning){
+            IntakeLevel = IntakeLevels.Running;
+        }
+        else{
+            IntakeLevel = IntakeLevels.NotRunning;
+        }
     }
 
     public void stop(){ 
