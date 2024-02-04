@@ -43,14 +43,9 @@ public class RobotContainer {
   /* Driver Buttons */
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
   private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-  private final JoystickButton intake = new JoystickButton(driver, XboxController.Button.kA.value);
-  private final JoystickButton runShooter = new JoystickButton(driver, XboxController.Button.kX.value);
-  private final JoystickButton runIndex = new JoystickButton(driver, XboxController.Button.kB.value);
-
 
   /* Subsystems */
   public final Swerve s_Swerve;
-  public final Shooter m_Shooter;
   public SendableChooser<Command> autoChooser;
   public Command AutoCommand;
 
@@ -59,7 +54,6 @@ public class RobotContainer {
    */
   public RobotContainer() { 
     s_Swerve = new Swerve();
-    m_Shooter = new Shooter();
     s_Swerve.setDefaultCommand(
         new TeleopSwerve(
             s_Swerve,
@@ -72,8 +66,6 @@ public class RobotContainer {
     // Configure the button bindings
     autoChooser = AutoBuilder.buildAutoChooser();
     
-    // Register pathplanner commands
-    NamedCommands.registerCommand("Fire Shooter", new ShooterFire(m_Shooter));
 
     // Another option that allows you to specify the default auto by its name
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
@@ -91,13 +83,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     /* Driver Buttons */
-    intake.whileTrue(new InstantCommand(m_Shooter::IntakeIn));
-    intake.onFalse(new InstantCommand(m_Shooter::IntakeStop));
-    runIndex.whileTrue(new InstantCommand(m_Shooter::Index));
-    runIndex.onFalse(new InstantCommand(m_Shooter::stopIndex));
-    runShooter.whileTrue(new InstantCommand(m_Shooter::Fire));
-
-  }
+    zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+  } 
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
