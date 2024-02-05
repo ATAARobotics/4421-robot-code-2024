@@ -54,6 +54,8 @@ public class Shooter extends SubsystemBase{
 
         leftShooter.setInverted(true);
         leftIndex.setInverted(true);
+        leftShooter.setIdleMode(IdleMode.kBrake);
+        rightShooter.setIdleMode(IdleMode.kBrake);
         leftIndex.setIdleMode(IdleMode.kBrake);
         rightIndex.setIdleMode(IdleMode.kBrake);
 
@@ -90,8 +92,10 @@ public class Shooter extends SubsystemBase{
     @Override
     public void periodic(){
         if(isFiring){
-            leftShooterPID.setReference(SmartDashboard.getNumber("Left Shooter Ref", 0), ControlType.kVelocity);
-            rightShooterPID.setReference(SmartDashboard.getNumber("Right Shooter Ref", 0), ControlType.kVelocity);
+            leftShooterPID.setReference(5500.0, ControlType.kVelocity);
+            rightShooterPID.setReference(5500.0, ControlType.kVelocity);
+            // leftShooter.set(0.5);
+            // rightShooter.set(0.5);
         }else{
             rightShooter.stopMotor();
             leftShooter.stopMotor();
@@ -113,8 +117,8 @@ public class Shooter extends SubsystemBase{
                 break;               
             case SeeSensor:
                 if(!IndexStop.get()){
-                    leftIndex.set(0.5);
-                    rightIndex.set(0.5);
+                    leftIndex.set(0.1);
+                    rightIndex.set(0.1);
                     intake.set(0);
                 } else{
                     IntakeLevel = IntakeLevels.Reverse;
@@ -122,11 +126,11 @@ public class Shooter extends SubsystemBase{
                 break;
             case Running:
                 if(IndexStop.get()){
-                    leftIndex.set(0.25);
-                    rightIndex.set(0.25);
-                    intake.set(-0.75);
+                    leftIndex.set(0.1);
+                    rightIndex.set(0.1);
+                    intake.set(1.0);
                 } else{
-                    IntakeLevel = IntakeLevels.SeeSensor;
+                    IntakeLevel = IntakeLevels.NotRunning;
                 }
                 break;  
             case Shooting:

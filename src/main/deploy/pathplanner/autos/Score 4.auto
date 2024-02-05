@@ -24,9 +24,39 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Index"
+          }
+        },
+        {
           "type": "wait",
           "data": {
-            "waitTime": 0.25
+            "waitTime": 0.1
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Index"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "grab 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "shoot 1"
           }
         },
         {
@@ -50,49 +80,19 @@
         {
           "type": "named",
           "data": {
-            "name": "Fire Shooter"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "Intake"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "grab 2"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 2.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Stop Index"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Fire Shooter"
+            "pathName": "grab 1"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "shoot 1"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 2.0
           }
         },
         {
@@ -104,7 +104,37 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.2
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "grab 4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "shoot 1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Index"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {

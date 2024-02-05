@@ -164,7 +164,7 @@ public class Swerve extends SubsystemBase {
     //   //PoseEstimator.resetPosition(poseR, getPositions(), new Pose2d(poseX, poseY, poseR));
     // }
 
-    // PoseEstimator.update(getYaw(), getPositions());
+    PoseEstimator.update(getYaw(), getPositions());
 
     // field.setRobotPose(getPose());
     for (SwerveModule mod : mSwerveMods) {
