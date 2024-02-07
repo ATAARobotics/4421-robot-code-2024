@@ -12,8 +12,8 @@ import frc.robot.subsystems.*;
 
 public class Shooting extends Command {
     private Pose3d robotPose;
-    private Translation3d BluegoalPose = new Translation3d(-0.1651, 5.5408, 2.2);
-    private Translation3d RedgoalPose = new Translation3d(16.706342, 5.5408, 2.2);
+    private Translation3d BluegoalPose = new Translation3d(-0.1651, 2.2, 5.5408);
+    private Translation3d RedgoalPose = new Translation3d(16.706342, 2.2, 5.5408);
     private Pose3d goalVelociety;
     private double robotAngle;
     private double shooterAngle;
@@ -44,16 +44,17 @@ public class Shooting extends Command {
           double A = 13.556742;
           // double B = 5.9472;
           // double B = 5.5408;
-          double B = 0.0;
+          double B = 0.4572;
           double C = 0.4572;
           //TODO change goal pose to be set based on color
           double M = RedgoalPose.getX();
           // double N = RedgoalPose.getY();
-          double N = 0.0;
+          double N = RedgoalPose.getY();
           double O = RedgoalPose.getZ();
 
           // double P = -mSwerve.getVelocity().getX();
-          // double Q = -mSwerve.getVelocity().getY();
+          // double Q = 0;
+          // double R = -mSwerve.getVelocity().getY();
           double P = 0;
           double Q = 0;
           double R = 0;
@@ -71,7 +72,7 @@ public class Shooting extends Command {
           double c4 = K*K + H*H + J*J;
           System.out.println("1: " +c0 +"  2: "+ c1 + " 3: " + c2 + " 4: " + c3 + " 5: " + c4);
 
-          double[] ts = solveQuartic(c4, c3, c2, c1, c0);
+          double[] ts = solveQuartic(c0, c1, c2, c3, c4);
           double t = 100;
           for (int i=0; i<ts.length; i++){
                if (ts[i] >= 0 & ts[i]<t){
