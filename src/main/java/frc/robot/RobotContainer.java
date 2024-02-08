@@ -101,7 +101,7 @@ public class RobotContainer {
     runIndex.whileTrue(new RunCommand(m_Shooter::Index));
     runIndex.onFalse(new InstantCommand(m_Shooter::stopIndex));
     runShooter.onTrue(new InstantCommand(m_Shooter::Fire));
-
+    zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
   }
 
   /**
