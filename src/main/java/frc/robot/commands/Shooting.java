@@ -1,31 +1,54 @@
 package frc.robot.commands;
 
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.*;
 
 public class Shooting extends Command {
-    private Pose3d robotPose;
-    private Translation3d BluegoalPose = new Translation3d(-0.1651, 2.2, 5.5408);
-    private Translation3d RedgoalPose = new Translation3d(16.706342, 2.2, 5.5408);
-    private Pose3d goalVelociety;
-    private double robotAngle;
-    private double shooterAngle;
+     private Translation3d BluegoalPose = new Translation3d(-0.1651, 2.2, 5.5408);
+     private Translation3d RedgoalPose = new Translation3d(16.706342, 2.2, 5.5408);
 
     private Shooter mShooter;
     private Swerve mSwerve;
     
-    private PIDController rotController = new PIDController(1.0, 0.15, 0);
-//     public Shooting(Shooter m_shooter, Swerve m_swerve){
-//         mShooter = m_shooter;
-//         mSwerve = m_swerve;
-//     }
+    private final PIDController rotController = new PIDController(3.0, 0.15, 0);
+
+     private double ShooterAngle = 2.0;
+     private double RobotAngle = 1.0;
+     private DoubleSupplier translationSup;
+     private DoubleSupplier strafeSup;
+     private DoubleSupplier rotationSup;
+     private BooleanSupplier robotCentricSup;
+
+     private SlewRateLimiter translationLimiter = new SlewRateLimiter(3.0);
+     private SlewRateLimiter strafeLimiter = new SlewRateLimiter(3.0);
+    public Shooting(
+          Shooter m_shooter, 
+          Swerve m_swerve,      
+          DoubleSupplier translationSup,
+          DoubleSupplier strafeSup,
+          BooleanSupplier robotCentricSup
+     ){
+        this.mShooter = m_shooter;
+        this.mSwerve = m_swerve;
+        addRequirements(mSwerve, mShooter);
+    
+        this.translationSup = translationSup;
+        this.strafeSup = strafeSup;
+        this.robotCentricSup = robotCentricSup;
+    }
      public Shooting(){
          // # g = 9.81
           // # A = proj_pos.x
@@ -45,7 +68,7 @@ public class Shooting extends Command {
           // double B = 5.9472;
           // double B = 5.5408;
           double B = 0.4572;
-          double C = 0.4572;
+          double C = 5.5408;
           //TODO change goal pose to be set based on color
           double M = RedgoalPose.getX();
           // double N = RedgoalPose.getY();
@@ -58,7 +81,7 @@ public class Shooting extends Command {
           double P = 0;
           double Q = 0;
           double R = 0;
-          double S = 15.2;
+          double S = 10;
 
           double H = M - A;
           double K = N - B;
@@ -85,13 +108,18 @@ public class Shooting extends Command {
           double e = ((K+Q*t-L*t*t)/t);
           double f = ((J+R*t)/t);
 
-          double angle = Math.atan2(f, Math.sqrt(Math.pow(e,2) + Math.pow(e,2)));
+          double angle = Math.atan2(e, Math.sqrt(Math.pow(d,2) + Math.pow(f,2)));
+
+          double angle2 = Math.atan2(f, d);
+
+
 
           System.out.println(Math.toDegrees(angle));
-          
+          System.out.println("angle2: " + Math.toDegrees(angle2));
           System.out.println("d: " + d);
           System.out.println("e: " + e);
           System.out.println("f: " + f);
+
      }
 
     @Override
@@ -113,22 +141,19 @@ public class Shooting extends Command {
           // # R = target_velocity.z
           // # S = proj_speed;
           double G = 9.81;
-          // double A = mSwerve.getPose().getX();
-          // double B = mSwerve.getPose().getY();
-          double A = 13.556742;
-          double B = 5.9472;
-          double C = 0.4572;
+          // Note Postion
+          double A = mSwerve.getPose().getX();
+          double B = 0.4572;
+          double C = mSwerve.getPose().getY();
           //TODO change goal pose to be set based on color
           double M = RedgoalPose.getX();
-          double N = RedgoalPose.getY();
+          double N = RedgoalPose.getZ();
           double O = RedgoalPose.getY();
-
-          // double P = -mSwerve.getVelocity().getX();
-          // double Q = -mSwerve.getVelocity().getY();
-          double P = 0;
+          //Velocietys
+          double P = -mSwerve.getVelocity().getX();
           double Q = 0;
-          double R = 0;
-          double S = 5;
+          double R = -mSwerve.getVelocity().getY();
+          double S = 100;
 
           double H = M - A;
           double J = O - C;
@@ -140,17 +165,39 @@ public class Shooting extends Command {
           double c2 = Q*Q - 2*K*L - S*S + P*P + R*R;
           double c3 = 2*K*Q + 2*H*P + 2*J*R;
           double c4 = K*K + H*H + J*J;
-          System.out.println("1: " +c0 +"  2: "+ c1 + " 3: " + c2 + " 4: " + c3 + " 5: " + c4);
-          double t = solveQuartic(c4, c3, c2, c1, c0)[-1];
+          double[] ts = solveQuartic(c0, c1, c2, c3, c4);
+          double t = 100;
+          for (int i=0; i<ts.length; i++){
+               if (ts[i] >= 0 & ts[i]<t){
+                    t = ts[i];
+               }
+          }
           double d = ((H+P*t)/t);
           double e = ((K+Q*t-L*t*t)/t);
           double f = ((J+R*t)/t);
-          
-          System.out.println("d: " + d);
-          System.out.println("e: " + e);
-          System.out.println("f: " + f);
 
-    }
+          ShooterAngle = Math.atan2(e, Math.sqrt(Math.pow(d,2) + Math.pow(f,2)));
+          RobotAngle = Math.atan2(f, d);
+
+          rotController.setSetpoint(RobotAngle);
+
+          double translationVal =
+               translationLimiter.calculate(
+                    MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.Swerve.stickDeadband));
+          double strafeVal =
+               strafeLimiter.calculate(
+                    MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.Swerve.stickDeadband));
+          
+          double rotationVal = MathUtil.clamp(rotController.calculate(mSwerve.getPose().getRotation().getRadians()), -Constants.Swerve.maxAngularVelocity, Constants.Swerve.maxAngularVelocity);
+
+          /* Drive */
+          mSwerve.drive(
+               new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
+               rotationVal,
+               !robotCentricSup.getAsBoolean(),
+               true);
+     }
+
 
     public static double[] solveQuartic(double a, double b, double c, double d, double e) {
           double inva = 1 / a;

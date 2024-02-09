@@ -46,10 +46,11 @@ public class RobotContainer {
   private final JoystickButton intake = new JoystickButton(driver, XboxController.Button.kA.value);
   private final JoystickButton runShooter = new JoystickButton(driver, XboxController.Button.kX.value);
   private final JoystickButton runIndex = new JoystickButton(driver, XboxController.Button.kB.value);
+  private final JoystickButton shooterLock = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
 
   /* Subsystems */
-  // public final Swerve s_Swerve;
+  public final Swerve s_Swerve;
   public final Shooter m_Shooter;
   public SendableChooser<Command> autoChooser;
   public Command AutoCommand;
@@ -58,17 +59,16 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() { 
-    new Shooting().schedule();
     System.out.println("damn it");
-    // s_Swerve = new Swerve();
+    s_Swerve = new Swerve();
     m_Shooter = new Shooter();
-    // s_Swerve.setDefaultCommand(
-    //     new TeleopSwerve(
-    //         s_Swerve,
-    //         () -> -driver.getRawAxis(translationAxis),
-    //         () -> -driver.getRawAxis(strafeAxis),
-    //         () -> -driver.getRawAxis(rotationAxis),
-    //         () -> robotCentric.getAsBoolean()));
+    s_Swerve.setDefaultCommand(
+        new TeleopSwerve(
+            s_Swerve,
+            () -> -driver.getRawAxis(translationAxis),
+            () -> -driver.getRawAxis(strafeAxis),
+            () -> -driver.getRawAxis(rotationAxis),
+            () -> robotCentric.getAsBoolean()));
 
     
     // Configure the button bindings
@@ -98,6 +98,20 @@ public class RobotContainer {
     runIndex.whileTrue(new InstantCommand(m_Shooter::Index));
     runIndex.onFalse(new InstantCommand(m_Shooter::stopIndex));
     runShooter.whileTrue(new InstantCommand(m_Shooter::Fire));
+
+    shooterLock.onTrue(new Shooting(
+            m_Shooter,
+            s_Swerve,
+            () -> -driver.getRawAxis(translationAxis),
+            () -> -driver.getRawAxis(strafeAxis),
+            //() -> driver.getRawAxis(rotationAxis),
+            () -> robotCentric.getAsBoolean()))
+    .onFalse(new TeleopSwerve(
+            s_Swerve,
+            () -> -driver.getRawAxis(translationAxis),
+            () -> -driver.getRawAxis(strafeAxis),
+            () -> -driver.getRawAxis(rotationAxis),
+            () -> robotCentric.getAsBoolean()));
 
   }
 
