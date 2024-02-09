@@ -10,6 +10,8 @@ import java.util.HashMap;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -43,9 +45,11 @@ public class RobotContainer {
   /* Driver Buttons */
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
   private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton toWaypoint = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
   /* Subsystems */
   public final Swerve s_Swerve;
+  public final ChaseTagSubsystem s_ChaseTagSubsystem;
   public SendableChooser<Command> autoChooser;
   public Command AutoCommand;
 
@@ -54,13 +58,14 @@ public class RobotContainer {
    */
   public RobotContainer() { 
     s_Swerve = new Swerve();
-    s_Swerve.setDefaultCommand(
-        new TeleopSwerve(
-            s_Swerve,
-            () -> -driver.getRawAxis(translationAxis),
-            () -> -driver.getRawAxis(strafeAxis),
-            () -> -driver.getRawAxis(rotationAxis),
-            () -> robotCentric.getAsBoolean()));
+    s_ChaseTagSubsystem = new ChaseTagSubsystem(s_Swerve, new Pose2d(16.8, 8.0, Rotation2d.fromDegrees(90)));
+    // s_Swerve.setDefaultCommand(
+    //     new TeleopSwerve(
+    //         s_Swerve,
+    //         () -> -driver.getRawAxis(translationAxis),
+    //         () -> -driver.getRawAxis(strafeAxis),
+    //         () -> -driver.getRawAxis(rotationAxis),
+    //         () -> robotCentric.getAsBoolean()));
 
     
     // Configure the button bindings
@@ -83,7 +88,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     /* Driver Buttons */
-    zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+    // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+    toWaypoint.onTrue(new InstantCommand(s_ChaseTagSubsystem::runChaseTag));
   } 
 
   /**

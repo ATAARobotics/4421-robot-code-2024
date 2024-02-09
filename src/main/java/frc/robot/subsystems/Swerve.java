@@ -28,7 +28,6 @@ import frc.lib.config.SwerveModuleConstants;
 
 public class Swerve extends SubsystemBase {
   private SwerveDrivePoseEstimator PoseEstimator;
-  private SwerveOdometry swerveOdometry;
 
   private double[] pose;
 
@@ -37,6 +36,10 @@ public class Swerve extends SubsystemBase {
   private SwerveModule[] mSwerveMods;
 
   private Field2d field;
+
+  private Pose2d vecPose;
+  private Pose2d lastPose;
+  private double lastTimeStamp = 0;
 
   public Swerve() {
     gyro = new Pigeon2(Constants.Swerve.pigeonID);
@@ -77,6 +80,8 @@ public class Swerve extends SubsystemBase {
         this // Reference to this subsystem to set requirements
     );
     PoseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), positions, new Pose2d(15.8, 8.0, getYaw()));
+  
+    lastPose = PoseEstimator.getEstimatedPosition();
   }
 
   public void drive(
@@ -109,8 +114,8 @@ public class Swerve extends SubsystemBase {
     }
   }
 
-  public void setBrakes(boolean state){
-    if(state){
+  public void setBrakes(boolean brake){
+    if(brake){
       for(SwerveModule m : mSwerveMods){
         m.setBrakeMode(true);
       }
@@ -167,18 +172,22 @@ public class Swerve extends SubsystemBase {
 
   @Override
   public void periodic() {
-    pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
-    double poseX = pose[0];
-    double poseY = pose[1];
-    Rotation2d poseR = Rotation2d.fromDegrees(pose[5]);
-    double timeStamp = Timer.getFPGATimestamp() - (pose[6] / 1000.0);
+    // pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
+    // double poseX = pose[0];
+    // double poseY = pose[1];
+    // Rotation2d poseR = Rotation2d.fromDegrees(pose[5]);
+    // double timeStamp = Timer.getFPGATimestamp() - (pose[6] / 1000.0);
+    lastTimeStamp = Timer.getFPGATimestamp();
 
-    if (Math.abs(pose[0]) >= 0.1) {
-      PoseEstimator.addVisionMeasurement(new Pose2d(poseX, poseY, poseR), timeStamp);
-      //PoseEstimator.resetPosition(poseR, getPositions(), new Pose2d(poseX, poseY, poseR));
-    }
+
+    // if (Math.abs(pose[0]) >= 0.1) {
+    //   PoseEstimator.addVisionMeasurement(new Pose2d(poseX, poseY, poseR), timeStamp);
+    //   //PoseEstimator.resetPosition(poseR, getPositions(), new Pose2d(poseX, poseY, poseR));
+    // }
 
     PoseEstimator.update(getYaw(), getPositions());
+
+    vecPose = new Pose2d((PoseEstimator.getEstimatedPosition().getX() - lastPose.getX())/ (Timer.getFPGATimestamp()-lastTimeStamp), (PoseEstimator.getEstimatedPosition().getY() - lastPose.getY())/(Timer.getFPGATimestamp()-lastTimeStamp), PoseEstimator.getEstimatedPosition().getRotation());
 
     field.setRobotPose(getPose());
     for (SwerveModule mod : mSwerveMods) {
@@ -193,7 +202,19 @@ public class Swerve extends SubsystemBase {
           "Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond );
     }
   }
+
   public Pose2d getVelocity(){
     return new Pose2d((PoseEstimator.getEstimatedPosition().getX() - lastPose.getX())/ (Timer.getFPGATimestamp()-lastTimeStamp), (PoseEstimator.getEstimatedPosition().getY() - lastPose.getY())/(Timer.getFPGATimestamp()-lastTimeStamp), PoseEstimator.getEstimatedPosition().getRotation());
- }
+  }
+
+  public void setSwerveDrive(double xVelocity, double yVelocity, double rotationVelocity, boolean useOdometry, boolean fieldOriented) {
+  if (fieldOriented) {
+      setModuleStates(Constants.Swerve.swerveKinematics.toSwerveModuleStates( ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, -rotationVelocity, Rotation2d.fromDegrees(gyro.getYaw()))));
+  }else{
+      ChassisSpeeds cs = new ChassisSpeeds(-xVelocity, -yVelocity, rotationVelocity);
+      setModuleStates(Constants.Swerve.swerveKinematics.toSwerveModuleStates(cs));
+  }
+  
+}
+
 }

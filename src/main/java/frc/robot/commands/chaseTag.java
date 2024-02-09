@@ -9,11 +9,12 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 
-public class chaseTag extends CommandBase {
+public class ChaseTag extends Command {
 
     private Swerve m_swerveDriveSubsystem;
     private PoseEstimator poseEstimator;
@@ -44,7 +45,7 @@ public class chaseTag extends CommandBase {
     private boolean X_ACH = false;
     private boolean ROT_ACH = false;
 
-    public chaseTag(Swerve swerveDriveSubsystem, PoseEstimator poseEstimator, Pose2d targetPose, double driveTolerance, double rotTolerance, double speedLimit, double rotLimit, boolean isEndPoint) {
+    public ChaseTag(Swerve swerveDriveSubsystem, PoseEstimator poseEstimator, Pose2d targetPose, double driveTolerance, double rotTolerance, double speedLimit, double rotLimit, boolean isEndPoint) {
         this.m_swerveDriveSubsystem = swerveDriveSubsystem;
         this.targetPose = targetPose;
         this.poseEstimator = poseEstimator;
@@ -55,7 +56,7 @@ public class chaseTag extends CommandBase {
         addRequirements(this.m_swerveDriveSubsystem);
     }
 
-    public chaseTag(Swerve swerveDriveSubsystem, Pose2d targetPose, boolean isEndPoint) {
+    public ChaseTag(Swerve swerveDriveSubsystem, Pose2d targetPose, boolean isEndPoint) {
       this(swerveDriveSubsystem, swerveDriveSubsystem.getPoseEstimator(), targetPose, Constants.Swerve.Waypoint.DTOLERANCE, Constants.Swerve.Waypoint.RTOLERANCE, Constants.Swerve.Waypoint.SPEEDLIMIT, Constants.Swerve.Waypoint.ROTLIMIT, isEndPoint);
     }
 
@@ -127,7 +128,11 @@ public class chaseTag extends CommandBase {
       SmartDashboard.putNumber("rotSpeed", rotSpeed);
 
       // Drive // x and y is flipped
-      m_swerveDriveSubsystem.setSwerveDrive(xSpeed + feedforward.calculate(poseEstimator.getVelX()), ySpeed + feedforward.calculate(poseEstimator.getYVel()), rotSpeed, true);
+      // velocity stored in pose2d: x is xvelocity and vise versa
+      double xVel = m_swerveDriveSubsystem.getVelocity().getX();
+      double yVel = m_swerveDriveSubsystem.getVelocity().getY();
+
+      m_swerveDriveSubsystem.setSwerveDrive(xSpeed + feedforward.calculate(xVel), ySpeed + feedforward.calculate(yVel), rotSpeed, true, true);
     }
 
     @Override
