@@ -54,8 +54,8 @@ public class Shooter extends SubsystemBase{
 
         leftShooter.setInverted(true);
         leftIndex.setInverted(true);
-        leftShooter.setIdleMode(IdleMode.kBrake);
-        rightShooter.setIdleMode(IdleMode.kBrake);
+        leftShooter.setIdleMode(IdleMode.kCoast);
+        rightShooter.setIdleMode(IdleMode.kCoast);
         leftIndex.setIdleMode(IdleMode.kBrake);
         rightIndex.setIdleMode(IdleMode.kBrake);
 
