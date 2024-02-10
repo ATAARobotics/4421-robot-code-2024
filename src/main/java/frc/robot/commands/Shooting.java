@@ -34,6 +34,36 @@ public class Shooting extends Command {
 
      private SlewRateLimiter translationLimiter = new SlewRateLimiter(3.0);
      private SlewRateLimiter strafeLimiter = new SlewRateLimiter(3.0);
+
+     private double G = 9.81;
+          // Note Postion
+     private double A = 0;
+     private double B = 0.4572;
+     private double C = 0;
+          //TODO change goal pose to be set based on color
+     private double M = 0;
+     private double N = 0;
+     private double O = 0;
+          //Velocietys
+     private double P = 0;
+     private double Q = 0;
+     private double R = 0;
+     private double S = 15.2;
+
+     private double H = M - A;
+     private double J = O - C;
+     private double K = N - B;
+     private double L = -0.5 * G;
+
+     private double c0 = L*L;
+     private double c1 = -2*Q*L;
+     private double c2 = Q*Q - 2*K*L - S*S + P*P + R*R;
+     private double c3 = 2*K*Q + 2*H*P + 2*J*R;
+     private double c4 = K*K + H*H + J*J;
+
+     private double d = 0;
+     private double e = 0;
+     private double f = 0;
     public Shooting(
           Shooter m_shooter, 
           Swerve m_swerve,      
@@ -50,75 +80,6 @@ public class Shooting extends Command {
         this.robotCentricSup = robotCentricSup;
     }
      public Shooting(){
-         // # g = 9.81
-          // # A = proj_pos.x
-          // # B = proj_pos.y
-          // # C = proj_ pos.z
-          // # M = target_pos.X
-          // # N = target_pos.y
-          // # O = target_pos.z
-          // # P = target_velocity.x
-          // # Q = target_velocity.y
-          // # R = target_velocity.z
-          // # S = proj_speed;
-          double G = 9.81;
-          // double A = mSwerve.getPose().getX();
-          // double B = mSwerve.getPose().getY();
-          double A = 13.556742;
-          // double B = 5.9472;
-          // double B = 5.5408;
-          double B = 0.4572;
-          double C = 5.5408;
-          //TODO change goal pose to be set based on color
-          double M = RedgoalPose.getX();
-          // double N = RedgoalPose.getY();
-          double N = RedgoalPose.getY();
-          double O = RedgoalPose.getZ();
-
-          // double P = -mSwerve.getVelocity().getX();
-          // double Q = 0;
-          // double R = -mSwerve.getVelocity().getY();
-          double P = 0;
-          double Q = 0;
-          double R = 0;
-          double S = 10;
-
-          double H = M - A;
-          double K = N - B;
-          double J = O - C;
-          double L = -0.5 * G;
-
-          double c0 = L*L;
-          double c1 = -2*Q*L;
-          double c2 = Q*Q - 2*K*L - S*S + P*P + R*R;
-          double c3 = 2*K*Q + 2*H*P + 2*J*R;
-          double c4 = K*K + H*H + J*J;
-          System.out.println("1: " +c0 +"  2: "+ c1 + " 3: " + c2 + " 4: " + c3 + " 5: " + c4);
-
-          double[] ts = solveQuartic(c0, c1, c2, c3, c4);
-          double t = 100;
-          for (int i=0; i<ts.length; i++){
-               if (ts[i] >= 0 & ts[i]<t){
-                    t = ts[i];
-               }
-          }
-          System.out.println("Root: " + t);
-
-          double d = ((H+P*t)/t);
-          double e = ((K+Q*t-L*t*t)/t);
-          double f = ((J+R*t)/t);
-
-          double angle = Math.atan2(e, Math.sqrt(Math.pow(d,2) + Math.pow(f,2)));
-
-          double angle2 = Math.atan2(f, d);
-
-
-
-          System.out.println(Math.toDegrees(angle));
-          System.out.println("angle2: " + Math.toDegrees(angle2));
-          System.out.println("d: " + d);
-          System.out.println("e: " + e);
-          System.out.println("f: " + f);
 
      }
 
@@ -140,41 +101,42 @@ public class Shooting extends Command {
           // # Q = target_velocity.y
           // # R = target_velocity.z
           // # S = proj_speed;
-          double G = 9.81;
           // Note Postion
-          double A = mSwerve.getPose().getX();
-          double B = 0.4572;
-          double C = mSwerve.getPose().getY();
+          A = mSwerve.getPose().getX();
+          B = 0.4572;
+          C = mSwerve.getPose().getY();
           //TODO change goal pose to be set based on color
-          double M = RedgoalPose.getX();
-          double N = RedgoalPose.getZ();
-          double O = RedgoalPose.getY();
+          M = RedgoalPose.getX();
+          N = RedgoalPose.getZ();
+          O = RedgoalPose.getY();
           //Velocietys
-          double P = -mSwerve.getVelocity().getX();
-          double Q = 0;
-          double R = -mSwerve.getVelocity().getY();
-          double S = 100;
+          P = -mSwerve.getVelocity().getX();
+          Q = 0;
+          R = -mSwerve.getVelocity().getY();
+          S = 100;
 
-          double H = M - A;
-          double J = O - C;
-          double K = N - B;
-          double L = -0.5 * G;
+          H = M - A;
+          J = O - C;
+          K = N - B;
+          L = -0.5 * G;
 
-          double c0 = L*L;
-          double c1 = -2*Q*L;
-          double c2 = Q*Q - 2*K*L - S*S + P*P + R*R;
-          double c3 = 2*K*Q + 2*H*P + 2*J*R;
-          double c4 = K*K + H*H + J*J;
+          c0 = L*L;
+          c1 = -2*Q*L;
+          c2 = Q*Q - 2*K*L - S*S + P*P + R*R;
+          c3 = 2*K*Q + 2*H*P + 2*J*R;
+          c4 = K*K + H*H + J*J;
           double[] ts = solveQuartic(c0, c1, c2, c3, c4);
           double t = 100;
-          for (int i=0; i<ts.length; i++){
-               if (ts[i] >= 0 & ts[i]<t){
-                    t = ts[i];
+          if(ts != null){
+               for (int i=0; i<ts.length; i++){
+                    if (ts[i] >= 0 & ts[i]<t){
+                         t = ts[i];
+                    }
                }
+               double d = ((H+P*t)/t);
+               double e = ((K+Q*t-L*t*t)/t);
+               double f = ((J+R*t)/t);
           }
-          double d = ((H+P*t)/t);
-          double e = ((K+Q*t-L*t*t)/t);
-          double f = ((J+R*t)/t);
 
           ShooterAngle = Math.atan2(e, Math.sqrt(Math.pow(d,2) + Math.pow(f,2)));
           RobotAngle = Math.atan2(f, d);
