@@ -17,7 +17,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d; 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -69,7 +69,7 @@ public class Swerve extends SubsystemBase {
             4.5, // Max module speed, in m/s
             0.4, // Drive base radius in meters. Distance from robot center to furthest module.
             new ReplanningConfig() // Default path replanning config. See the API for the options here
-        ), () -> {return false;},
+        ), () -> true,
         this // Reference to this subsystem to set requirements
     );
     PoseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), positions, new Pose2d(15.8, 8.0, getYaw()));
@@ -172,7 +172,7 @@ public class Swerve extends SubsystemBase {
 
     PoseEstimator.update(getYaw(), getPositions());
 
-    field.setRobotPose(getPose());
+    // field.setRobotPose(getPose());
     for (SwerveModule mod : mSwerveMods) {
       SmartDashboard.putNumber(
         // mod.getAngleOffset().getDegrees() is used to add angle offset to canCoder values

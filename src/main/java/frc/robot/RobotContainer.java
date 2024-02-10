@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.HashMap;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -16,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
@@ -42,12 +44,14 @@ public class RobotContainer {
   /* Driver Buttons */
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
   private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-  private final JoystickButton goStraight = new JoystickButton(driver, XboxController.Button.kX.value);
-  private final JoystickButton shoot = new JoystickButton(driver, XboxController.Button.kA.value);
+  private final JoystickButton intake = new JoystickButton(driver, XboxController.Button.kA.value);
+  private final JoystickButton runShooter = new JoystickButton(driver, XboxController.Button.kX.value);
+  private final JoystickButton runIndex = new JoystickButton(driver, XboxController.Button.kB.value);
+
 
   /* Subsystems */
-  public final Swerve s_Swerve;
-  public Shooter s_Shooter;
+  public Swerve s_Swerve;
+  public final Shooter m_Shooter;
   public SendableChooser<Command> autoChooser;
   public Command AutoCommand;
   public Lighting s_Lighting;
@@ -58,7 +62,13 @@ public class RobotContainer {
   public RobotContainer() { 
     s_Swerve = new Swerve();
     s_Lighting = new Lighting(s_Swerve);
-    s_Shooter = new Shooter();
+    m_Shooter = new Shooter();
+    // Register pathplanner commands
+    NamedCommands.registerCommand("Fire Shooter", new InstantCommand(m_Shooter::Fire));
+    NamedCommands.registerCommand("Intake", new InstantCommand(m_Shooter::IntakeIn));
+    NamedCommands.registerCommand("Index", new InstantCommand(m_Shooter::Index));
+    NamedCommands.registerCommand("Stop Index", new InstantCommand(m_Shooter::stopIndex));
+
     s_Swerve.setDefaultCommand(
         new TeleopSwerve(
             s_Swerve,
@@ -70,6 +80,8 @@ public class RobotContainer {
     
     // Configure the button bindings
     autoChooser = AutoBuilder.buildAutoChooser();
+    
+
 
     // Another option that allows you to specify the default auto by its name
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
@@ -87,17 +99,11 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     /* Driver Buttons */
+    intake.onTrue(new InstantCommand(m_Shooter::IntakeIn));
+    runIndex.whileTrue(new RunCommand(m_Shooter::Index));
+    runIndex.onFalse(new InstantCommand(m_Shooter::stopIndex));
+    runShooter.onTrue(new InstantCommand(m_Shooter::Fire));
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-    goStraight.whileTrue(
-        new TeleopSwerve(
-            s_Swerve,
-            () -> 0.25,
-            () -> 0,
-            () -> 0,
-            () -> robotCentric.getAsBoolean()));
-    shoot.onTrue(new InstantCommand(() -> s_Shooter.setSpeed(1.0)));
-    shoot.onFalse(new InstantCommand(() -> s_Shooter.setSpeed(0.0)));
-
   }
 
   /**
