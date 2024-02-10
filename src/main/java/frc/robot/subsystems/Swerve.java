@@ -170,9 +170,11 @@ public class Swerve extends SubsystemBase {
 
     PoseEstimator.update(getYaw(), getPositions());
     vecPose = new Pose2d((PoseEstimator.getEstimatedPosition().getX() - lastPose.getX())/ (Timer.getFPGATimestamp()-lastTimeStamp), (PoseEstimator.getEstimatedPosition().getY() - lastPose.getY())/(Timer.getFPGATimestamp()-lastTimeStamp), PoseEstimator.getEstimatedPosition().getRotation());
+    lastPose = PoseEstimator.getEstimatedPosition();
     lastTimeStamp = Timer.getFPGATimestamp();
 
     field.setRobotPose(getPose());
+    SmartDashboard.putNumber("Rotation Angle", getPose().getRotation().getDegrees());
     for (SwerveModule mod : mSwerveMods) {
       SmartDashboard.putNumber(
         // mod.getAngleOffset().getDegrees() is used to add angle offset to canCoder values

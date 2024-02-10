@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
@@ -42,7 +43,7 @@ public class RobotContainer {
 
   /* Driver Buttons */
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-  private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
   private final JoystickButton intake = new JoystickButton(driver, XboxController.Button.kA.value);
   private final JoystickButton runShooter = new JoystickButton(driver, XboxController.Button.kX.value);
   private final JoystickButton runIndex = new JoystickButton(driver, XboxController.Button.kB.value);
@@ -54,6 +55,7 @@ public class RobotContainer {
   public final Shooter m_Shooter;
   public SendableChooser<Command> autoChooser;
   public Command AutoCommand;
+  private Shooting shoot;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -69,8 +71,8 @@ public class RobotContainer {
             () -> -driver.getRawAxis(strafeAxis),
             () -> -driver.getRawAxis(rotationAxis),
             () -> robotCentric.getAsBoolean()));
-
-    
+    shoot = new Shooting(m_Shooter, s_Swerve,() -> -driver.getRawAxis(translationAxis),
+            () -> -driver.getRawAxis(strafeAxis), () -> robotCentric.getAsBoolean());
     // Configure the button bindings
     autoChooser = AutoBuilder.buildAutoChooser();
     
@@ -93,19 +95,13 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     /* Driver Buttons */
-    intake.whileTrue(new InstantCommand(m_Shooter::IntakeIn));
-    intake.onFalse(new InstantCommand(m_Shooter::IntakeStop));
-    runIndex.whileTrue(new InstantCommand(m_Shooter::Index));
+    intake.onTrue(new InstantCommand(m_Shooter::IntakeIn));
+    runIndex.whileTrue(new RunCommand(m_Shooter::Index));
     runIndex.onFalse(new InstantCommand(m_Shooter::stopIndex));
-    runShooter.whileTrue(new InstantCommand(m_Shooter::Fire));
+    runShooter.onTrue(new InstantCommand(m_Shooter::Fire));
+    zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
-    shooterLock.onTrue(new Shooting(
-            m_Shooter,
-            s_Swerve,
-            () -> -driver.getRawAxis(translationAxis),
-            () -> -driver.getRawAxis(strafeAxis),
-            //() -> driver.getRawAxis(rotationAxis),
-            () -> robotCentric.getAsBoolean()))
+    shooterLock.whileTrue(shoot)
     .onFalse(new TeleopSwerve(
             s_Swerve,
             () -> -driver.getRawAxis(translationAxis),

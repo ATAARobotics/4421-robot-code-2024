@@ -3,6 +3,8 @@ package frc.robot.commands;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import org.opencv.core.Mat;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -12,18 +14,19 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.*;
 
 public class Shooting extends Command {
      private Translation3d BluegoalPose = new Translation3d(-0.1651, 2.2, 5.5408);
-     private Translation3d RedgoalPose = new Translation3d(16.706342, 2.2, 5.5408);
+     private Translation3d RedgoalPose = new Translation3d(16.706342, 5.5408, 2.2);
 
     private Shooter mShooter;
     private Swerve mSwerve;
     
-    private final PIDController rotController = new PIDController(3.0, 0.15, 0);
+    private final PIDController rotController = new PIDController(5, 0, 0);
 
      private double ShooterAngle = 2.0;
      private double RobotAngle = 1.0;
@@ -74,10 +77,13 @@ public class Shooting extends Command {
         this.mShooter = m_shooter;
         this.mSwerve = m_swerve;
         addRequirements(mSwerve, mShooter);
-    
+          SmartDashboard.putNumber("Rot P", 0);
+          SmartDashboard.putNumber("Rot I", 0);
+          SmartDashboard.putNumber("Rot D", 0);
         this.translationSup = translationSup;
         this.strafeSup = strafeSup;
         this.robotCentricSup = robotCentricSup;
+        
     }
      public Shooting(){
 
@@ -85,7 +91,7 @@ public class Shooting extends Command {
 
     @Override
     public void initialize(){
-        
+        rotController.setTolerance(Math.toRadians(10));
     }
 
     @Override
@@ -105,6 +111,8 @@ public class Shooting extends Command {
           A = mSwerve.getPose().getX();
           B = 0.4572;
           C = mSwerve.getPose().getY();
+
+          System.out.println("X: "+ A + " Y: "+ C);
           //TODO change goal pose to be set based on color
           M = RedgoalPose.getX();
           N = RedgoalPose.getZ();
@@ -113,7 +121,7 @@ public class Shooting extends Command {
           P = -mSwerve.getVelocity().getX();
           Q = 0;
           R = -mSwerve.getVelocity().getY();
-          S = 100;
+          S = 15;
 
           H = M - A;
           J = O - C;
@@ -125,23 +133,27 @@ public class Shooting extends Command {
           c2 = Q*Q - 2*K*L - S*S + P*P + R*R;
           c3 = 2*K*Q + 2*H*P + 2*J*R;
           c4 = K*K + H*H + J*J;
+          System.out.println(c4+"x^4 + "+ c3+"x^3 + " + c2+"x^2 + " + c1+"x + "+ c0);
           double[] ts = solveQuartic(c0, c1, c2, c3, c4);
-          double t = 100;
+          double t = 1000000000;
           if(ts != null){
                for (int i=0; i<ts.length; i++){
                     if (ts[i] >= 0 & ts[i]<t){
                          t = ts[i];
                     }
                }
-               double d = ((H+P*t)/t);
-               double e = ((K+Q*t-L*t*t)/t);
-               double f = ((J+R*t)/t);
+               System.out.println("Time: " + t);
+               d = ((H+P*t)/t);
+               e = ((K+Q*t-L*t*t)/t);
+               f = ((J+R*t)/t);
           }
 
           ShooterAngle = Math.atan2(e, Math.sqrt(Math.pow(d,2) + Math.pow(f,2)));
           RobotAngle = Math.atan2(f, d);
 
-          rotController.setSetpoint(RobotAngle);
+          if (rotController.atSetpoint() && mShooter.CanShoot()){
+               mShooter.Index();
+          }
 
           double translationVal =
                translationLimiter.calculate(
@@ -151,6 +163,8 @@ public class Shooting extends Command {
                     MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.Swerve.stickDeadband));
           
           double rotationVal = MathUtil.clamp(rotController.calculate(mSwerve.getPose().getRotation().getRadians()), -Constants.Swerve.maxAngularVelocity, Constants.Swerve.maxAngularVelocity);
+          mShooter.AutoFire();
+
 
           /* Drive */
           mSwerve.drive(
@@ -158,6 +172,12 @@ public class Shooting extends Command {
                rotationVal,
                !robotCentricSup.getAsBoolean(),
                true);
+
+     }
+     @Override
+     public void end(boolean interrupted) {
+         mShooter.AutoStop();
+         mShooter.stopIndex();
      }
 
 
