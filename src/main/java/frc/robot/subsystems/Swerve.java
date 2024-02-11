@@ -76,6 +76,8 @@ public class Swerve extends SubsystemBase {
     PoseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), positions, new Pose2d(15.8, 8.0, getYaw()));
   
     lastPose = PoseEstimator.getEstimatedPosition();
+    Rotation2dOut = Rotation2d.fromDegrees(0);
+
   }
 
   public void drive(
@@ -182,8 +184,6 @@ public class Swerve extends SubsystemBase {
     vecPose = new Pose2d((PoseEstimator.getEstimatedPosition().getX() - lastPose.getX())/ (Timer.getFPGATimestamp()-lastTimeStamp), (PoseEstimator.getEstimatedPosition().getY() - lastPose.getY())/(Timer.getFPGATimestamp()-lastTimeStamp), PoseEstimator.getEstimatedPosition().getRotation());
     lastPose = PoseEstimator.getEstimatedPosition();
     lastTimeStamp = Timer.getFPGATimestamp();
-
-    vecPose = new Pose2d((PoseEstimator.getEstimatedPosition().getX() - lastPose.getX())/ (Timer.getFPGATimestamp()-lastTimeStamp), (PoseEstimator.getEstimatedPosition().getY() - lastPose.getY())/(Timer.getFPGATimestamp()-lastTimeStamp), PoseEstimator.getEstimatedPosition().getRotation());
 
     field.setRobotPose(getPose());
     SmartDashboard.putNumber("Rotation Angle", getPose().getRotation().getDegrees());

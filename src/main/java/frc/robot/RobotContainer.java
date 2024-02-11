@@ -11,6 +11,7 @@ import org.ejml.dense.block.MatrixOps_DDRB;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -75,9 +76,11 @@ public class RobotContainer {
     NamedCommands.registerCommand("Index", new InstantCommand(m_Shooter::Index));
     NamedCommands.registerCommand("Stop Index", new InstantCommand(m_Shooter::stopIndex));
 
-
     s_Swerve = new Swerve(m_Shooter::hasNote);
-    
+    shoot = new Shooting(m_Shooter, s_Swerve,joysticks::getXVelocity,
+        joysticks::getYVelocity);
+    NamedCommands.registerCommand("Auto Shooter", new RunCommand(() -> {shoot.execute();}).onlyWhile(m_Shooter::hasNote));
+
     NamedCommands.registerCommand("abandon path", new AbandonPath().a_AbandonPath(() -> true, // we do abandon path
     "Goal Path", "Alternate Path", s_Swerve));
     AutoBuilder.configureHolonomic(
@@ -102,11 +105,10 @@ public class RobotContainer {
             joysticks::getRotationVelocity // rotation
             ));
 
-    shoot = new Shooting(m_Shooter, s_Swerve,joysticks::getXVelocity,
-            joysticks::getYVelocity);
+    PPHolonomicDriveController.setRotationTargetOverride(s_Swerve::getRotationTargetOverride);
     // Configure the button bindings
     autoChooser = AutoBuilder.buildAutoChooser();
-    
+  
 
     // Another option that allows you to specify the default auto by its name
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");

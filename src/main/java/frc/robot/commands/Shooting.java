@@ -26,7 +26,7 @@ public class Shooting extends Command {
     private Shooter mShooter;
     private Swerve mSwerve;
     
-    private final PIDController rotController = new PIDController(5, 0, 0);
+    private final PIDController rotController = new PIDController(30, 2.4, 2.5);
 
      private double ShooterAngle = 2.0;
      private double RobotAngle = 1.0;
@@ -67,6 +67,8 @@ public class Shooting extends Command {
      private double d = 0;
      private double e = 0;
      private double f = 0;
+
+     private double rotationVal = 0;
     public Shooting(
           Shooter m_shooter, 
           Swerve m_swerve,      
@@ -88,23 +90,7 @@ public class Shooting extends Command {
 
     @Override
     public void initialize(){
-        rotController.setTolerance(Math.toRadians(10));
-    }
-
-    @Override
-    public void execute(){
-          // # g = 9.81
-          // # A = proj_pos.x
-          // # B = proj_pos.y
-          // # C = proj_ pos.z
-          // # M = target_pos.X
-          // # N = target_pos.y
-          // # O = target_pos.z
-          // # P = target_velocity.x
-          // # Q = target_velocity.y
-          // # R = target_velocity.z
-          // # S = proj_speed;
-          // Note Postion
+        rotController.setTolerance(Math.toRadians(1));
           A = mSwerve.getPose().getX();
           B = 0.4572;
           C = mSwerve.getPose().getY();
@@ -118,6 +104,9 @@ public class Shooting extends Command {
           Q = 0;
           R = -mSwerve.getVelocity().getY();
           S = 15;
+
+          SmartDashboard.putNumber("x velocity", P);
+          SmartDashboard.putNumber("y velocity", R);
 
           H = M - A;
           J = O - C;
@@ -144,9 +133,34 @@ public class Shooting extends Command {
 
           ShooterAngle = Math.atan2(e, Math.sqrt(Math.pow(d,2) + Math.pow(f,2)));
           RobotAngle = Math.atan2(f, d);
+    }
+
+    @Override
+    public void execute(){
+          // # g = 9.81
+          // # A = proj_pos.x
+          // # B = proj_pos.y
+          // # C = proj_ pos.z
+          // # M = target_pos.X
+          // # N = target_pos.y
+          // # O = target_pos.z
+          // # P = target_velocity.x
+          // # Q = target_velocity.y
+          // # R = target_velocity.z
+          // # S = proj_speed;
+          // Note Postion
+
+          rotController.setIZone(Math.toRadians(5));
+
           rotController.setSetpoint(RobotAngle);
           if (rotController.atSetpoint() && mShooter.CanShoot()){
                mShooter.Index();
+          }
+          if(!rotController.atSetpoint()){
+               mShooter.stopIndex();
+               rotationVal = MathUtil.clamp(rotController.calculate(mSwerve.getPose().getRotation().getRadians()), -Constants.Swerve.maxAngularVelocity, Constants.Swerve.maxAngularVelocity);
+          }else{
+               rotationVal = 0; 
           }
 
           double translationVal =
@@ -156,7 +170,6 @@ public class Shooting extends Command {
                strafeLimiter.calculate(
                     MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.Swerve.stickDeadband));
           
-          double rotationVal = MathUtil.clamp(rotController.calculate(mSwerve.getPose().getRotation().getRadians()), -Constants.Swerve.maxAngularVelocity, Constants.Swerve.maxAngularVelocity);
           mShooter.AutoFire();
 
 

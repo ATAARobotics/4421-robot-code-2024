@@ -155,10 +155,6 @@ public class AutoShooter extends Command {
                mShooter.Index();
           }
           mSwerve.setAutoAngle(RobotAngle);
-
-
-          
-
      }
      @Override
      public void end(boolean interrupted) {
