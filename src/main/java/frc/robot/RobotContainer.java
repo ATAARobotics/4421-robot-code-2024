@@ -7,9 +7,16 @@ package frc.robot;
 import java.io.File;
 import java.util.HashMap;
 
+import org.ejml.dense.block.MatrixOps_DDRB;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -54,6 +61,8 @@ public class RobotContainer {
 
 
 
+  // temp
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -68,8 +77,23 @@ public class RobotContainer {
 
 
     s_Swerve = new Swerve(m_Shooter::hasNote);
-
-
+    
+    NamedCommands.registerCommand("abandon path", new AbandonPath().a_AbandonPath(() -> true, // we do abandon path
+    "Goal Path", "Alternate Path", s_Swerve));
+    AutoBuilder.configureHolonomic(
+        s_Swerve::getPose, // Robot pose supplier
+        s_Swerve::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+        s_Swerve::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        s_Swerve::autoDrive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+            new PIDConstants(5.0, 0.03, 0.0), // Translation PID constants
+            new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+            4.5, // Max module speed, in m/s
+            0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+            new ReplanningConfig() // Default path replanning config. See the API for the options here
+        ), () -> true,
+        s_Swerve // Reference to this subsystem to set requirements
+    );
     s_Swerve.setDefaultCommand(
         new TeleopSwerve(
             s_Swerve,
@@ -77,8 +101,6 @@ public class RobotContainer {
             joysticks::getYVelocity, // strafe
             joysticks::getRotationVelocity // rotation
             ));
-    //shoot = new Shooting(m_Shooter, s_Swerve,() -> -driver.getRawAxis(translationAxis),
-    //        () -> -driver.getRawAxis(strafeAxis), () -> robotCentric.getAsBoolean());
 
     shoot = new Shooting(m_Shooter, s_Swerve,joysticks::getXVelocity,
             joysticks::getYVelocity);
@@ -86,9 +108,10 @@ public class RobotContainer {
     autoChooser = AutoBuilder.buildAutoChooser();
     
 
-
     // Another option that allows you to specify the default auto by its name
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
+    
+
     SmartDashboard.putData("Auto Chooser", autoChooser);
     configureButtonBindings();
   }
@@ -118,7 +141,8 @@ public class RobotContainer {
             joysticks::getYVelocity,
             joysticks::getRotationVelocity
             ));
-
+    // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+    joysticks.toWaypoint.onTrue(new ChaseTag(s_Swerve, new Pose2d(16.8, 8.0, Rotation2d.fromDegrees(90)), false));
   }
   public OI getOI() {
     return joysticks;

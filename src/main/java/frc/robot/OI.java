@@ -36,6 +36,7 @@ class OI {
     public JoystickButton runIndex;
     public JoystickButton shooterLock;
     public JoystickButton reverseIntake;
+    public JoystickButton toWaypoint;
 
     public OI() {
         // Configure the button bindings
@@ -59,6 +60,8 @@ class OI {
         zeroGyro = driveStick.getWPIJoystickButton("Zero");
 
         reverseIntake = driveStick.getWPIJoystickButton("ReverseIntake");
+
+        toWaypoint = driveStick.getWPIJoystickButton("ScoreAmp");
 
         // Set up command-based stuff
         /** 
