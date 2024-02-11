@@ -97,6 +97,9 @@ public class RobotContainer {
 
     joysticks.zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
+    joysticks.reverseIntake.onTrue(new InstantCommand(m_Shooter::ReverseIndex));
+    joysticks.reverseIntake.onFalse(new InstantCommand(m_Shooter::stopIndex));
+
     joysticks.shooterLock.whileTrue(shoot)
     .onFalse(new TeleopSwerve(
             s_Swerve,

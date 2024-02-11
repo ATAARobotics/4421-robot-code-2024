@@ -35,6 +35,8 @@ class OI {
     public JoystickButton runShooter;
     public JoystickButton runIndex;
     public JoystickButton shooterLock;
+    public JoystickButton reverseIntake;
+
     public OI() {
         // Configure the button bindings
         try (InputStream input = new FileInputStream("/home/lvuser/deploy/bindings.properties")) {
@@ -55,6 +57,8 @@ class OI {
         shooterLock = rotationStick.getWPIJoystickButton("AutoShooter");
         intake = driveStick.getWPIJoystickButton("Intake");
         zeroGyro = driveStick.getWPIJoystickButton("Zero");
+
+        reverseIntake = driveStick.getWPIJoystickButton("ReverseIntake");
 
         // Set up command-based stuff
         /** 
