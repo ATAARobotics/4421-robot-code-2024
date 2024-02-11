@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.function.BooleanSupplier;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
@@ -22,7 +23,9 @@ class OI {
     // Driver Values
     private double xVelocity;
     private double yVelocity;
-    private double rotationVelocity;
+    private double rotationVelocityX; // rename to position
+    private double rotationVelocityY;
+    private double lastAngle;
     private boolean toggleFieldOriented;
     private double speed;
     private boolean override = false;
@@ -101,7 +104,8 @@ class OI {
     public void checkInputs() {
         xVelocity = driveStick.getAnalog("XVelocity");
         yVelocity = driveStick.getAnalog("YVelocity");
-        rotationVelocity = rotationStick.getAnalog("XVelocity");
+        rotationVelocityX = rotationStick.getAnalog("XVelocity");
+        rotationVelocityY = rotationStick.getAnalog("YVelocity");
         //rotationVelocity = driveStick.getAnalog("RotationVelocity");
 
         speed = (-driveStick.getAnalog("Speed") + 1) / 4 + 0.5;
@@ -111,14 +115,18 @@ class OI {
             xVelocity = 0;
             yVelocity = 0;
         }
-        if (Math.abs(rotationVelocity) < Constants.Swerve.JOY_DEAD_ZONE) {
-            rotationVelocity = 0;
+        if (Math.sqrt(Math.pow(rotationVelocityX, 2) + Math.pow(rotationVelocityY, 2)) < Constants.Swerve.JOY_DEAD_ZONE) {
+            rotationVelocityX = 0;
+            rotationVelocityY = 0;
         }
         // kinda crimnal
         xVelocity = Math.signum(xVelocity) * Math.abs(Math.pow(xVelocity, Constants.Swerve.JOYSTICK_SENSITIVITY));
         yVelocity = Math.signum(yVelocity) * Math.abs(Math.pow(yVelocity, Constants.Swerve.JOYSTICK_SENSITIVITY));
-        rotationVelocity = Math.signum(rotationVelocity)
-                * Math.abs(Math.pow(rotationVelocity, Constants.Swerve.TURNING_SENSITIVITY));
+
+        rotationVelocityX = Math.signum(rotationVelocityX)
+                * Math.abs(Math.pow(rotationVelocityX, Constants.Swerve.TURNING_SENSITIVITY));
+        rotationVelocityY = Math.signum(rotationVelocityY)
+                * Math.abs(Math.pow(rotationVelocityY, Constants.Swerve.TURNING_SENSITIVITY));
 
         toggleFieldOriented = driveStick.getButton("ToggleFieldOriented");
     }
@@ -137,7 +145,16 @@ class OI {
     }
 
     public double getRotationVelocity() {
-        return -rotationVelocity;
+        return -rotationVelocityX; // this returns same thing as before
+    }
+    // save last position, then check if new one is valid (>db)
+    public double getRotationAngle(){ // dont want deadband, deadband returns zero if below value, we want the opposite
+        double db = Constants.Swerve.stickDeadband;
+        
+        if(Math.abs(rotationVelocityX)>db && Math.abs(rotationVelocityY)>db){
+            lastAngle = Math.atan2(-rotationVelocityX, -rotationVelocityY);
+        }
+        return lastAngle;
     }
 
     public boolean getToggleFieldOriented() {

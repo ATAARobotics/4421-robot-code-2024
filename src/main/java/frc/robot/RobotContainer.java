@@ -102,7 +102,7 @@ public class RobotContainer {
             s_Swerve,
             joysticks::getXVelocity, // translation
             joysticks::getYVelocity, // strafe
-            joysticks::getRotationVelocity // rotation
+            joysticks::getRotationAngle
             ));
 
     PPHolonomicDriveController.setRotationTargetOverride(s_Swerve::getRotationTargetOverride);
