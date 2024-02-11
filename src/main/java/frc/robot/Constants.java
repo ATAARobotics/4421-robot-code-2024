@@ -10,7 +10,14 @@ import frc.lib.config.SwerveModuleConstants;
 
 public final class Constants {
 
+
   public static final class Swerve {
+    //joysticks
+    public static final double JOY_DEAD_ZONE = 0.3;
+    public static final double JOYSTICK_SENSITIVITY = 1;
+    public static final double TURNING_SENSITIVITY = 3;
+
+
     public static final double stickDeadband = 0.1;
 
     public static final int pigeonID = 20;
@@ -69,7 +76,7 @@ public final class Constants {
 
     /* Swerve Profiling Values */
     public static final double maxSpeed = 4.5; // meters per second
-    public static final double maxAngularVelocity = 2.0;
+    public static final double maxAngularVelocity = 4.0;
 
     /* Neutral Modes */
     public static final IdleMode angleNeutralMode = IdleMode.kBrake;
