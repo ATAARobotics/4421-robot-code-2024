@@ -131,7 +131,7 @@ public class Shooter extends SubsystemBase{
                     rightIndex.set(0.1);
                     intake.set(1.0);
                 } else{
-                    IntakeLevel = IntakeLevels.NotRunning;
+                    IntakeLevel = IntakeLevels.SeeSensor;
                 }
                 break;  
             case Shooting:
@@ -174,6 +174,10 @@ public class Shooter extends SubsystemBase{
         else{
             IntakeLevel = IntakeLevels.NotRunning;
         }
+    }
+
+    public void StopIntake() {
+        IntakeLevel = IntakeLevels.NotRunning;
     }
 
     public void stop(){ 

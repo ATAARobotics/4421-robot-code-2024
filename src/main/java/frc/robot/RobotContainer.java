@@ -34,22 +34,16 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {
   /* Controllers */
-  private final Joystick driver = new Joystick(0);
-
   /* Drive Controls */
-  private final int translationAxis = XboxController.Axis.kLeftY.value;
-  private final int strafeAxis = XboxController.Axis.kLeftX.value;
-  private final int rotationAxis = XboxController.Axis.kRightX.value;
+  //private final int translationAxis = XboxController.Axis.kLeftY.value;
+  //private final int strafeAxis = XboxController.Axis.kLeftX.value;
+  //private final int rotationAxis = XboxController.Axis.kRightX.value;
+
+  private final OI joysticks = new OI();
+
+  
 
   /* Driver Buttons */
-  private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-  private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-  private final JoystickButton intake = new JoystickButton(driver, XboxController.Button.kA.value);
-  private final JoystickButton runShooter = new JoystickButton(driver, XboxController.Button.kX.value);
-  private final JoystickButton runIndex = new JoystickButton(driver, XboxController.Button.kB.value);
-  private final JoystickButton shooterLock = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-
-
   /* Subsystems */
   public final Swerve s_Swerve;
   public final Shooter m_Shooter;
@@ -61,18 +55,21 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() { 
-    System.out.println("damn it");
     s_Swerve = new Swerve();
     m_Shooter = new Shooter();
+
     s_Swerve.setDefaultCommand(
         new TeleopSwerve(
             s_Swerve,
-            () -> -driver.getRawAxis(translationAxis),
-            () -> -driver.getRawAxis(strafeAxis),
-            () -> -driver.getRawAxis(rotationAxis),
-            () -> robotCentric.getAsBoolean()));
-    shoot = new Shooting(m_Shooter, s_Swerve,() -> -driver.getRawAxis(translationAxis),
-            () -> -driver.getRawAxis(strafeAxis), () -> robotCentric.getAsBoolean());
+            joysticks::getXVelocity, // translation
+            joysticks::getYVelocity, // strafe
+            joysticks::getRotationVelocity // rotation
+            ));
+    //shoot = new Shooting(m_Shooter, s_Swerve,() -> -driver.getRawAxis(translationAxis),
+    //        () -> -driver.getRawAxis(strafeAxis), () -> robotCentric.getAsBoolean());
+
+    shoot = new Shooting(m_Shooter, s_Swerve,joysticks::getXVelocity,
+            joysticks::getYVelocity);
     // Configure the button bindings
     autoChooser = AutoBuilder.buildAutoChooser();
     
@@ -95,22 +92,23 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     /* Driver Buttons */
-    intake.onTrue(new InstantCommand(m_Shooter::IntakeIn));
-    runIndex.whileTrue(new RunCommand(m_Shooter::Index));
-    runIndex.onFalse(new InstantCommand(m_Shooter::stopIndex));
-    runShooter.onTrue(new InstantCommand(m_Shooter::Fire));
-    zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+    joysticks.intake.onTrue(new InstantCommand(m_Shooter::IntakeIn));
+    joysticks.intake.onFalse(new InstantCommand(m_Shooter::StopIntake));
 
-    shooterLock.whileTrue(shoot)
+    joysticks.zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+
+    joysticks.shooterLock.whileTrue(shoot)
     .onFalse(new TeleopSwerve(
             s_Swerve,
-            () -> -driver.getRawAxis(translationAxis),
-            () -> -driver.getRawAxis(strafeAxis),
-            () -> -driver.getRawAxis(rotationAxis),
-            () -> robotCentric.getAsBoolean()));
+            joysticks::getXVelocity,
+            joysticks::getYVelocity,
+            joysticks::getRotationVelocity
+            ));
 
   }
-
+  public OI getOI() {
+    return joysticks;
+  }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

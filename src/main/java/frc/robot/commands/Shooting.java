@@ -71,8 +71,7 @@ public class Shooting extends Command {
           Shooter m_shooter, 
           Swerve m_swerve,      
           DoubleSupplier translationSup,
-          DoubleSupplier strafeSup,
-          BooleanSupplier robotCentricSup
+          DoubleSupplier strafeSup
      ){
         this.mShooter = m_shooter;
         this.mSwerve = m_swerve;
@@ -81,9 +80,7 @@ public class Shooting extends Command {
           SmartDashboard.putNumber("Rot I", 0);
           SmartDashboard.putNumber("Rot D", 0);
         this.translationSup = translationSup;
-        this.strafeSup = strafeSup;
-        this.robotCentricSup = robotCentricSup;
-        
+        this.strafeSup = strafeSup;        
     }
      public Shooting(){
 
@@ -112,7 +109,6 @@ public class Shooting extends Command {
           B = 0.4572;
           C = mSwerve.getPose().getY();
 
-          System.out.println("X: "+ A + " Y: "+ C);
           //TODO change goal pose to be set based on color
           M = RedgoalPose.getX();
           N = RedgoalPose.getZ();
@@ -133,7 +129,6 @@ public class Shooting extends Command {
           c2 = Q*Q - 2*K*L - S*S + P*P + R*R;
           c3 = 2*K*Q + 2*H*P + 2*J*R;
           c4 = K*K + H*H + J*J;
-          System.out.println(c4+"x^4 + "+ c3+"x^3 + " + c2+"x^2 + " + c1+"x + "+ c0);
           double[] ts = solveQuartic(c0, c1, c2, c3, c4);
           double t = 1000000000;
           if(ts != null){
@@ -142,7 +137,6 @@ public class Shooting extends Command {
                          t = ts[i];
                     }
                }
-               System.out.println("Time: " + t);
                d = ((H+P*t)/t);
                e = ((K+Q*t-L*t*t)/t);
                f = ((J+R*t)/t);
@@ -150,7 +144,7 @@ public class Shooting extends Command {
 
           ShooterAngle = Math.atan2(e, Math.sqrt(Math.pow(d,2) + Math.pow(f,2)));
           RobotAngle = Math.atan2(f, d);
-
+          rotController.setSetpoint(RobotAngle);
           if (rotController.atSetpoint() && mShooter.CanShoot()){
                mShooter.Index();
           }
@@ -170,7 +164,7 @@ public class Shooting extends Command {
           mSwerve.drive(
                new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
                rotationVal,
-               !robotCentricSup.getAsBoolean(),
+               true,
                true);
 
      }
