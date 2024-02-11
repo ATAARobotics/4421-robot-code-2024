@@ -24,6 +24,9 @@ public class Shooter extends SubsystemBase{
     private double indexPower = 0.10;
     private boolean finishedIntake = false;
 
+    private boolean hasNote = true;
+
+
 
     public CANSparkFlex leftShooter;
     public CANSparkFlex rightShooter;
@@ -123,6 +126,9 @@ public class Shooter extends SubsystemBase{
                     leftIndex.set(indexPower);
                     rightIndex.set(indexPower);
                     intake.set(0);
+
+                    hasNote = true;
+
                 } else{
                     IntakeLevel = IntakeLevels.Reverse;
                 }
@@ -162,6 +168,10 @@ public class Shooter extends SubsystemBase{
         IntakeLevel = IntakeLevels.Shooting;
         leftIndex.set(indexPower);
         rightIndex.set(indexPower);
+
+        if (isFiring) {
+            hasNote = false;
+        }
     }
     public void stopIndex(){
         IntakeLevel = IntakeLevels.NotRunning;
@@ -197,6 +207,10 @@ public class Shooter extends SubsystemBase{
 
     public boolean CanShoot(){
         return(5000<leftShooter.getEncoder().getVelocity() && leftShooter.getEncoder().getVelocity()<6000);
+    }
+
+    public boolean hasNote() {
+        return hasNote;
     }
 
 }

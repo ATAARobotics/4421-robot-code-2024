@@ -1,5 +1,8 @@
 package frc.robot.subsystems;
 
+import java.util.Optional;
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix.sensors.Pigeon2;
 import com.ctre.phoenix.sensors.Pigeon2.AxisDirection;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -38,7 +41,12 @@ public class Swerve extends SubsystemBase {
   private Pose2d lastPose;
   private Pose2d vecPose;
   private double lastTimeStamp = 0;
-  public Swerve() {
+  private Rotation2d Rotation2dOut;
+
+  private BooleanSupplier hasNote;
+
+  public Swerve(BooleanSupplier hasNote) {
+    this.hasNote = hasNote;
     gyro = new Pigeon2(Constants.Swerve.pigeonID);
     gyro.configFactoryDefault();
     gyro.configMountPose(AxisDirection.PositiveY, AxisDirection.PositiveZ);
@@ -190,4 +198,19 @@ public class Swerve extends SubsystemBase {
  public Pose2d getVelocity(){
     return vecPose;
  }
+
+ public void setAutoAngle(double ang) {
+    //Rotatvoiion2d.fromDegrees(ang);
+    Rotation2dOut = Rotation2d.fromDegrees(ang);
+ }
+
+  public Optional<Rotation2d> getRotationTargetOverride(){
+    if(hasNote.getAsBoolean()) {
+      // Return an optional containing the rotation override (this should be a field relative rotation)
+      return Optional.of(Rotation2dOut);
+  } else {
+      // return an empty optional when we don't want to override the path's rotation
+      return Optional.empty();
+  }
+}
 }

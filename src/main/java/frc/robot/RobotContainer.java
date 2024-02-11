@@ -51,18 +51,24 @@ public class RobotContainer {
   public Command AutoCommand;
   private Shooting shoot;
 
+
+
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() { 
-    s_Swerve = new Swerve();
     m_Shooter = new Shooter();
 
     // Register pathplanner commands
-    NamedCommands.registerCommand("Fire Shooter", new InstantCommand(m_Shooter::Fire));
+    NamedCommands.registerCommand("Fire Shooter", new InstantCommand(() -> {m_Shooter.Fire();}));
     NamedCommands.registerCommand("Intake", new InstantCommand(m_Shooter::IntakeIn));
     NamedCommands.registerCommand("Index", new InstantCommand(m_Shooter::Index));
     NamedCommands.registerCommand("Stop Index", new InstantCommand(m_Shooter::stopIndex));
+
+
+    s_Swerve = new Swerve(m_Shooter::hasNote);
+
 
     s_Swerve.setDefaultCommand(
         new TeleopSwerve(
