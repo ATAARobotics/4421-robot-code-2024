@@ -58,6 +58,12 @@ public class RobotContainer {
     s_Swerve = new Swerve();
     m_Shooter = new Shooter();
 
+    // Register pathplanner commands
+    NamedCommands.registerCommand("Fire Shooter", new InstantCommand(m_Shooter::Fire));
+    NamedCommands.registerCommand("Intake", new InstantCommand(m_Shooter::IntakeIn));
+    NamedCommands.registerCommand("Index", new InstantCommand(m_Shooter::Index));
+    NamedCommands.registerCommand("Stop Index", new InstantCommand(m_Shooter::stopIndex));
+
     s_Swerve.setDefaultCommand(
         new TeleopSwerve(
             s_Swerve,
@@ -73,8 +79,7 @@ public class RobotContainer {
     // Configure the button bindings
     autoChooser = AutoBuilder.buildAutoChooser();
     
-    // Register pathplanner commands
-    NamedCommands.registerCommand("Fire Shooter", new ShooterFire(m_Shooter));
+
 
     // Another option that allows you to specify the default auto by its name
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");

@@ -21,9 +21,7 @@ public class Shooter extends SubsystemBase{
     private boolean isFiring = false;
     private boolean isIntaking = false;
     private boolean indexing = false;
-
     private double indexPower = 0.10;
-
     private boolean finishedIntake = false;
 
 
@@ -91,7 +89,6 @@ public class Shooter extends SubsystemBase{
         
         //SmartDashboard.putNumber("Left Index", 0.10);
        // SmartDashboard.putNumber("Right Index", 0.10);
-
     }
 
 
@@ -189,6 +186,7 @@ public class Shooter extends SubsystemBase{
 
     public void StopIntake() {
         IntakeLevel = IntakeLevels.NotRunning;
+
     }
 
     public void stop(){ 
