@@ -37,6 +37,8 @@ public class Shooter extends SubsystemBase{
 
     private DigitalInput IndexStop;
 
+    private DigitalInput IntakeStop;
+
     private enum IntakeLevels{
         NotRunning,
         Running, 
@@ -54,6 +56,7 @@ public class Shooter extends SubsystemBase{
         rightIndex = new CANSparkFlex(Constants.Subsystems.rightSideIndex, CANSparkLowLevel.MotorType.kBrushless);
         
         IndexStop = new DigitalInput(0);
+        IntakeStop = new DigitalInput(1);
 
         leftShooter.setInverted(true);
         leftIndex.setInverted(true);
@@ -106,6 +109,9 @@ public class Shooter extends SubsystemBase{
             rightShooter.stopMotor();
             leftShooter.stopMotor();
         }
+
+        
+
         switch (IntakeLevel){
             case NotRunning:
                 leftIndex.stopMotor();
@@ -113,6 +119,9 @@ public class Shooter extends SubsystemBase{
                 intake.stopMotor();
                 break;
             case Reverse:
+                if (IntakeStop.get()) {
+                    intake.set(0);
+                }
                 if(IndexStop.get()){
                     leftIndex.set(-indexPower);
                     rightIndex.set(-indexPower);
@@ -134,6 +143,9 @@ public class Shooter extends SubsystemBase{
                 }
                 break;
             case Running:
+                if (IntakeStop.get()) {
+                    intake.set(0);
+                }
                 if(IndexStop.get()){
                     leftIndex.set(indexPower);
                     rightIndex.set(indexPower);
@@ -141,11 +153,15 @@ public class Shooter extends SubsystemBase{
                 } else{
                     IntakeLevel = IntakeLevels.SeeSensor;
                 }
-                break;  
+                break; 
             case Shooting:
                 break;
             default:
                 break;
+        }
+
+        if (IntakeStop.get()) {
+            intake.set(0);
         }
 
         SmartDashboard.putNumber("left velocity", leftShooter.getEncoder().getVelocity());
