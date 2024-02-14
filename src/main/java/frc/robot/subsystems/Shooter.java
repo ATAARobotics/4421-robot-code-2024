@@ -160,8 +160,10 @@ public class Shooter extends SubsystemBase{
                 break;
         }
 
-        if (IntakeStop.get()) {
+        if (!IntakeStop.get()) { // when thing in front
             intake.set(0);
+            leftIndex.set(0);
+            rightIndex.set(0);
         }
 
         SmartDashboard.putNumber("left velocity", leftShooter.getEncoder().getVelocity());
