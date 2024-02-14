@@ -91,6 +91,23 @@ public class Shooting extends Command {
     @Override
     public void initialize(){
         rotController.setTolerance(Math.toRadians(1));
+
+    }
+
+    @Override
+    public void execute(){
+          // # g = 9.81
+          // # A = proj_pos.x
+          // # B = proj_pos.y
+          // # C = proj_ pos.z
+          // # M = target_pos.X
+          // # N = target_pos.y
+          // # O = target_pos.z
+          // # P = target_velocity.x
+          // # Q = target_velocity.y
+          // # R = target_velocity.z
+          // # S = proj_speed;
+          // Note Postion
           A = mSwerve.getPose().getX();
           B = 0.4572;
           C = mSwerve.getPose().getY();
@@ -133,23 +150,6 @@ public class Shooting extends Command {
 
           ShooterAngle = Math.atan2(e, Math.sqrt(Math.pow(d,2) + Math.pow(f,2)));
           RobotAngle = Math.atan2(f, d);
-    }
-
-    @Override
-    public void execute(){
-          // # g = 9.81
-          // # A = proj_pos.x
-          // # B = proj_pos.y
-          // # C = proj_ pos.z
-          // # M = target_pos.X
-          // # N = target_pos.y
-          // # O = target_pos.z
-          // # P = target_velocity.x
-          // # Q = target_velocity.y
-          // # R = target_velocity.z
-          // # S = proj_speed;
-          // Note Postion
-
           rotController.setIZone(Math.toRadians(5));
 
           rotController.setSetpoint(RobotAngle);

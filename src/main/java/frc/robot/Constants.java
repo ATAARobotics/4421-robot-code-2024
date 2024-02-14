@@ -49,7 +49,7 @@ public final class Constants {
 
     /* Swerve Current Limiting */
     public static final int angleContinuousCurrentLimit = 20;
-    public static final int driveContinuousCurrentLimit = 20;
+    public static final int driveContinuousCurrentLimit = 40;
 
     /* Angle Motor PID Values */
     public static final double angleKP = 0.039;
@@ -76,7 +76,7 @@ public final class Constants {
 
     /* Swerve Profiling Values */
     public static final double maxSpeed = 4.5; // meters per second
-    public static final double maxAngularVelocity = 4.0;
+    public static final double maxAngularVelocity = Math.PI*3;
 
     /* Neutral Modes */
     public static final IdleMode angleNeutralMode = IdleMode.kBrake;
