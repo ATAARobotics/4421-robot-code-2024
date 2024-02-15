@@ -102,7 +102,7 @@ public class RobotContainer {
             s_Swerve,
             joysticks::getXVelocity, // translation
             joysticks::getYVelocity, // strafe
-            joysticks::getRotationAngle
+            joysticks::getRotationVelocity
             ));
 
     PPHolonomicDriveController.setRotationTargetOverride(s_Swerve::getRotationTargetOverride);
@@ -144,7 +144,11 @@ public class RobotContainer {
             joysticks::getRotationVelocity
             ));
     // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-    joysticks.toWaypoint.onTrue(new ChaseTag(s_Swerve, new Pose2d(16.8, 8.0, Rotation2d.fromDegrees(90)), false));
+    joysticks.toWaypoint.onTrue(new ChaseTag(s_Swerve, 
+    new Pose2d(
+      s_Swerve.getPose().getX()+1.0, s_Swerve.getPose().getY()+1.0, Rotation2d.fromDegrees(90)
+    ), 
+    false));
   }
   public OI getOI() {
     return joysticks;

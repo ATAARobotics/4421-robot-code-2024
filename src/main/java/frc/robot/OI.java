@@ -147,8 +147,8 @@ class OI {
     public double getRotationVelocity() {
         return -rotationVelocityX; // this returns same thing as before
     }
-    // save last position, then check if new one is valid (>db)
-    public double getRotationAngle(){ // dont want deadband, deadband returns zero if below value, we want the opposite
+
+    public double getRotationAngle(){
         double db = Constants.Swerve.stickDeadband;
         
         if(Math.abs(rotationVelocityX)>db && Math.abs(rotationVelocityY)>db){
