@@ -135,7 +135,7 @@ public class RobotContainer {
 
     joysticks.reverseIntake.onTrue(new InstantCommand(m_Shooter::ReverseIndex));
     joysticks.reverseIntake.onFalse(new InstantCommand(m_Shooter::stopIndex));
-
+    joysticks.runShooter.onTrue(new InstantCommand(m_Shooter::Fire));
     joysticks.shooterLock.whileTrue(shoot)
     .onFalse(new TeleopSwerve(
             s_Swerve,

@@ -85,7 +85,7 @@ public class Swerve extends SubsystemBase {
     SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                translation.getX(), translation.getY(), rotation, getYaw())
+                translation.getX(), translation.getY(), rotation, getAngle())
             : new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
 
@@ -165,7 +165,9 @@ public class Swerve extends SubsystemBase {
        ? Rotation2d.fromDegrees(360 - gyro.getYaw())
        : Rotation2d.fromDegrees(gyro.getYaw());
   }
-
+  public Rotation2d getAngle(){
+    return (PoseEstimator.getEstimatedPosition().getRotation());
+  }
   @Override
   public void periodic() {
     pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
@@ -173,6 +175,9 @@ public class Swerve extends SubsystemBase {
     double poseY = pose[1];
     Rotation2d poseR = Rotation2d.fromDegrees(pose[5]);
     double timeStamp = Timer.getFPGATimestamp() - (pose[6] / 1000.0);
+
+    SmartDashboard.putNumber("Pose Estimator ", PoseEstimator.getEstimatedPosition().getRotation().getDegrees());
+    SmartDashboard.putNumber("Get Yaw ", getYaw().getDegrees());
 
 
     if (Math.abs(pose[0]) >= 0.1) {

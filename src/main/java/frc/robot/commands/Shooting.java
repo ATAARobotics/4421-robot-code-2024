@@ -82,15 +82,13 @@ public class Shooting extends Command {
           SmartDashboard.putNumber("Rot I", 0);
           SmartDashboard.putNumber("Rot D", 0);
         this.translationSup = translationSup;
-        this.strafeSup = strafeSup;        
+        this.strafeSup = strafeSup;
+        rotController.enableContinuousInput(-Math.PI, Math.PI);
     }
-     public Shooting(){
-
-     }
 
     @Override
     public void initialize(){
-        rotController.setTolerance(Math.toRadians(1));
+        rotController.setTolerance(Math.toRadians(5));
 
     }
 
@@ -107,23 +105,26 @@ public class Shooting extends Command {
           // # Q = target_velocity.y
           // # R = target_velocity.z
           // # S = proj_speed;
+          //velocity
+          P = -mSwerve.getChassisSpeeds().vxMetersPerSecond;
+          Q = 0;
+          R = -mSwerve.getChassisSpeeds().vyMetersPerSecond;
           // Note Postion
-          A = mSwerve.getPose().getX();
+          A = mSwerve.getPose().getX() + (-P*0.2);
           B = 0.4572;
-          C = mSwerve.getPose().getY();
+          C = mSwerve.getPose().getY()+ (-R*0.2);
 
           //TODO change goal pose to be set based on color
           M = RedgoalPose.getX();
           N = RedgoalPose.getZ();
           O = RedgoalPose.getY();
-          //Velocietys
-          P = -mSwerve.getVelocity().getX();
-          Q = 0;
-          R = -mSwerve.getVelocity().getY();
           S = 15;
 
           SmartDashboard.putNumber("x velocity", P);
           SmartDashboard.putNumber("y velocity", R);
+          rotController.setP(SmartDashboard.getNumber("Rot P", 0));
+          rotController.setI(SmartDashboard.getNumber("Rot I", 0));
+          rotController.setD(SmartDashboard.getNumber("Rot D", 0));
 
           H = M - A;
           J = O - C;
@@ -156,12 +157,8 @@ public class Shooting extends Command {
           if (rotController.atSetpoint() && mShooter.CanShoot()){
                mShooter.Index();
           }
-          if(!rotController.atSetpoint()){
-               mShooter.stopIndex();
-               rotationVal = MathUtil.clamp(rotController.calculate(mSwerve.getPose().getRotation().getRadians()), -Constants.Swerve.maxAngularVelocity, Constants.Swerve.maxAngularVelocity);
-          }else{
-               rotationVal = 0; 
-          }
+          rotationVal = MathUtil.clamp(rotController.calculate(mSwerve.getPose().getRotation().getRadians()), -Constants.Swerve.maxAngularVelocity, Constants.Swerve.maxAngularVelocity);
+
 
           double translationVal =
                translationLimiter.calculate(
@@ -170,7 +167,6 @@ public class Shooting extends Command {
                strafeLimiter.calculate(
                     MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.Swerve.stickDeadband));
           
-          mShooter.AutoFire();
 
 
           /* Drive */

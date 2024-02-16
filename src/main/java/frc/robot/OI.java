@@ -63,6 +63,8 @@ class OI {
 
         toWaypoint = driveStick.getWPIJoystickButton("ScoreAmp");
 
+        runShooter = gunnerStick.getWPIJoystickButton("Shoot");
+
         // Set up command-based stuff
         /** 
         RotIntake = rotationStick.getWPIJoystickButton("RotIntake");
@@ -99,8 +101,8 @@ class OI {
     }
 
     public void checkInputs() {
-        xVelocity = driveStick.getAnalog("XVelocity");
-        yVelocity = driveStick.getAnalog("YVelocity");
+        xVelocity = -driveStick.getAnalog("XVelocity");
+        yVelocity = -driveStick.getAnalog("YVelocity");
         rotationVelocity = rotationStick.getAnalog("XVelocity");
         //rotationVelocity = driveStick.getAnalog("RotationVelocity");
 
