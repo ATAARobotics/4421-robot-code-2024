@@ -26,7 +26,7 @@ public class Shooting extends Command {
     private Shooter mShooter;
     private Swerve mSwerve;
     
-    private final PIDController rotController = new PIDController(30, 2.4, 2.5);
+    private final PIDController rotController = new PIDController(10, 0, 0);
 
      private double ShooterAngle = 2.0;
      private double RobotAngle = 1.0;
@@ -94,6 +94,7 @@ public class Shooting extends Command {
 
     @Override
     public void execute(){
+          System.out.println("Shooting");
           // # g = 9.81
           // # A = proj_pos.x
           // # B = proj_pos.y
@@ -122,9 +123,6 @@ public class Shooting extends Command {
 
           SmartDashboard.putNumber("x velocity", P);
           SmartDashboard.putNumber("y velocity", R);
-          rotController.setP(SmartDashboard.getNumber("Rot P", 0));
-          rotController.setI(SmartDashboard.getNumber("Rot I", 0));
-          rotController.setD(SmartDashboard.getNumber("Rot D", 0));
 
           H = M - A;
           J = O - C;

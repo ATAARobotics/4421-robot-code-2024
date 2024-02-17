@@ -89,8 +89,8 @@ public class RobotContainer {
         s_Swerve::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         s_Swerve::autoDrive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-            new PIDConstants(5.0, 0.03, 0.0), // Translation PID constants
-            new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+            new PIDConstants(5.0, 0.5, 0.01), // Translation PID constants
+            new PIDConstants(5.0, 0, 0), // Rotation PID constants
             4.5, // Max module speed, in m/s
             0.4, // Drive base radius in meters. Distance from robot center to furthest module.
             new ReplanningConfig() // Default path replanning config. See the API for the options here
@@ -105,7 +105,7 @@ public class RobotContainer {
             joysticks::getRotationVelocity // rotation
             ));
 
-    PPHolonomicDriveController.setRotationTargetOverride(s_Swerve::getRotationTargetOverride);
+    // PPHolonomicDriveController.setRotationTargetOverride(s_Swerve::getRotationTargetOverride);
     // Configure the button bindings
     autoChooser = AutoBuilder.buildAutoChooser();
   
@@ -144,7 +144,7 @@ public class RobotContainer {
             joysticks::getRotationVelocity
             ));
     // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-    joysticks.toWaypoint.onTrue(new ChaseTag(s_Swerve, new Pose2d(16.8, 8.0, Rotation2d.fromDegrees(90)), false));
+    joysticks.toWaypoint.whileTrue(s_Swerve.driveToWaypoint(new Pose2d(578.77/39.37, (323.00/39.37) - 1, Rotation2d.fromDegrees(270))));
   }
   public OI getOI() {
     return joysticks;
