@@ -144,7 +144,7 @@ public class RobotContainer {
             joysticks::getRotationVelocity
             ));
     // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-    joysticks.toWaypoint.whileTrue(s_Swerve.driveToWaypoint(new Pose2d(578.77/39.37, (323.00/39.37) - 1, Rotation2d.fromDegrees(270))));
+    joysticks.toWaypoint.whileTrue(s_Swerve.driveToWaypoint(new Pose2d((578.77/39.37), (323.00/39.37) - 0.7, Rotation2d.fromDegrees(270))));
   }
   public OI getOI() {
     return joysticks;

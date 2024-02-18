@@ -94,14 +94,14 @@ public final class Constants {
       public static final double driveKV = (1.51 / 12);
       public static final double driveKA = (0.27 / 12);
       // not endpoint tolerances
-      public static final double DTOLERANCE = 0.09; // meters
-      public static final double RTOLERANCE = 5.0; // degrees
+      public static final double DTOLERANCE = 0.01; // meters
+      public static final double RTOLERANCE = 3.0; // degrees
       
-      public static final double SPEEDLIMIT = 1.5; // meters per second
-      public static final double ROTLIMIT = 2*Math.PI;
+      public static final double SPEEDLIMIT = 4.0; // meters per second
+      public static final double ROTLIMIT = 3*Math.PI;
       
-      public static final double E_DTOLERANCE = 0.03; // meters
-      public static final double E_RTOLERANCE = 3.0; // degrees
+      public static final double E_DTOLERANCE = 0.0; // meters
+      public static final double E_RTOLERANCE = 0.0; // degrees
     }
 
     /* Module Specific Constants */
