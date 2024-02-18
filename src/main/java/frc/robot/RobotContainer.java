@@ -81,7 +81,7 @@ public class RobotContainer {
         joysticks::getYVelocity);
     NamedCommands.registerCommand("Auto Shooter", new RunCommand(() -> {shoot.execute();}).onlyWhile(m_Shooter::hasNote));
 
-    NamedCommands.registerCommand("abandon path", new AbandonPath().a_AbandonPath(() -> true, // we do abandon path
+    NamedCommands.registerCommand("Abandon Path GOALPATH to ALTPATH", new AbandonPath().a_AbandonPath(() -> true, // we do abandon path
     "Goal Path", "Alternate Path", s_Swerve));
     AutoBuilder.configureHolonomic(
         s_Swerve::getPose, // Robot pose supplier
