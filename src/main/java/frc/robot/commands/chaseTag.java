@@ -39,7 +39,7 @@ public class ChaseTag extends Command {
     // PID
     private final PIDController xController = new PIDController(3.0, 0, 0);
     private final PIDController yController = new PIDController(5.0, 0, 0);
-    private final PIDController rotController = new PIDController(10.0, 0.0, 0);
+    private final PIDController rotController = new PIDController(10.0, 0.0, 0.0);
 
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.Swerve.Waypoint.driveKS, Constants.Swerve.Waypoint.driveKV);
 

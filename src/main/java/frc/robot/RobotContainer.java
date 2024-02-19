@@ -26,6 +26,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
@@ -144,7 +146,11 @@ public class RobotContainer {
             joysticks::getRotationVelocity
             ));
     // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-    joysticks.toWaypoint.whileTrue(s_Swerve.driveToWaypoint(new Pose2d((578.77/39.37), (323.00/39.37) - 0.7, Rotation2d.fromDegrees(270))));
+    joysticks.toWaypoint.whileTrue(new SequentialCommandGroup(
+      s_Swerve.driveToWaypoint(new Pose2d((578.77/39.37), (323.00/39.37) - 1.5, Rotation2d.fromDegrees(90))),
+      new WaitCommand(0.2),
+      new ChaseTag(s_Swerve, new Pose2d((578.77/39.37), (323.00/39.37) - 0.75, Rotation2d.fromDegrees(270)), false)
+    ));
   }
   public OI getOI() {
     return joysticks;

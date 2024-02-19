@@ -26,7 +26,7 @@ public class Shooting extends Command {
     private Shooter mShooter;
     private Swerve mSwerve;
     
-    private final PIDController rotController = new PIDController(10, 0, 0);
+    private final PIDController rotController = new PIDController(10, 20, 1);
 
      private double ShooterAngle = 2.0;
      private double RobotAngle = 1.0;
@@ -78,7 +78,7 @@ public class Shooting extends Command {
         this.mShooter = m_shooter;
         this.mSwerve = m_swerve;
         addRequirements(mSwerve, mShooter);
-          SmartDashboard.putNumber("Rot P", 0);
+          SmartDashboard.putNumber("Rot P", 10);
           SmartDashboard.putNumber("Rot I", 0);
           SmartDashboard.putNumber("Rot D", 0);
         this.translationSup = translationSup;
@@ -146,7 +146,6 @@ public class Shooting extends Command {
                e = ((K+Q*t-L*t*t)/t);
                f = ((J+R*t)/t);
           }
-
           ShooterAngle = Math.atan2(e, Math.sqrt(Math.pow(d,2) + Math.pow(f,2)));
           RobotAngle = Math.atan2(f, d);
           rotController.setIZone(Math.toRadians(5));

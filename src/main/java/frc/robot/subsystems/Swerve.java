@@ -3,10 +3,14 @@ package frc.robot.subsystems;
 import java.util.Optional;
 import java.util.function.BooleanSupplier;
 
+import org.opencv.core.Mat;
+
 import com.ctre.phoenix.sensors.Pigeon2;
 import com.ctre.phoenix.sensors.Pigeon2.AxisDirection;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathfindThenFollowPathHolonomic;
 import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -23,6 +27,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d; 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -188,6 +193,10 @@ public class Swerve extends SubsystemBase {
 
     if (Math.abs(pose[0]) >= 0.1) {
       PoseEstimator.addVisionMeasurement(new Pose2d(poseX, poseY, poseR), timeStamp);
+      double angleError = Math.abs(getYaw().minus(poseR).getDegrees());
+      if(!DriverStation.isEnabled()){
+        gyro.setYaw(poseR.getDegrees());
+      }
       //PoseEstimator.resetPosition(poseR, getPositions(), new Pose2d(poseX, poseY, poseR));
     }
 
@@ -230,23 +239,18 @@ public class Swerve extends SubsystemBase {
 }
   public Command driveToWaypoint(Pose2d targetPose){
 
-    return new ChaseTag(this, targetPose, false);
+    PathConstraints constraints = new PathConstraints(
+            4.0, 2.0,
+            Units.degreesToRadians(540), Units.degreesToRadians(360));
 
-
-    // PathConstraints constraints = new PathConstraints(
-    //         4.0, 2.0,
-    //         Units.degreesToRadians(540), Units.degreesToRadians(720));
-
-    // // Since AutoBuilder is configured, we can use it to build pathfinding commands
-    // Command pathfindingCommand = AutoBuilder.pathfindToPose(
-    //         targetPose,
-    //         constraints,
-    //         0.0, // Goal end velocity in meters/sec
-    //         0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
-    // );
-    // return pathfindingCommand;
+    // Since AutoBuilder is configured, we can use it to build pathfinding commands
+    Command pathfindingCommand = AutoBuilder.pathfindToPose(
+            targetPose,
+            constraints,
+            0.0, // Goal end velocity in meters/sec
+            0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+    );
+    return pathfindingCommand;
 
   }
-
-  
 }
