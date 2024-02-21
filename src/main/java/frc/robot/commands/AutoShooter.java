@@ -5,6 +5,8 @@ import java.util.function.DoubleSupplier;
 
 import org.opencv.core.Mat;
 
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -19,14 +21,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.*;
 
-public class Shooting extends Command {
+public class AutoShooter extends Command {
      private Translation3d BluegoalPose = new Translation3d(-0.1651, 2.2, 5.5408);
      private Translation3d RedgoalPose = new Translation3d(16.706342, 5.5408, 2.2);
 
     private Shooter mShooter;
     private Swerve mSwerve;
     
-    private final PIDController rotController = new PIDController(10, 20, 1);
+    private final PIDController rotController = new PIDController(5, 0, 0);
 
      private double ShooterAngle = 2.0;
      private double RobotAngle = 1.0;
@@ -68,8 +70,10 @@ public class Shooting extends Command {
      private double e = 0;
      private double f = 0;
 
-     private double rotationVal = 0;
-    public Shooting(
+
+     private boolean hasNote = true;
+
+    public AutoShooter(
           Shooter m_shooter, 
           Swerve m_swerve,      
           DoubleSupplier translationSup,
@@ -78,23 +82,23 @@ public class Shooting extends Command {
         this.mShooter = m_shooter;
         this.mSwerve = m_swerve;
         addRequirements(mSwerve, mShooter);
-          SmartDashboard.putNumber("Rot P", 10);
+          SmartDashboard.putNumber("Rot P", 0);
           SmartDashboard.putNumber("Rot I", 0);
           SmartDashboard.putNumber("Rot D", 0);
         this.translationSup = translationSup;
-        this.strafeSup = strafeSup;
-        rotController.enableContinuousInput(-Math.PI, Math.PI);
+        this.strafeSup = strafeSup;        
     }
+     public AutoShooter(){
+
+     }
 
     @Override
     public void initialize(){
-        rotController.setTolerance(Math.toRadians(5));
-
+        rotController.setTolerance(Math.toRadians(10));
     }
 
     @Override
     public void execute(){
-          System.out.println("Shooting");
           // # g = 9.81
           // # A = proj_pos.x
           // # B = proj_pos.y
@@ -106,23 +110,20 @@ public class Shooting extends Command {
           // # Q = target_velocity.y
           // # R = target_velocity.z
           // # S = proj_speed;
-          //velocity
-          P = -mSwerve.getChassisSpeeds().vxMetersPerSecond;
-          Q = 0;
-          R = -mSwerve.getChassisSpeeds().vyMetersPerSecond;
           // Note Postion
-          A = mSwerve.getPose().getX() + (-P*0.2);
+          A = mSwerve.getPose().getX();
           B = 0.4572;
-          C = mSwerve.getPose().getY()+ (-R*0.2);
+          C = mSwerve.getPose().getY();
 
           //TODO change goal pose to be set based on color
           M = RedgoalPose.getX();
           N = RedgoalPose.getZ();
           O = RedgoalPose.getY();
+          //Velocietys
+          P = -mSwerve.getVelocity().getX();
+          Q = 0;
+          R = -mSwerve.getVelocity().getY();
           S = 15;
-
-          SmartDashboard.putNumber("x velocity", P);
-          SmartDashboard.putNumber("y velocity", R);
 
           H = M - A;
           J = O - C;
@@ -146,33 +147,14 @@ public class Shooting extends Command {
                e = ((K+Q*t-L*t*t)/t);
                f = ((J+R*t)/t);
           }
+
           ShooterAngle = Math.atan2(e, Math.sqrt(Math.pow(d,2) + Math.pow(f,2)));
           RobotAngle = Math.atan2(f, d);
-          rotController.setIZone(Math.toRadians(5));
-
           rotController.setSetpoint(RobotAngle);
           if (rotController.atSetpoint() && mShooter.CanShoot()){
                mShooter.Index();
           }
-          rotationVal = MathUtil.clamp(rotController.calculate(mSwerve.getPose().getRotation().getRadians()), -Constants.Swerve.maxAngularVelocity, Constants.Swerve.maxAngularVelocity);
-
-
-          double translationVal =
-               translationLimiter.calculate(
-                    MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.Swerve.stickDeadband));
-          double strafeVal =
-               strafeLimiter.calculate(
-                    MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.Swerve.stickDeadband));
-          
-
-
-          /* Drive */
-          mSwerve.drive(
-               new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
-               rotationVal,
-               true,
-               true);
-
+          mSwerve.setAutoAngle(RobotAngle);
      }
      @Override
      public void end(boolean interrupted) {
@@ -279,5 +261,9 @@ public class Shooting extends Command {
           else
                return -(sQ + Q / sQ) - an;
           }
+     }
+
+     public void setHasNote(boolean hasNote) {
+        this.hasNote = hasNote;
      }
 }

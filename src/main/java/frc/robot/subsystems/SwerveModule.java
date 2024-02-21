@@ -71,6 +71,13 @@ public class SwerveModule {
     setAngle(desiredState);
     setSpeed(desiredState, isOpenLoop);
   }
+  public void setBrakeMode(boolean brake){
+    if(brake){
+      this.driveMotor.setIdleMode(IdleMode.kBrake);
+    }else{
+        this.driveMotor.setIdleMode(IdleMode.kCoast);
+    }
+  }
 
   private void resetToAbsolute() {
     double absolutePosition = getCanCoder().getDegrees() - angleOffset.getDegrees();
