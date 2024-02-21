@@ -56,7 +56,9 @@ public class RobotContainer {
   /* Driver Buttons */
   /* Subsystems */
   public final Swerve s_Swerve;
-  public final Shooter m_Shooter;
+  public Shooter m_Shooter;
+  public Index m_Index;
+  public Intake m_Intake;
   public SendableChooser<Command> autoChooser;
   public Command AutoCommand;
   private Shooting shoot;
@@ -70,7 +72,9 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() { 
-     m_Shooter = new Shooter();
+    m_Index = new Index();
+    m_Intake = new Intake();
+    m_Shooter = new Shooter(m_Index, m_Intake);
 
     // Register pathplanner commands
     NamedCommands.registerCommand("Fire Shooter", new InstantCommand(() -> {m_Shooter.Fire();}));
