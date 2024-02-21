@@ -1,5 +1,8 @@
 package frc.robot.subsystems;
 
+import java.util.Optional;
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix.sensors.Pigeon2;
 import com.ctre.phoenix.sensors.Pigeon2.AxisDirection;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -7,21 +10,25 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d; 
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.commands.AbandonPath;
+import frc.robot.subsystems.SwerveModule;
 import frc.lib.config.SwerveModuleConstants;
 
 public class Swerve extends SubsystemBase {
@@ -35,7 +42,24 @@ public class Swerve extends SubsystemBase {
 
   private Field2d field;
 
-  public Swerve() {
+  private Pose2d lastPose;
+  private Pose2d vecPose;
+  private double lastTimeStamp = 0;
+  private Rotation2d Rotation2dOut;
+
+  private BooleanSupplier hasNote;
+  public boolean avoid;
+
+  public static double boxlength;
+  public static double boxwidth;
+  public static double lenpct;
+  public static double widpct;
+
+  public static double adj;
+  public static double dist;
+
+  public Swerve(BooleanSupplier hasNote) {
+    this.hasNote = hasNote;
     gyro = new Pigeon2(Constants.Swerve.pigeonID);
     gyro.configFactoryDefault();
     gyro.configMountPose(AxisDirection.PositiveY, AxisDirection.PositiveZ);
@@ -58,22 +82,13 @@ public class Swerve extends SubsystemBase {
     field = new Field2d();
     SmartDashboard.putData("Field", field);
     // Configure the AutoBuilder last
-    
-    AutoBuilder.configureHolonomic(
-        this::getPose, // Robot pose supplier
-        this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
-        this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-        this::autoDrive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-            new PIDConstants(5.0, 0.03, 0.0), // Translation PID constants
-            new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-            4.5, // Max module speed, in m/s
-            0.4, // Drive base radius in meters. Distance from robot center to furthest module.
-            new ReplanningConfig() // Default path replanning config. See the API for the options here
-        ), () -> false,
-        this // Reference to this subsystem to set requirements
-    );
-    PoseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), positions, new Pose2d(15.8, 8.0, getYaw()));
+
+    PoseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), positions,
+        new Pose2d(15.8, 8.0, getYaw()));
+
+    lastPose = PoseEstimator.getEstimatedPosition();
+    Rotation2dOut = Rotation2d.fromDegrees(0);
+
   }
 
   public void drive(
@@ -81,7 +96,7 @@ public class Swerve extends SubsystemBase {
     SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                translation.getX(), translation.getY(), rotation, getYaw())
+                translation.getX(), translation.getY(), rotation, getAngle())
             : new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
 
@@ -89,6 +104,7 @@ public class Swerve extends SubsystemBase {
       mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
     }
   }
+
   public void autoDrive(ChassisSpeeds speeds) {
     SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
@@ -97,6 +113,7 @@ public class Swerve extends SubsystemBase {
       mod.setDesiredState(swerveModuleStates[mod.moduleNumber], false);
     }
   }
+
   /* Used by SwerveControllerCommand in Auto */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.maxSpeed);
@@ -106,9 +123,18 @@ public class Swerve extends SubsystemBase {
     }
   }
 
+  public void setBrakes(boolean brake) {
+    if (brake) {
+      for (SwerveModule m : mSwerveMods) {
+        m.setBrakeMode(true);
+      }
+    }
+  }
+
   public Pose2d getPose() {
     return PoseEstimator.getEstimatedPosition();
   }
+
   public void resetPose(Pose2d pose) {
     gyro.setYaw(pose.getRotation().getDegrees());
     PoseEstimator.resetPosition(getYaw(), getPositions(), pose);
@@ -116,7 +142,10 @@ public class Swerve extends SubsystemBase {
 
   public void resetOdometry(Pose2d pose) {
     PoseEstimator.resetPosition(getYaw(), this.getPositions(), pose);
+  }
 
+  public PoseEstimator getPoseEstimator() {
+    return this.PoseEstimator;
   }
 
   public SwerveModuleState[] getStates() {
@@ -134,11 +163,13 @@ public class Swerve extends SubsystemBase {
     }
     return states;
   }
-  public ChassisSpeeds getChassisSpeeds(){
+
+  public ChassisSpeeds getChassisSpeeds() {
     SwerveModuleState[] states = getStates();
 
     return Constants.Swerve.swerveKinematics.toChassisSpeeds(states[0], states[1], states[2], states[3]);
   }
+
   public void zeroGyro() {
 
     gyro.setYaw(0);
@@ -147,36 +178,100 @@ public class Swerve extends SubsystemBase {
 
   public Rotation2d getYaw() {
     return (Constants.Swerve.invertGyro)
-       ? Rotation2d.fromDegrees(360 - gyro.getYaw())
-       : Rotation2d.fromDegrees(gyro.getYaw());
+        ? Rotation2d.fromDegrees(360 - gyro.getYaw())
+        : Rotation2d.fromDegrees(gyro.getYaw());
+  }
+
+  public Rotation2d getAngle() {
+    return (PoseEstimator.getEstimatedPosition().getRotation());
   }
 
   @Override
   public void periodic() {
-    // pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
-    // double poseX = pose[0];
-    // double poseY = pose[1];
-    // Rotation2d poseR = Rotation2d.fromDegrees(pose[5]);
-    // double timeStamp = Timer.getFPGATimestamp() - (pose[6] / 1000.0);
+    pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose_wpiblue")
+        .getDoubleArray(new double[6]);
+    double poseX = pose[0];
+    double poseY = pose[1];
+    Rotation2d poseR = Rotation2d.fromDegrees(pose[5]);
+    double timeStamp = Timer.getFPGATimestamp() - (pose[6] / 1000.0);
 
-    // if (Math.abs(pose[0]) >= 0.1) {
-    //   PoseEstimator.addVisionMeasurement(new Pose2d(poseX, poseY, poseR), timeStamp);
-    //   //PoseEstimator.resetPosition(poseR, getPositions(), new Pose2d(poseX, poseY, poseR));
-    // }
+    boxlength = NetworkTableInstance.getDefault().getTable("limelight-front").getEntry("tlong").getDouble(0);
+    boxwidth = NetworkTableInstance.getDefault().getTable("limelight-front").getEntry("tshort")
+        .getDouble(0);
+
+    lenpct = (boxlength / 960) * 100;
+    widpct = (boxwidth / 720) * 100;
+
+    double targetWidth = 76.2;
+
+    dist = ((-2.86) * Math.log(lenpct) + 13.1) * targetWidth;
+    avoid = AbandonPath.avoidBot(100, dist);
+
+    SmartDashboard.putNumber("Distance (bot to bot)", dist);
+    SmartDashboard.putBoolean("Abandon Path", avoid);
+
+    SmartDashboard.putNumber("Pose Estimator ", PoseEstimator.getEstimatedPosition().getRotation().getDegrees());
+    SmartDashboard.putNumber("Get Yaw ", getYaw().getDegrees());
+
+    if (Math.abs(pose[0]) >= 0.1) {
+      PoseEstimator.addVisionMeasurement(new Pose2d(poseX, poseY, poseR), timeStamp);
+      // PoseEstimator.resetPosition(poseR, getPositions(), new Pose2d(poseX, poseY,
+      // poseR));
+    }
 
     PoseEstimator.update(getYaw(), getPositions());
+    vecPose = new Pose2d(
+        (PoseEstimator.getEstimatedPosition().getX() - lastPose.getX()) / (Timer.getFPGATimestamp() - lastTimeStamp),
+        (PoseEstimator.getEstimatedPosition().getY() - lastPose.getY()) / (Timer.getFPGATimestamp() - lastTimeStamp),
+        PoseEstimator.getEstimatedPosition().getRotation());
+    lastPose = PoseEstimator.getEstimatedPosition();
+    lastTimeStamp = Timer.getFPGATimestamp();
 
     field.setRobotPose(getPose());
+    SmartDashboard.putNumber("Rotation Angle", getPose().getRotation().getDegrees());
     for (SwerveModule mod : mSwerveMods) {
       SmartDashboard.putNumber(
-        // mod.getAngleOffset().getDegrees() is used to add angle offset to canCoder values
+          // mod.getAngleOffset().getDegrees() is used to add angle offset to canCoder
+          // values
           "Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees() - mod.getAngleOffset().getDegrees());
       SmartDashboard.putNumber(
           "Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
       SmartDashboard.putNumber(
           "Mod " + mod.moduleNumber + " Target Angle", mod.getTargetAngle().angle.getDegrees());
       SmartDashboard.putNumber(
-          "Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond );
+          "Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
     }
+  }
+
+  public Pose2d getVelocity() {
+    return vecPose;
+  }
+
+  public void setAutoAngle(double ang) {
+    // Rotatvoiion2d.fromDegrees(ang);
+    Rotation2dOut = Rotation2d.fromDegrees(ang);
+  }
+
+  public Optional<Rotation2d> getRotationTargetOverride() {
+    if (hasNote.getAsBoolean()) {
+      // Return an optional containing the rotation override (this should be a field
+      // relative rotation)
+      return Optional.of(Rotation2dOut);
+    } else {
+      // return an empty optional when we don't want to override the path's rotation
+      return Optional.empty();
+    }
+  }
+
+  public void setSwerveDrive(double xVelocity, double yVelocity, double rotationVelocity, boolean useOdometry,
+      boolean fieldOriented) {
+    if (fieldOriented) {
+      setModuleStates(Constants.Swerve.swerveKinematics.toSwerveModuleStates(ChassisSpeeds
+          .fromFieldRelativeSpeeds(xVelocity, yVelocity, -rotationVelocity, Rotation2d.fromDegrees(gyro.getYaw()))));
+    } else {
+      ChassisSpeeds cs = new ChassisSpeeds(-xVelocity, -yVelocity, rotationVelocity);
+      setModuleStates(Constants.Swerve.swerveKinematics.toSwerveModuleStates(cs));
+    }
+
   }
 }
