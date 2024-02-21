@@ -12,12 +12,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.*;
+
 
 
 
 
 public class Shooter extends SubsystemBase{
-    public CANSparkFlex intake;
     private boolean isFiring = false;
     private boolean isIntaking = false;
     private boolean indexing = false;
@@ -27,11 +28,12 @@ public class Shooter extends SubsystemBase{
     private boolean hasNote = true;
 
 
+    private Index mIndex;
+    private Intake mIntake;
+
 
     public CANSparkFlex leftShooter;
     public CANSparkFlex rightShooter;
-    public CANSparkFlex leftIndex;
-    public CANSparkFlex rightIndex;
     public SparkPIDController leftShooterPID;
     public SparkPIDController rightShooterPID;
 
@@ -47,20 +49,19 @@ public class Shooter extends SubsystemBase{
 
     private IntakeLevels IntakeLevel = IntakeLevels.NotRunning;
 
-    public Shooter(){
+    public Shooter(Index m_Index, Intake m_Intake){
+        this.mIndex = m_Index;
+        this.mIntake = m_Intake;
+
         leftShooter = new CANSparkFlex(Constants.Subsystems.leftSide, CANSparkLowLevel.MotorType.kBrushless);
         rightShooter = new CANSparkFlex(Constants.Subsystems.rightSide, CANSparkLowLevel.MotorType.kBrushless);
-        leftIndex = new CANSparkFlex(Constants.Subsystems.leftSideIndex, CANSparkLowLevel.MotorType.kBrushless);
-        rightIndex = new CANSparkFlex(Constants.Subsystems.rightSideIndex, CANSparkLowLevel.MotorType.kBrushless);
+        
         
         IndexStop = new DigitalInput(0);
 
         leftShooter.setInverted(true);
-        leftIndex.setInverted(true);
         leftShooter.setIdleMode(IdleMode.kCoast);
         rightShooter.setIdleMode(IdleMode.kCoast);
-        leftIndex.setIdleMode(IdleMode.kBrake);
-        rightIndex.setIdleMode(IdleMode.kBrake);
 
         leftShooterPID = leftShooter.getPIDController();
         rightShooterPID = rightShooter.getPIDController();
@@ -82,9 +83,7 @@ public class Shooter extends SubsystemBase{
         rightShooterPID.setD(Constants.Subsystems.shooterD);
         rightShooterPID.setFF(Constants.Subsystems.shooterFF);
         rightShooterPID.setIZone(2000);
-
-        intake = new CANSparkFlex(Constants.Subsystems.intake, CANSparkLowLevel.MotorType.kBrushless);
-        SmartDashboard.setDefaultNumber("Intake", -1);
+        
 
         SmartDashboard.putNumber("Left Shooter Ref", 5500);
         SmartDashboard.putNumber("Right Shooter Ref", 5500);
@@ -108,24 +107,24 @@ public class Shooter extends SubsystemBase{
         }
         switch (IntakeLevel){
             case NotRunning:
-                leftIndex.stopMotor();
-                rightIndex.stopMotor();
-                intake.stopMotor();
+                mIndex.stopIndex();
+                mIntake.stopIntake();
                 break;
             case Reverse:
                 if(IndexStop.get()){
-                    leftIndex.set(-indexPower);
-                    rightIndex.set(-indexPower);
-                    intake.set(0);
+                    mIndex.runIndex(-indexPower);
+                    mIntake.stopIntake();
+
                 } else{
                     IntakeLevel = IntakeLevels.NotRunning;
                 }
                 break;               
             case SeeSensor:
                 if(!IndexStop.get()){
-                    leftIndex.set(indexPower);
-                    rightIndex.set(indexPower);
-                    intake.set(0);
+                    mIndex.runIndex(indexPower);
+
+                    mIntake.stopIntake();
+
 
                     hasNote = true;
 
@@ -135,9 +134,9 @@ public class Shooter extends SubsystemBase{
                 break;
             case Running:
                 if(IndexStop.get()){
-                    leftIndex.set(indexPower);
-                    rightIndex.set(indexPower);
-                    intake.set(1.0);
+                    mIndex.runIndex(indexPower);
+
+                    mIntake.runIntake(1.0);
                 } else{
                     IntakeLevel = IntakeLevels.SeeSensor;
                 }
@@ -166,8 +165,8 @@ public class Shooter extends SubsystemBase{
     }
     public void Index(){
         IntakeLevel = IntakeLevels.Shooting;
-        leftIndex.set(indexPower);
-        rightIndex.set(indexPower);
+        mIndex.runIndex(indexPower);
+
 
         if (isFiring) {
             hasNote = false;
@@ -175,14 +174,13 @@ public class Shooter extends SubsystemBase{
     }
     public void stopIndex(){
         IntakeLevel = IntakeLevels.NotRunning;
-        leftIndex.stopMotor();
-        rightIndex.stopMotor();
+        mIndex.stopIndex();
     }
 
     public void ReverseIndex(){
         IntakeLevel = IntakeLevels.Shooting;
-        leftIndex.set(-indexPower);
-        rightIndex.set(-indexPower);
+        mIndex.runIndex(-indexPower);
+
     }
 
     public void IntakeIn(){

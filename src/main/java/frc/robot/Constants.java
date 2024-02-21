@@ -155,7 +155,9 @@ public final class Constants {
     public static final double shooterI = 0.000001;
     public static final double shooterD = 0.005;
     public static final double shooterFF = 0.0001; 
-    public static final int intake = 40;
+    public static final int frontIntake = 40;
+    public static final int backIntake = 41;
+
   }
 
   public static final class AutoConstants {
