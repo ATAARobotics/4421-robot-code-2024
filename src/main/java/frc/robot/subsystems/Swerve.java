@@ -56,8 +56,8 @@ public class Swerve extends SubsystemBase {
 
   private BooleanSupplier hasNote;
 
-  public Swerve(BooleanSupplier hasNote) {
-    this.hasNote = hasNote;
+  public Swerve() {
+    // this.hasNote = hasNote;
     gyro = new Pigeon2(Constants.Swerve.pigeonID);
     gyro.configFactoryDefault();
     gyro.configMountPose(AxisDirection.PositiveY, AxisDirection.PositiveZ);
@@ -181,24 +181,24 @@ public class Swerve extends SubsystemBase {
   }
   @Override
   public void periodic() {
-    pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
-    double poseX = pose[0];
-    double poseY = pose[1];
-    Rotation2d poseR = Rotation2d.fromDegrees(pose[5]);
-    double timeStamp = Timer.getFPGATimestamp() - (pose[6] / 1000.0);
+    // pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
+    // double poseX = pose[0];
+    // double poseY = pose[1];
+    // Rotation2d poseR = Rotation2d.fromDegrees(pose[5]);
+    // double timeStamp = Timer.getFPGATimestamp() - (pose[6] / 1000.0);
 
-    SmartDashboard.putNumber("Pose Estimator ", PoseEstimator.getEstimatedPosition().getRotation().getDegrees());
-    SmartDashboard.putNumber("Get Yaw ", getYaw().getDegrees());
+    // SmartDashboard.putNumber("Pose Estimator ", PoseEstimator.getEstimatedPosition().getRotation().getDegrees());
+    // SmartDashboard.putNumber("Get Yaw ", getYaw().getDegrees());
 
 
-    if (Math.abs(pose[0]) >= 0.1) {
-      PoseEstimator.addVisionMeasurement(new Pose2d(poseX, poseY, poseR), timeStamp);
-      double angleError = Math.abs(getYaw().minus(poseR).getDegrees());
-      if(!DriverStation.isEnabled()){
-        gyro.setYaw(poseR.getDegrees());
-      }
-      //PoseEstimator.resetPosition(poseR, getPositions(), new Pose2d(poseX, poseY, poseR));
-    }
+    // if (Math.abs(pose[0]) >= 0.1) {
+    //   PoseEstimator.addVisionMeasurement(new Pose2d(poseX, poseY, poseR), timeStamp);
+    //   double angleError = Math.abs(getYaw().minus(poseR).getDegrees());
+    //   if(!DriverStation.isEnabled()){
+    //     gyro.setYaw(poseR.getDegrees());
+    //   }
+    //   //PoseEstimator.resetPosition(poseR, getPositions(), new Pose2d(poseX, poseY, poseR));
+    // }
 
     PoseEstimator.update(getYaw(), getPositions());
     vecPose = new Pose2d((PoseEstimator.getEstimatedPosition().getX() - lastPose.getX())/ (Timer.getFPGATimestamp()-lastTimeStamp), (PoseEstimator.getEstimatedPosition().getY() - lastPose.getY())/(Timer.getFPGATimestamp()-lastTimeStamp), PoseEstimator.getEstimatedPosition().getRotation());

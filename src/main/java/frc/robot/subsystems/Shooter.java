@@ -48,10 +48,10 @@ public class Shooter extends SubsystemBase{
     private IntakeLevels IntakeLevel = IntakeLevels.NotRunning;
 
     public Shooter(){
-        leftShooter = new CANSparkFlex(Constants.Subsystems.leftSide, CANSparkLowLevel.MotorType.kBrushless);
-        rightShooter = new CANSparkFlex(Constants.Subsystems.rightSide, CANSparkLowLevel.MotorType.kBrushless);
-        leftIndex = new CANSparkFlex(Constants.Subsystems.leftSideIndex, CANSparkLowLevel.MotorType.kBrushless);
-        rightIndex = new CANSparkFlex(Constants.Subsystems.rightSideIndex, CANSparkLowLevel.MotorType.kBrushless);
+        // leftShooter = new CANSparkFlex(Constants.Subsystems.leftSide, CANSparkLowLevel.MotorType.kBrushless);
+        // rightShooter = new CANSparkFlex(Constants.Subsystems.rightSide, CANSparkLowLevel.MotorType.kBrushless);
+        // leftIndex = new CANSparkFlex(Constants.Subsystems.leftSideIndex, CANSparkLowLevel.MotorType.kBrushless);
+        // rightIndex = new CANSparkFlex(Constants.Subsystems.rightSideIndex, CANSparkLowLevel.MotorType.kBrushless);
         
         IndexStop = new DigitalInput(0);
 
@@ -83,7 +83,7 @@ public class Shooter extends SubsystemBase{
         rightShooterPID.setFF(Constants.Subsystems.shooterFF);
         rightShooterPID.setIZone(2000);
 
-        intake = new CANSparkFlex(Constants.Subsystems.intake, CANSparkLowLevel.MotorType.kBrushless);
+        intake = new CANSparkFlex(Constants.Subsystems.intakeFront, CANSparkLowLevel.MotorType.kBrushless);
         SmartDashboard.setDefaultNumber("Intake", -1);
 
         SmartDashboard.putNumber("Left Shooter Ref", 5500);

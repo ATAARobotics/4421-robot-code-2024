@@ -70,7 +70,7 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() { 
-    m_Shooter = new Shooter();
+     m_Shooter = new Shooter();
 
     // Register pathplanner commands
     NamedCommands.registerCommand("Fire Shooter", new InstantCommand(() -> {m_Shooter.Fire();}));
@@ -78,7 +78,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Index", new InstantCommand(m_Shooter::Index));
     NamedCommands.registerCommand("Stop Index", new InstantCommand(m_Shooter::stopIndex));
 
-    s_Swerve = new Swerve(m_Shooter::hasNote);
+    s_Swerve = new Swerve();
     shoot = new Shooting(m_Shooter, s_Swerve,joysticks::getXVelocity,
         joysticks::getYVelocity);
     NamedCommands.registerCommand("Auto Shooter", new RunCommand(() -> {shoot.execute();}).onlyWhile(m_Shooter::hasNote));
@@ -129,7 +129,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    /* Driver Buttons */
+    // /* Driver Buttons */
     joysticks.intake.onTrue(new InstantCommand(m_Shooter::IntakeIn));
     joysticks.intake.onFalse(new InstantCommand(m_Shooter::StopIntake));
 
@@ -138,6 +138,21 @@ public class RobotContainer {
     joysticks.reverseIntake.onTrue(new InstantCommand(m_Shooter::ReverseIndex));
     joysticks.reverseIntake.onFalse(new InstantCommand(m_Shooter::stopIndex));
     joysticks.runShooter.onTrue(new InstantCommand(m_Shooter::Fire));
+    joysticks.runShooter.whileTrue(
+       new TeleopSwerve(
+            s_Swerve,
+            () -> 1, // translation
+            () -> 0, // strafe
+            () -> 0 // rotation
+            )).onFalse( 
+      new TeleopSwerve(
+            s_Swerve,
+            joysticks::getXVelocity, // translation
+            joysticks::getYVelocity, // strafe
+            joysticks::getRotationVelocity // rotation
+            ));
+          
+
     joysticks.shooterLock.whileTrue(shoot)
     .onFalse(new TeleopSwerve(
             s_Swerve,
@@ -145,7 +160,7 @@ public class RobotContainer {
             joysticks::getYVelocity,
             joysticks::getRotationVelocity
             ));
-    // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+    // // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     joysticks.toWaypoint.whileTrue(new SequentialCommandGroup(
       s_Swerve.driveToWaypoint(new Pose2d((578.77/39.37), (323.00/39.37) - 1.5, Rotation2d.fromDegrees(90))),
       new WaitCommand(0.2),
