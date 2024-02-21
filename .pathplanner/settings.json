@@ -3,7 +3,12 @@
   "robotLength": 1.02,
   "holonomicMode": true,
   "pathFolders": [
-    "3 Note"
+    "2 Speaker, 1 Amp",
+    "3 Note Speaker",
+    "3 Speaker, 1 Amp",
+    "4 Note Speaker",
+    "6 Note Speaker",
+    "4 Note Speaker #2"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,

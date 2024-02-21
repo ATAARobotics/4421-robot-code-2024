@@ -81,8 +81,10 @@ public class RobotContainer {
         joysticks::getYVelocity);
     NamedCommands.registerCommand("Auto Shooter", new RunCommand(() -> {shoot.execute();}).onlyWhile(m_Shooter::hasNote));
 
-    NamedCommands.registerCommand("Abandon Path GOALPATH to ALTPATH", new AbandonPath().a_AbandonPath(() -> true, // we do abandon path
+    NamedCommands.registerCommand("Abandon Path GOALPATH to ALTPATH", new AbandonPath().a_AbandonPath(
+    () -> true, // whether we do abandon path, the boolean supplier will correlate to note/bot detection
     "Goal Path", "Alternate Path", s_Swerve));
+
     AutoBuilder.configureHolonomic(
         s_Swerve::getPose, // Robot pose supplier
         s_Swerve::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)

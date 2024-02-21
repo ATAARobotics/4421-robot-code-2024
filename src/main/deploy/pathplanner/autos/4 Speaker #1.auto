@@ -14,13 +14,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Note - fire 1, goto 2"
+            "pathName": "5 Note - shoot 1, get 2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3 Note - fire 2, goto 3"
+            "pathName": "4 Note - fire 2, goto 3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4 Note - get 4, fire 4"
           }
         }
       ]

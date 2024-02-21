@@ -8,59 +8,54 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.3,
-        "y": 5.55
+        "x": 2.517828881811611,
+        "y": 6.078036771458159
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.3,
-        "y": 4.844668920107071
+        "x": 2.4388933393251424,
+        "y": 6.758855825403959
       },
       "prevControl": {
-        "x": 2.9939732895532445,
-        "y": 4.810955813246407
+        "x": 2.8138371661358725,
+        "y": 6.403645884214846
       },
       "nextControl": {
-        "x": 1.284461030460524,
-        "y": 4.894003634161114
+        "x": 2.1869657238470444,
+        "y": 6.997524092698999
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.0639495125144114,
-        "y": 4.035579609620759
+        "x": 1.8468767706766198,
+        "y": 7.548211250268655
       },
       "prevControl": {
-        "x": 1.383130458568611,
-        "y": 3.996111838377523
-      },
-      "nextControl": {
-        "x": 2.5671885636210323,
-        "y": 4.06475288794578
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.3,
-        "y": 4.844668920107071
-      },
-      "prevControl": {
-        "x": 2.5079619390008028,
-        "y": 4.874269748539498
+        "x": 2.1277065707977574,
+        "y": 7.39527363670112
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.45,
+      "rotationDegrees": -120.0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 1.15,
+      "rotationDegrees": -120.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -70,15 +65,15 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 3.0,
-    "rotation": 180.0,
+    "velocity": 0.0,
+    "rotation": -90.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "3 Note Speaker",
+  "folder": "2 Speaker, 1 Amp",
   "previewStartingState": {
     "rotation": 180.0,
-    "velocity": 3.0
+    "velocity": 0.0
   },
   "useDefaultConstraints": false
 }
