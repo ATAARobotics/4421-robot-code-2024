@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -12,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.commands.AmpScore;
 import frc.robot.subsystems.*;
 
 
@@ -22,14 +24,13 @@ public class Shooter extends SubsystemBase{
     private boolean isFiring = false;
     private boolean isIntaking = false;
     private boolean indexing = false;
-    private double indexPower = 0.10;
+    private double indexPower = 0.75;
     private boolean finishedIntake = false;
 
+    private boolean atAmpPoint = false;
+    private boolean isAmpScoring = false;
+
     private boolean hasNote = true;
-
-
-    private Index mIndex;
-
 
     public CANSparkFlex leftShooter;
     public CANSparkFlex rightShooter;
@@ -48,39 +49,53 @@ public class Shooter extends SubsystemBase{
 
     private IntakeLevels IntakeLevel = IntakeLevels.NotRunning;
 
-    public Shooter(Index m_Index){
-        this.mIndex = m_Index;
-
+    public Shooter(){
         leftShooter = new CANSparkFlex(Constants.Subsystems.leftShooter, CANSparkLowLevel.MotorType.kBrushless);
         rightShooter = new CANSparkFlex(Constants.Subsystems.rightShooter, CANSparkLowLevel.MotorType.kBrushless);
         
-        
+        SmartDashboard.setDefaultNumber("left shooter p%", 0);
+        SmartDashboard.setDefaultNumber("right shooter p%", 0);
+        SmartDashboard.setDefaultNumber("right shooter p% a", 0);
+        SmartDashboard.setDefaultNumber("left shooter p% a", 0);
+
+        SmartDashboard.setDefaultNumber("shooter ref", 0);
+
+        SmartDashboard.setDefaultNumber("index p%", 0);
+
         IndexStop = new DigitalInput(0);
 
-        leftShooter.setInverted(true);
+        leftShooter.setInverted(false);
+        rightShooter.setInverted(true);
+
         leftShooter.setIdleMode(IdleMode.kCoast);
         rightShooter.setIdleMode(IdleMode.kCoast);
 
         leftShooterPID = leftShooter.getPIDController();
         rightShooterPID = rightShooter.getPIDController();
 
-        SmartDashboard.putNumber("left velocity", leftShooter.getEncoder().getVelocity());
-        SmartDashboard.putNumber("right velocity", rightShooter.getEncoder().getVelocity());
-        SmartDashboard.putNumber("left power", leftShooter.getAppliedOutput());
-        SmartDashboard.putNumber("right power", rightShooter.getAppliedOutput());
-
-        
         leftShooterPID.setP(Constants.Subsystems.shooterP);
         leftShooterPID.setI(Constants.Subsystems.shooterI);
         leftShooterPID.setD(Constants.Subsystems.shooterD);
         leftShooterPID.setFF(Constants.Subsystems.shooterFF);
-        leftShooterPID.setIZone(2000);
 
         rightShooterPID.setP(Constants.Subsystems.shooterP);
         rightShooterPID.setI(Constants.Subsystems.shooterI);
         rightShooterPID.setD(Constants.Subsystems.shooterD);
         rightShooterPID.setFF(Constants.Subsystems.shooterFF);
-        rightShooterPID.setIZone(2000);
+        
+
+        // SmartDashboard.putNumber("left velocity", leftShooter.getEncoder().getVelocity());
+        // SmartDashboard.putNumber("right velocity", rightShooter.getEncoder().getVelocity());
+        // SmartDashboard.putNumber("left power", leftShooter.getAppliedOutput());
+        // SmartDashboard.putNumber("right power", rightShooter.getAppliedOutput());
+
+        
+        SmartDashboard.setDefaultNumber("shooter p", 0);
+        SmartDashboard.setDefaultNumber("shooter i", 0);
+        SmartDashboard.setDefaultNumber("shooter d", 0);
+        SmartDashboard.setDefaultNumber("shooter ff", 0);
+        
+        // rightShooterPID.setIZone(2000);
         
 
         SmartDashboard.putNumber("Left Shooter Ref", 5500);
@@ -94,56 +109,46 @@ public class Shooter extends SubsystemBase{
 
     @Override
     public void periodic(){
-        if(isFiring){
+
+        SmartDashboard.putNumber("rpm l", leftShooter.getEncoder().getVelocity());
+        SmartDashboard.putNumber("rpm r", rightShooter.getEncoder().getVelocity());
+
+        if(isFiring && !isAmpScoring){
             leftShooterPID.setReference(5500.0, ControlType.kVelocity);
             rightShooterPID.setReference(5500.0, ControlType.kVelocity);
-            // leftShooter.set(0.5);
-            // rightShooter.set(0.5);
+            // leftShooterPID.setReference(SmartDashboard.getNumber("Left Shooter Ref", 0), ControlType.kVelocity);
+            // rightShooterPID.setReference(SmartDashboard.getNumber("Right Shooter Ref", 0), ControlType.kVelocity);
+            // leftShooter.set(SmartDashboard.getNumber("left shooter p%", 0));
+            // rightShooter.set(SmartDashboard.getNumber("right shooter p%", 0));
+
         }else{
             rightShooter.stopMotor();
             leftShooter.stopMotor();
         }
-        switch (IntakeLevel){
-            case NotRunning:
-                mIndex.stopIndex();
-                break;
-            case Reverse:
-                if(IndexStop.get()){
-                    mIndex.runIndex(-indexPower);
-
-                } else{
-                    IntakeLevel = IntakeLevels.NotRunning;
-                }
-                break;               
-            case SeeSensor:
-                if(!IndexStop.get()){
-                    mIndex.runIndex(indexPower);
+    }
 
 
-
-                    hasNote = true;
-
-                } else{
-                    IntakeLevel = IntakeLevels.Reverse;
-                }
-                break;
-            case Running:
-                if(IndexStop.get()){
-                    mIndex.runIndex(indexPower);
-                } else{
-                    IntakeLevel = IntakeLevels.SeeSensor;
-                }
-                break;  
-            case Shooting:
-                break;
-            default:
-                break;
+    public void scoreAmp(Index sIndex){
+        isAmpScoring = true;
+        if(!atAmpPoint){
+            sIndex.index.set(SmartDashboard.getNumber("left index p%", 0));
+            leftShooter.set(SmartDashboard.getNumber("left shooter p% a", 0));
+            rightShooter.set(SmartDashboard.getNumber("right shooter p% a", 0));
+        }else{
+            sIndex.index.set(SmartDashboard.getNumber("right index p%", 0));
+            leftShooter.set(-SmartDashboard.getNumber("left shooter p% a", 0));
+            rightShooter.set(-SmartDashboard.getNumber("right shooter p% a", 0));
         }
+    }
+    public void stopScoreAmp(Index sIndex){
+        isAmpScoring= false;
+        sIndex.index.set(SmartDashboard.getNumber("right index p%", 0));
+        leftShooter.set(SmartDashboard.getNumber("left shooter p% a", 0));
+        rightShooter.set(SmartDashboard.getNumber("right shooter p% a", 0));
+    }
 
-        SmartDashboard.putNumber("left velocity", leftShooter.getEncoder().getVelocity());
-        SmartDashboard.putNumber("right velocity", rightShooter.getEncoder().getVelocity());
-        SmartDashboard.putNumber("left power", leftShooter.getAppliedOutput());
-        SmartDashboard.putNumber("right power", rightShooter.getAppliedOutput());
+    public boolean getHasNote() {
+        return hasNote;
     }
 
 
@@ -158,8 +163,6 @@ public class Shooter extends SubsystemBase{
     }
     public void Index(){
         IntakeLevel = IntakeLevels.Shooting;
-        mIndex.runIndex(indexPower);
-
 
         if (isFiring) {
             hasNote = false;
@@ -167,12 +170,10 @@ public class Shooter extends SubsystemBase{
     }
     public void stopIndex(){
         IntakeLevel = IntakeLevels.NotRunning;
-        mIndex.stopIndex();
     }
 
     public void ReverseIndex(){
         IntakeLevel = IntakeLevels.Shooting;
-        mIndex.runIndex(-indexPower);
 
     }
 

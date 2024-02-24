@@ -156,10 +156,12 @@ public final class Constants {
     public static final int rightShooter = 19;
     public static final int shooterPivot = 21;
 
-    public static final double shooterP = 0.0007;
-    public static final double shooterI = 0.000001;
-    public static final double shooterD = 0.005;
-    public static final double shooterFF = 0.0001; 
+    public static final double shooterP = 0.0002;
+    public static final double shooterI = 0.000003;
+    public static final double shooterD = 0.002;
+    public static final double shooterFF = 0.00005;
+
+    public static final double ampTime = 1500;
   }
 
   public static final class AutoConstants {
