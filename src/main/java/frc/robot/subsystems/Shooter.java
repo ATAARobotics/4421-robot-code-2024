@@ -37,7 +37,8 @@ public class Shooter extends SubsystemBase{
     public SparkPIDController leftShooterPID;
     public SparkPIDController rightShooterPID;
 
-    private DigitalInput IndexStop;
+    private DigitalInput IndexStopBack;
+    private DigitalInput IndexStopFront;
 
     private enum IntakeLevels{
         NotRunning,
@@ -57,7 +58,8 @@ public class Shooter extends SubsystemBase{
         rightShooter = new CANSparkFlex(Constants.Subsystems.rightShooter, CANSparkLowLevel.MotorType.kBrushless);
         
         
-        IndexStop = new DigitalInput(0);
+        IndexStopBack = new DigitalInput(0);
+        IndexStopFront = new DigitalInput(1);
 
         leftShooter.setInverted(true);
         leftShooter.setIdleMode(IdleMode.kCoast);
@@ -111,16 +113,16 @@ public class Shooter extends SubsystemBase{
                 mIntake.stopIntake();
                 break;
             case Reverse:
-                if(IndexStop.get()){
+                if(IndexStopBack.get()){
                     mIndex.runIndex(-indexPower);
                     mIntake.stopIntake();
 
-                } else{
+                } else if(!IndexStopFront.get()) {
                     IntakeLevel = IntakeLevels.NotRunning;
                 }
                 break;               
             case SeeSensor:
-                if(!IndexStop.get()){
+                if(!IndexStopFront.get()){
                     mIndex.runIndex(indexPower);
 
                     mIntake.stopIntake();
@@ -128,12 +130,12 @@ public class Shooter extends SubsystemBase{
 
                     hasNote = true;
 
-                } else{
+                } else if (!IndexStopBack.get()) {
                     IntakeLevel = IntakeLevels.Reverse;
                 }
                 break;
             case Running:
-                if(IndexStop.get()){
+                if(IndexStopBack.get()){
                     mIndex.runIndex(indexPower);
 
                     mIntake.runIntake(1.0);
