@@ -56,9 +56,10 @@ public class RobotContainer {
   /* Driver Buttons */
   /* Subsystems */
   public final Swerve s_Swerve;
-  public Shooter m_Shooter;
-  public Index m_Index;
-  public Intake m_Intake;
+  public final Shooter m_Shooter;
+  public final Index m_Index;
+  public final Intake m_Intake;
+  public final Pivot mPivot;
   public SendableChooser<Command> autoChooser;
   public Command AutoCommand;
   private Shooting shoot;
@@ -75,7 +76,7 @@ public class RobotContainer {
     m_Index = new Index();
     m_Intake = new Intake();
     m_Shooter = new Shooter(m_Index);
-
+    mPivot = new Pivot();
     // Register pathplanner commands
     NamedCommands.registerCommand("Fire Shooter", new InstantCommand(() -> {m_Shooter.Fire();}));
     NamedCommands.registerCommand("Intake", new InstantCommand(m_Shooter::IntakeIn));
@@ -170,6 +171,11 @@ public class RobotContainer {
       new WaitCommand(0.2),
       new ChaseTag(s_Swerve, new Pose2d((578.77/39.37), (323.00/39.37) - 0.75, Rotation2d.fromDegrees(270)), false)
     ));
+
+    joysticks.pivotUp.onTrue(new InstantCommand(mPivot::PivotUp)).onFalse(new InstantCommand(mPivot::stop));
+    joysticks.pivotDown.onTrue(new InstantCommand(mPivot::PivotDown)).onFalse(new InstantCommand(mPivot::stop));
+    joysticks.pivotGoSetpoint.onTrue(new InstantCommand(() -> mPivot.toSetpoint(45))).onFalse(new InstantCommand(mPivot::stop));
+
   }
   public OI getOI() {
     return joysticks;

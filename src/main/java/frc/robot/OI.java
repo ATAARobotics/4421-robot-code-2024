@@ -38,6 +38,10 @@ class OI {
     public JoystickButton reverseIntake;
     public JoystickButton toWaypoint;
 
+    public JoystickButton pivotUp;
+    public JoystickButton pivotDown;
+    public JoystickButton pivotGoSetpoint;
+
     public OI() {
         // Configure the button bindings
         try (InputStream input = new FileInputStream("/home/lvuser/deploy/bindings.properties")) {
@@ -64,6 +68,9 @@ class OI {
         toWaypoint = driveStick.getWPIJoystickButton("ScoreAmp");
 
         runShooter = gunnerStick.getWPIJoystickButton("Shoot");
+        pivotUp = gunnerStick.getWPIJoystickButton("PivotUp");
+        pivotDown = gunnerStick.getWPIJoystickButton("PivotDown");
+        pivotGoSetpoint = gunnerStick.getWPIJoystickButton("pivotGoSetpoint");
 
         // Set up command-based stuff
         /** 
