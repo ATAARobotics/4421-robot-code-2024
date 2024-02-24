@@ -136,6 +136,7 @@ public class Shooting extends Command {
           c4 = K*K + H*H + J*J;
           double[] ts = solveQuartic(c0, c1, c2, c3, c4);
           double t = 1000000000;
+          rotationVal = 0;
           if(ts != null){
                for (int i=0; i<ts.length; i++){
                     if (ts[i] >= 0 & ts[i]<t){
@@ -145,18 +146,18 @@ public class Shooting extends Command {
                d = ((H+P*t)/t);
                e = ((K+Q*t-L*t*t)/t);
                f = ((J+R*t)/t);
+
+               ShooterAngle = Math.atan2(e, Math.sqrt(Math.pow(d,2) + Math.pow(f,2)));
+               RobotAngle = Math.atan2(f, d);
+               rotController.setIZone(Math.toRadians(5));
+
+               rotController.setSetpoint(RobotAngle);
+               if (rotController.atSetpoint() && mShooter.CanShoot()){
+                    mShooter.Index();
+               }
+               rotationVal = MathUtil.clamp(rotController.calculate(mSwerve.getPose().getRotation().getRadians()), -Constants.Swerve.maxAngularVelocity, Constants.Swerve.maxAngularVelocity);
           }
-          ShooterAngle = Math.atan2(e, Math.sqrt(Math.pow(d,2) + Math.pow(f,2)));
-          RobotAngle = Math.atan2(f, d);
-          rotController.setIZone(Math.toRadians(5));
-
-          rotController.setSetpoint(RobotAngle);
-          if (rotController.atSetpoint() && mShooter.CanShoot()){
-               mShooter.Index();
-          }
-          rotationVal = MathUtil.clamp(rotController.calculate(mSwerve.getPose().getRotation().getRadians()), -Constants.Swerve.maxAngularVelocity, Constants.Swerve.maxAngularVelocity);
-
-
+ 
           double translationVal =
                translationLimiter.calculate(
                     MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.Swerve.stickDeadband));

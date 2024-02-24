@@ -146,15 +146,14 @@ public class AutoShooter extends Command {
                d = ((H+P*t)/t);
                e = ((K+Q*t-L*t*t)/t);
                f = ((J+R*t)/t);
+               ShooterAngle = Math.atan2(e, Math.sqrt(Math.pow(d,2) + Math.pow(f,2)));
+               RobotAngle = Math.atan2(f, d);
+               rotController.setSetpoint(RobotAngle);
+               if (rotController.atSetpoint() && mShooter.CanShoot()){
+                    mShooter.Index();
+               }
+               mSwerve.setAutoAngle(RobotAngle);
           }
-
-          ShooterAngle = Math.atan2(e, Math.sqrt(Math.pow(d,2) + Math.pow(f,2)));
-          RobotAngle = Math.atan2(f, d);
-          rotController.setSetpoint(RobotAngle);
-          if (rotController.atSetpoint() && mShooter.CanShoot()){
-               mShooter.Index();
-          }
-          mSwerve.setAutoAngle(RobotAngle);
      }
      @Override
      public void end(boolean interrupted) {

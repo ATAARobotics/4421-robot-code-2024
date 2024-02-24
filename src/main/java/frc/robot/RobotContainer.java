@@ -74,7 +74,7 @@ public class RobotContainer {
   public RobotContainer() { 
     m_Index = new Index();
     m_Intake = new Intake();
-    m_Shooter = new Shooter(m_Index, m_Intake);
+    m_Shooter = new Shooter(m_Index);
 
     // Register pathplanner commands
     NamedCommands.registerCommand("Fire Shooter", new InstantCommand(() -> {m_Shooter.Fire();}));

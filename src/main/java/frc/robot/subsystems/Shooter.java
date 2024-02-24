@@ -29,7 +29,6 @@ public class Shooter extends SubsystemBase{
 
 
     private Index mIndex;
-    private Intake mIntake;
 
 
     public CANSparkFlex leftShooter;
@@ -49,9 +48,8 @@ public class Shooter extends SubsystemBase{
 
     private IntakeLevels IntakeLevel = IntakeLevels.NotRunning;
 
-    public Shooter(Index m_Index, Intake m_Intake){
+    public Shooter(Index m_Index){
         this.mIndex = m_Index;
-        this.mIntake = m_Intake;
 
         leftShooter = new CANSparkFlex(Constants.Subsystems.leftShooter, CANSparkLowLevel.MotorType.kBrushless);
         rightShooter = new CANSparkFlex(Constants.Subsystems.rightShooter, CANSparkLowLevel.MotorType.kBrushless);
@@ -108,12 +106,10 @@ public class Shooter extends SubsystemBase{
         switch (IntakeLevel){
             case NotRunning:
                 mIndex.stopIndex();
-                mIntake.stopIntake();
                 break;
             case Reverse:
                 if(IndexStop.get()){
                     mIndex.runIndex(-indexPower);
-                    mIntake.stopIntake();
 
                 } else{
                     IntakeLevel = IntakeLevels.NotRunning;
@@ -123,7 +119,6 @@ public class Shooter extends SubsystemBase{
                 if(!IndexStop.get()){
                     mIndex.runIndex(indexPower);
 
-                    mIntake.stopIntake();
 
 
                     hasNote = true;
@@ -135,8 +130,6 @@ public class Shooter extends SubsystemBase{
             case Running:
                 if(IndexStop.get()){
                     mIndex.runIndex(indexPower);
-
-                    mIntake.runIntake(1.0);
                 } else{
                     IntakeLevel = IntakeLevels.SeeSensor;
                 }
