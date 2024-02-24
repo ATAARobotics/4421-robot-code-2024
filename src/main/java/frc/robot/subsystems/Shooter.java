@@ -115,7 +115,7 @@ public class Shooter extends SubsystemBase{
 
         if(isFiring && !isAmpScoring){
             leftShooterPID.setReference(5500.0, ControlType.kVelocity);
-            rightShooterPID.setReference(5500.0, ControlType.kVelocity);
+            rightShooterPID.setReference(4500, ControlType.kVelocity);
             // leftShooterPID.setReference(SmartDashboard.getNumber("Left Shooter Ref", 0), ControlType.kVelocity);
             // rightShooterPID.setReference(SmartDashboard.getNumber("Right Shooter Ref", 0), ControlType.kVelocity);
             // leftShooter.set(SmartDashboard.getNumber("left shooter p%", 0));

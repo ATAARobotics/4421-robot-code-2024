@@ -140,9 +140,8 @@ public class RobotContainer {
 
     joysticks.zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
-    joysticks.reverseIntake.onTrue(new InstantCommand(m_Shooter::ReverseIndex));
-    joysticks.reverseIntake.onFalse(new InstantCommand(m_Shooter::stopIndex));
-    joysticks.runShooter.onTrue(new InstantCommand(m_Shooter::Fire));
+    joysticks.reverseIntake.onTrue(new InstantCommand(() -> m_Index.runIndex(1)));
+    joysticks.runShooter.onTrue(new InstantCommand(m_Shooter::Fire)).onFalse(new InstantCommand(() -> m_Index.stopIndex()));
 
           
 
@@ -162,7 +161,7 @@ public class RobotContainer {
 
     joysticks.pivotUp.onTrue(new InstantCommand(mPivot::PivotUp)).onFalse(new InstantCommand(mPivot::stop));
     joysticks.pivotDown.onTrue(new InstantCommand(mPivot::PivotDown)).onFalse(new InstantCommand(mPivot::stop));
-    joysticks.pivotGoSetpoint.onTrue(new InstantCommand(() -> mPivot.toSetpoint(45))).onFalse(new InstantCommand(mPivot::stop));
+    // joysticks.pivotGoSetpoint.onTrue(new InstantCommand(() -> mPivot.toSetpoint(45))).onFalse(new InstantCommand(mPivot::stop));
 
   }
   public OI getOI() {
