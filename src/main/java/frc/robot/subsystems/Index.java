@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -10,11 +9,12 @@ import frc.robot.Constants;
 
 public class Index extends SubsystemBase{
     public CANSparkMax index;
-
-
+    
     public Index() {
         index = new CANSparkMax(Constants.Subsystems.index, CANSparkLowLevel.MotorType.kBrushless);
         index.setIdleMode(IdleMode.kBrake);
+
+        
     }
 
     public void runIndex(double speed) {
@@ -25,4 +25,5 @@ public class Index extends SubsystemBase{
         index.stopMotor();
     }
 
+    
 }

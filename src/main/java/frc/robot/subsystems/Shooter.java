@@ -27,19 +27,9 @@ public class Shooter extends SubsystemBase{
 
     private boolean hasNote = true;
 
-
     private Index mIndex;
-    private Intake mIntake;
 
-
-    public CANSparkFlex leftShooter;
-    public CANSparkFlex rightShooter;
-    public SparkPIDController leftShooterPID;
-    public SparkPIDController rightShooterPID;
-
-    private DigitalInput IndexStop;
-
-    private enum IntakeLevels{
+    public enum IntakeLevels{
         NotRunning,
         Running, 
         SeeSensor,
@@ -49,9 +39,16 @@ public class Shooter extends SubsystemBase{
 
     private IntakeLevels IntakeLevel = IntakeLevels.NotRunning;
 
-    public Shooter(Index m_Index, Intake m_Intake){
+
+    public CANSparkFlex leftShooter;
+    public CANSparkFlex rightShooter;
+    public SparkPIDController leftShooterPID;
+    public SparkPIDController rightShooterPID;
+
+    private DigitalInput IndexStop;
+
+    public Shooter(Index m_Index){
         this.mIndex = m_Index;
-        this.mIntake = m_Intake;
 
         leftShooter = new CANSparkFlex(Constants.Subsystems.leftShooter, CANSparkLowLevel.MotorType.kBrushless);
         rightShooter = new CANSparkFlex(Constants.Subsystems.rightShooter, CANSparkLowLevel.MotorType.kBrushless);
@@ -108,12 +105,10 @@ public class Shooter extends SubsystemBase{
         switch (IntakeLevel){
             case NotRunning:
                 mIndex.stopIndex();
-                mIntake.stopIntake();
                 break;
             case Reverse:
                 if(IndexStop.get()){
                     mIndex.runIndex(-indexPower);
-                    mIntake.stopIntake();
 
                 } else{
                     IntakeLevel = IntakeLevels.NotRunning;
@@ -122,9 +117,6 @@ public class Shooter extends SubsystemBase{
             case SeeSensor:
                 if(!IndexStop.get()){
                     mIndex.runIndex(indexPower);
-
-                    mIntake.stopIntake();
-
 
                     hasNote = true;
 
@@ -135,8 +127,6 @@ public class Shooter extends SubsystemBase{
             case Running:
                 if(IndexStop.get()){
                     mIndex.runIndex(indexPower);
-
-                    mIntake.runIntake(1.0);
                 } else{
                     IntakeLevel = IntakeLevels.SeeSensor;
                 }
@@ -183,19 +173,7 @@ public class Shooter extends SubsystemBase{
 
     }
 
-    public void IntakeIn(){
-        if (IntakeLevel == IntakeLevels.NotRunning){
-            IntakeLevel = IntakeLevels.Running;
-        }
-        else{
-            IntakeLevel = IntakeLevels.NotRunning;
-        }
-    }
-
-    public void StopIntake() {
-        IntakeLevel = IntakeLevels.NotRunning;
-
-    }
+    
 
     public void stop(){ 
         rightShooter.stopMotor();

@@ -73,12 +73,12 @@ public class RobotContainer {
    */
   public RobotContainer() { 
     m_Index = new Index();
-    m_Intake = new Intake();
-    m_Shooter = new Shooter(m_Index, m_Intake);
+    m_Intake = new Intake(m_Index);
+    m_Shooter = new Shooter(m_Index);
 
     // Register pathplanner commands
     NamedCommands.registerCommand("Fire Shooter", new InstantCommand(() -> {m_Shooter.Fire();}));
-    NamedCommands.registerCommand("Intake", new InstantCommand(m_Shooter::IntakeIn));
+    NamedCommands.registerCommand("Intake", new InstantCommand(m_Intake::IntakeIn));
     NamedCommands.registerCommand("Index", new InstantCommand(m_Shooter::Index));
     NamedCommands.registerCommand("Stop Index", new InstantCommand(m_Shooter::stopIndex));
 
@@ -134,8 +134,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // /* Driver Buttons */
-    joysticks.intake.onTrue(new InstantCommand(m_Shooter::IntakeIn));
-    joysticks.intake.onFalse(new InstantCommand(m_Shooter::StopIntake));
+    joysticks.intake.onTrue(new InstantCommand(m_Intake::IntakeIn));
+    joysticks.intake.onFalse(new InstantCommand(m_Intake::StopIntake));
 
     joysticks.zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
