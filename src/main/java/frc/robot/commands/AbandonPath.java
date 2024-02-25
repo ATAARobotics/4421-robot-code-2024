@@ -12,6 +12,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Swerve;
 
 public class AbandonPath extends Command{
@@ -32,10 +33,10 @@ public class AbandonPath extends Command{
         // Create a path following command using AutoBuilder. This will also trigger event markers.
         // return AutoBuilder.followPath(path);
         
-        return b_AbandonPath(path, drive);
+        return builtPath(path, drive);
     }
 
-    public Command b_AbandonPath( PathPlannerPath path /*String pathURL*/, Swerve m_Swerve) {
+    public Command builtPath(PathPlannerPath path /*String pathURL*/, Swerve m_Swerve) {
         //PathPlannerPath path = PathPlannerPath.fromPathFile(pathURL);
         
         return new FollowPathHolonomic(

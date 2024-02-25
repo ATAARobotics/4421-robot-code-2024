@@ -1,12 +1,6 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 1.27,
-      "y": 5.53
-    },
-    "rotation": 180.0
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
@@ -14,13 +8,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Init Path"
+            "pathName": "2 Amp - amp 1"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "abandon path"
+            "pathName": "2 Amp - goto 2, get 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 Amp - score 2"
           }
         }
       ]

@@ -1,8 +1,19 @@
 {
   "robotWidth": 0.61,
-  "robotLength": 0.88,
+  "robotLength": 1.02,
   "holonomicMode": true,
-  "pathFolders": [],
+  "pathFolders": [
+    "2 Amp",
+    "2 Speaker, 1 Amp",
+    "3 Note Speaker",
+    "3 Speaker, 1 Amp",
+    "4 Note Speaker",
+    "4 Note Speaker #2",
+    "6 Note Speaker",
+    "Devious 4 Speaker",
+    "Alternate Paths",
+    "Start poses"
+  ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

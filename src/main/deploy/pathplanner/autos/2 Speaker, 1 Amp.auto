@@ -1,6 +1,12 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 1.4,
+      "y": 5.55
+    },
+    "rotation": 180.0
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -8,13 +14,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "New Path"
+            "pathName": "Centre - fire 1, goto 2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "New New Path"
+            "pathName": "2 Speaker, 1 Amp - score 2, get 3, amp 3"
           }
         }
       ]
