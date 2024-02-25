@@ -84,7 +84,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Stop Index", new InstantCommand(m_Shooter::stopIndex));
 
     s_Swerve = new Swerve();
-    shoot = new Shooting(m_Shooter, s_Swerve,joysticks::getXVelocity,
+    shoot = new Shooting(m_Shooter, mPivot, m_Index, s_Swerve,joysticks::getXVelocity,
         joysticks::getYVelocity);
     NamedCommands.registerCommand("Auto Shooter", new RunCommand(() -> {shoot.execute();}).onlyWhile(m_Shooter::hasNote));
 
@@ -137,13 +137,12 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // /* Driver Buttons */
-    joysticks.intake.onTrue(new InstantCommand(() -> {m_Intake.runIntake(0.4); m_Index.runIndex(0.75);}));
+    joysticks.intake.onTrue(new InstantCommand(() -> {m_Intake.runIntake(0.3); m_Index.runIndex(1);}));
     joysticks.intake.onFalse(new InstantCommand(() -> {m_Intake.stopIntake(); m_Index.stopIndex();}));
 
     joysticks.zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
-    joysticks.reverseIntake.onTrue(new InstantCommand(m_Shooter::ReverseIndex));
-    joysticks.reverseIntake.onFalse(new InstantCommand(m_Shooter::stopIndex));
+    joysticks.reverseIntake.onTrue(new InstantCommand(() -> m_Shooter.scoreAmp(m_Index))).onFalse(new InstantCommand(() -> m_Shooter.stopScoreAmp(m_Index)));
     joysticks.runShooter.onTrue(new InstantCommand(m_Shooter::Fire));
 
           
@@ -157,18 +156,23 @@ public class RobotContainer {
             ));
     // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     joysticks.toWaypoint.whileTrue(new SequentialCommandGroup(
-      s_Swerve.driveToWaypoint(new Pose2d((578.77/39.37), (323.00/39.37) - 1.5, Rotation2d.fromDegrees(90))),
+      s_Swerve.driveToWaypoint(new Pose2d((72.5/39.37), (323.00/39.37) - 1.5, Rotation2d.fromDegrees(90))),
       new WaitCommand(0.2),
-      new ChaseTag(s_Swerve, new Pose2d((578.77/39.37), (323.00/39.37) - 0.75, Rotation2d.fromDegrees(270)), false)
+      new GetToAmp(s_Swerve, false)
     ));
 
+    joysticks.ShooterIntake.onTrue(new InstantCommand(() -> {m_Shooter.ReverseIndex();m_Index.runIndex(-0.75);}))
+      .onFalse(new InstantCommand(() -> {m_Shooter.stopIndex();m_Index.stopIndex();}));
     joysticks.pivotUp.onTrue(new InstantCommand(mPivot::PivotUp)).onFalse(new InstantCommand(mPivot::stop));
     joysticks.pivotDown.onTrue(new InstantCommand(mPivot::PivotDown)).onFalse(new InstantCommand(mPivot::stop));
-    joysticks.pivotGoSetpoint.onTrue(new InstantCommand(() -> mPivot.toSetpoint(45))).onFalse(new InstantCommand(mPivot::stop));
+    // joysticks.pivotGoSetpoint.onTrue(new InstantCommand(() -> mPivot.toSetpoint(90))).onFalse(new InstantCommand(mPivot::stop));
 
   }
   public OI getOI() {
     return joysticks;
+  }
+  public Swerve getSwerve(){
+    return s_Swerve;
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

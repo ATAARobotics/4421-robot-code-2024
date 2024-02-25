@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -21,10 +22,17 @@ import frc.robot.subsystems.*;
 
 public class Shooting extends Command {
      private Translation3d BluegoalPose = new Translation3d(-0.1651, 2.2, 5.5408);
-     private Translation3d RedgoalPose = new Translation3d(16.706342, 5.5408, 2.2);
+     // private Translation3d RedgoalPose = new Translation3d(16.706342, 5.5408, 2.2);
+     private Translation3d RedgoalPose = new Translation3d(16.706342, 5.5408, 2.15);
+
+
+     // SIDE FLIP
+     private Translation3d GoalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
 
     private Shooter mShooter;
+    private Pivot mPivot;
     private Swerve mSwerve;
+    private Index mIndex;
     
     private final PIDController rotController = new PIDController(10, 20, 1);
 
@@ -71,13 +79,17 @@ public class Shooting extends Command {
      private double rotationVal = 0;
     public Shooting(
           Shooter m_shooter, 
+          Pivot m_Pivot,
+          Index m_Index,
           Swerve m_swerve,      
           DoubleSupplier translationSup,
           DoubleSupplier strafeSup
      ){
         this.mShooter = m_shooter;
+        this.mIndex = m_Index;
         this.mSwerve = m_swerve;
-        addRequirements(mSwerve, mShooter);
+        this.mPivot = m_Pivot;
+        addRequirements(mSwerve, mShooter, mPivot, m_Index);
           SmartDashboard.putNumber("Rot P", 10);
           SmartDashboard.putNumber("Rot I", 0);
           SmartDashboard.putNumber("Rot D", 0);
@@ -89,12 +101,12 @@ public class Shooting extends Command {
     @Override
     public void initialize(){
         rotController.setTolerance(Math.toRadians(5));
+        GoalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
 
     }
 
     @Override
     public void execute(){
-          System.out.println("Shooting");
           // # g = 9.81
           // # A = proj_pos.x
           // # B = proj_pos.y
@@ -111,15 +123,15 @@ public class Shooting extends Command {
           Q = 0;
           R = -mSwerve.getChassisSpeeds().vyMetersPerSecond;
           // Note Postion
-          A = mSwerve.getPose().getX() + (-P*0.2);
+          A = mSwerve.getPose().getX() + (-P*0.05);
           B = 0.4572;
-          C = mSwerve.getPose().getY()+ (-R*0.2);
+          C = mSwerve.getPose().getY()+ (-R*0.5);
 
           //TODO change goal pose to be set based on color
-          M = RedgoalPose.getX();
-          N = RedgoalPose.getZ();
-          O = RedgoalPose.getY();
-          S = 15;
+          M = GoalPose.getX();
+          N = GoalPose.getZ();
+          O = GoalPose.getY();
+          S = 12;
 
           SmartDashboard.putNumber("x velocity", P);
           SmartDashboard.putNumber("y velocity", R);
@@ -152,9 +164,9 @@ public class Shooting extends Command {
                rotController.setIZone(Math.toRadians(5));
 
                rotController.setSetpoint(RobotAngle);
-               if (rotController.atSetpoint() && mShooter.CanShoot()){
-                    mShooter.Index();
-               }
+
+
+               mPivot.toSetpoint(Math.toDegrees(ShooterAngle));
                rotationVal = MathUtil.clamp(rotController.calculate(mSwerve.getPose().getRotation().getRadians()), -Constants.Swerve.maxAngularVelocity, Constants.Swerve.maxAngularVelocity);
           }
  
@@ -165,12 +177,19 @@ public class Shooting extends Command {
                strafeLimiter.calculate(
                     MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.Swerve.stickDeadband));
           
-
+          if (rotController.atSetpoint() & mShooter.CanShoot() & mPivot.AtSetpoint()){
+               SmartDashboard.putBoolean("Can Shoot", true);
+               mIndex.runIndex(1);
+          }
+          else{
+               SmartDashboard.putBoolean("Can Shoot", false);
+          }
+          mShooter.AutoFire();
 
           /* Drive */
           mSwerve.drive(
                new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
-               rotationVal,
+               -rotationVal,
                true,
                true);
 
@@ -178,7 +197,8 @@ public class Shooting extends Command {
      @Override
      public void end(boolean interrupted) {
          mShooter.AutoStop();
-         mShooter.stopIndex();
+         mPivot.stop();
+         mIndex.stopIndex();
      }
 
 

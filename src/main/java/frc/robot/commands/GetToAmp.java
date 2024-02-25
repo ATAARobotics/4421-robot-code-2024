@@ -7,16 +7,19 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 
-public class ChaseTag extends Command {
+public class GetToAmp extends Command {
 
     private Swerve m_swerveDriveSubsystem;
     private PoseEstimator poseEstimator;
@@ -24,7 +27,12 @@ public class ChaseTag extends Command {
     // Poses
     private Pose2d targetPose;
     private Pose2d robotPose;
-    private Pose2d goalPose;
+
+    // TODO: ADD BLUE GOAL POSE
+    private Pose2d BluegoalPose =  new Pose2d((72.5/39.37), (323.00/39.37) - 1.5, Rotation2d.fromDegrees(90));
+    private Pose2d RedgoalPose = new Pose2d((578.77/39.37), (323.00/39.37) - 1.5, Rotation2d.fromDegrees(90));
+
+    private Pose2d goalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
 
     // speed variables
     private double xSpeed;
@@ -39,7 +47,7 @@ public class ChaseTag extends Command {
     // PID
     private final PIDController xController = new PIDController(3.0, 0, 0);
     private final PIDController yController = new PIDController(5.0, 0, 0);
-    private final PIDController rotController = new PIDController(10.0, 0.0, 0.0);
+    private final PIDController rotController = new PIDController(Constants.Subsystems.rotationPID.kP, Constants.Subsystems.rotationPID.kI, Constants.Subsystems.rotationPID.kD);
 
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.Swerve.Waypoint.driveKS, Constants.Swerve.Waypoint.driveKV);
 
@@ -50,35 +58,31 @@ public class ChaseTag extends Command {
     private boolean X_ACH = false;
     private boolean ROT_ACH = false;
 
-    public ChaseTag(Swerve swerveDriveSubsystem, PoseEstimator poseEstimator, Pose2d targetPose, double driveTolerance, double rotTolerance, double speedLimit, double rotLimit, boolean isEndPoint) {
+    public GetToAmp(Swerve swerveDriveSubsystem, PoseEstimator poseEstimator, double driveTolerance, double rotTolerance, double speedLimit, double rotLimit, boolean isEndPoint) {
         this.m_swerveDriveSubsystem = swerveDriveSubsystem;
-        this.targetPose = targetPose;
         this.poseEstimator = poseEstimator;
         rotController.enableContinuousInput(-Math.PI, Math.PI);
         this.speedLimit = 1.0;
         this.rotLimit = 3*Math.PI;
         this.isEndPoint = isEndPoint;
+        rotController.setIZone(Constants.Subsystems.rotationPID.iZone);
         addRequirements(this.m_swerveDriveSubsystem);
     }
 
-    public ChaseTag(Swerve swerveDriveSubsystem, Pose2d targetPose, boolean isEndPoint) {
-      this(swerveDriveSubsystem, swerveDriveSubsystem.getPoseEstimator(), targetPose, Constants.Swerve.Waypoint.E_DTOLERANCE, Constants.Swerve.Waypoint.E_RTOLERANCE, Constants.Swerve.Waypoint.SPEEDLIMIT, Constants.Swerve.Waypoint.ROTLIMIT, isEndPoint);
+    public GetToAmp(Swerve swerveDriveSubsystem, boolean isEndPoint) {
+      this(swerveDriveSubsystem, swerveDriveSubsystem.getPoseEstimator(), Constants.Swerve.Waypoint.E_DTOLERANCE, Constants.Swerve.Waypoint.E_RTOLERANCE, Constants.Swerve.Waypoint.SPEEDLIMIT, Constants.Swerve.Waypoint.ROTLIMIT, isEndPoint);
     }
 
     @Override
     public void initialize() {
+        goalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
         m_swerveDriveSubsystem.setBrakes(true);
         goalPose = targetPose;
 
-        if (false) {
-          xController.setTolerance(Constants.Swerve.Waypoint.E_DTOLERANCE);
-          yController.setTolerance(Constants.Swerve.Waypoint.E_DTOLERANCE);
-          rotController.setTolerance(Units.degreesToRadians(Constants.Swerve.Waypoint.E_RTOLERANCE));
-        } else {
-          xController.setTolerance(10.75);
-          yController.setTolerance(10.75);
+
+          xController.setTolerance(0.05);
+          yController.setTolerance(0.05);
           rotController.setTolerance(Units.degreesToRadians(Constants.Swerve.Waypoint.RTOLERANCE));
-        }
 
         xController.setSetpoint(goalPose.getX());
         yController.setSetpoint(goalPose.getY());
@@ -154,4 +158,9 @@ public class ChaseTag extends Command {
           true);
       // m_swerveDriveSubsystem.drive(xSpeed + feedforward.calculate(xVel), ySpeed + feedforward.calculate(yVel), rotSpeed, true, true);
     }
+    @Override
+    public boolean isFinished() {
+        return (xController.atSetpoint() && yController.atSetpoint());
+    }
+
 }

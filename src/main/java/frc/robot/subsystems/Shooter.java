@@ -28,7 +28,7 @@ public class Shooter extends SubsystemBase{
     private boolean finishedIntake = false;
 
     private boolean atAmpPoint = false;
-    private boolean isAmpScoring = false;
+    private int isAmpScoring = 0;
 
     private boolean hasNote = true;
 
@@ -38,6 +38,7 @@ public class Shooter extends SubsystemBase{
     public SparkPIDController rightShooterPID;
 
     private DigitalInput IndexStop;
+    private DigitalInput AmpStop;
 
     private enum IntakeLevels{
         NotRunning,
@@ -62,7 +63,8 @@ public class Shooter extends SubsystemBase{
 
         SmartDashboard.setDefaultNumber("index p%", 0);
 
-        IndexStop = new DigitalInput(0);
+        IndexStop = new DigitalInput(8);
+        AmpStop = new DigitalInput(9);
 
         leftShooter.setInverted(false);
         rightShooter.setInverted(true);
@@ -113,35 +115,52 @@ public class Shooter extends SubsystemBase{
         SmartDashboard.putNumber("rpm l", leftShooter.getEncoder().getVelocity());
         SmartDashboard.putNumber("rpm r", rightShooter.getEncoder().getVelocity());
 
-        if(isFiring && !isAmpScoring){
+        if(isFiring && isAmpScoring == 0){
             leftShooterPID.setReference(5500.0, ControlType.kVelocity);
-            rightShooterPID.setReference(5500.0, ControlType.kVelocity);
+            rightShooterPID.setReference(4500, ControlType.kVelocity);
             // leftShooterPID.setReference(SmartDashboard.getNumber("Left Shooter Ref", 0), ControlType.kVelocity);
             // rightShooterPID.setReference(SmartDashboard.getNumber("Right Shooter Ref", 0), ControlType.kVelocity);
             // leftShooter.set(SmartDashboard.getNumber("left shooter p%", 0));
             // rightShooter.set(SmartDashboard.getNumber("right shooter p%", 0));
 
-        }else{
+        }else if (isAmpScoring == 0){
             rightShooter.stopMotor();
             leftShooter.stopMotor();
+        } else{
+            switch (isAmpScoring) {
+                case 1:
+                    if(AmpStop.get()){
+                        leftShooter.set(0.2);
+                        rightShooter.set(0.2);
+                     }else{
+                        isAmpScoring = 2;
+                    }
+                    break;
+                case 2:
+                    if(!AmpStop.get()){
+                        leftShooter.set(0.1);
+                        rightShooter.set(0.1);
+                     }else{
+                        isAmpScoring = 3;
+                    }                    
+                    break;
+                case 3:
+                    leftShooter.set(-0.5);
+                    rightShooter.set(-0.5);                
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
 
     public void scoreAmp(Index sIndex){
-        isAmpScoring = true;
-        if(!atAmpPoint){
-            sIndex.index.set(SmartDashboard.getNumber("left index p%", 0));
-            leftShooter.set(SmartDashboard.getNumber("left shooter p% a", 0));
-            rightShooter.set(SmartDashboard.getNumber("right shooter p% a", 0));
-        }else{
-            sIndex.index.set(SmartDashboard.getNumber("right index p%", 0));
-            leftShooter.set(-SmartDashboard.getNumber("left shooter p% a", 0));
-            rightShooter.set(-SmartDashboard.getNumber("right shooter p% a", 0));
-        }
+        isAmpScoring = 1;
+        sIndex.index.set(1);
     }
     public void stopScoreAmp(Index sIndex){
-        isAmpScoring= false;
+        isAmpScoring = 0;
         sIndex.index.set(SmartDashboard.getNumber("right index p%", 0));
         leftShooter.set(SmartDashboard.getNumber("left shooter p% a", 0));
         rightShooter.set(SmartDashboard.getNumber("right shooter p% a", 0));
@@ -170,11 +189,12 @@ public class Shooter extends SubsystemBase{
     }
     public void stopIndex(){
         IntakeLevel = IntakeLevels.NotRunning;
+        isAmpScoring = 0;
     }
 
     public void ReverseIndex(){
         IntakeLevel = IntakeLevels.Shooting;
-
+        isAmpScoring = 3;
     }
 
     public void IntakeIn(){
@@ -198,7 +218,7 @@ public class Shooter extends SubsystemBase{
     }
 
     public boolean CanShoot(){
-        return(5000<leftShooter.getEncoder().getVelocity() && leftShooter.getEncoder().getVelocity()<6000);
+        return(5400<leftShooter.getEncoder().getVelocity() && leftShooter.getEncoder().getVelocity()<5600);
     }
 
     public boolean hasNote() {
