@@ -42,8 +42,4 @@ public class AmpScore extends Command{
     public void end(boolean isInterrupted) {
         s_Shooter.stopScoreAmp(s_Index);
     }
-
-
-    
-
 }

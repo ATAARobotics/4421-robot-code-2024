@@ -35,7 +35,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.commands.ChaseTag;
+import frc.robot.commands.GetToAmp;
 import frc.lib.config.SwerveModuleConstants;
 
 public class Swerve extends SubsystemBase {
@@ -63,7 +63,6 @@ public class Swerve extends SubsystemBase {
     gyro.configMountPose(AxisDirection.PositiveY, AxisDirection.PositiveZ);
 
     zeroGyro();
-
     mSwerveMods = new SwerveModule[] {
         new SwerveModule(0, Constants.Swerve.Mod0.constants),
         new SwerveModule(1, Constants.Swerve.Mod1.constants),
@@ -179,26 +178,31 @@ public class Swerve extends SubsystemBase {
   public Rotation2d getAngle(){
     return (PoseEstimator.getEstimatedPosition().getRotation());
   }
+  public void SetAbsMod(){
+    for (SwerveModule mod : mSwerveMods) {
+      mod.resetToAbsolute();
+    }
+  }
   @Override
   public void periodic() {
-    // pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
-    // double poseX = pose[0];
-    // double poseY = pose[1];
-    // Rotation2d poseR = Rotation2d.fromDegrees(pose[5]);
-    // double timeStamp = Timer.getFPGATimestamp() - (pose[6] / 1000.0);
+    pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
+    double poseX = pose[0];
+    double poseY = pose[1];
+    Rotation2d poseR = Rotation2d.fromDegrees(pose[5]);
+    double timeStamp = Timer.getFPGATimestamp() - (pose[6] / 1000.0);
 
     // SmartDashboard.putNumber("Pose Estimator ", PoseEstimator.getEstimatedPosition().getRotation().getDegrees());
     // SmartDashboard.putNumber("Get Yaw ", getYaw().getDegrees());
 
 
-    // if (Math.abs(pose[0]) >= 0.1) {
-    //   PoseEstimator.addVisionMeasurement(new Pose2d(poseX, poseY, poseR), timeStamp);
-    //   double angleError = Math.abs(getYaw().minus(poseR).getDegrees());
-    //   if(!DriverStation.isEnabled()){
-    //     gyro.setYaw(poseR.getDegrees());
-    //   }
-    //   //PoseEstimator.resetPosition(poseR, getPositions(), new Pose2d(poseX, poseY, poseR));
-    // }
+    if (Math.abs(pose[0]) >= 0.1) {
+      PoseEstimator.addVisionMeasurement(new Pose2d(poseX, poseY, poseR), timeStamp);
+      double angleError = Math.abs(getYaw().minus(poseR).getDegrees());
+      if(!DriverStation.isEnabled()){
+        gyro.setYaw(poseR.getDegrees());
+      }
+      //PoseEstimator.resetPosition(poseR, getPositions(), new Pose2d(poseX, poseY, poseR));
+    }
 
     PoseEstimator.update(getYaw(), getPositions());
     vecPose = new Pose2d((PoseEstimator.getEstimatedPosition().getX() - lastPose.getX())/ (Timer.getFPGATimestamp()-lastTimeStamp), (PoseEstimator.getEstimatedPosition().getY() - lastPose.getY())/(Timer.getFPGATimestamp()-lastTimeStamp), PoseEstimator.getEstimatedPosition().getRotation());
@@ -232,11 +236,12 @@ public class Swerve extends SubsystemBase {
     if(hasNote.getAsBoolean()) {
       // Return an optional containing the rotation override (this should be a field relative rotation)
       return Optional.of(Rotation2dOut);
-  } else {
-      // return an empty optional when we don't want to override the path's rotation
-      return Optional.empty();
+    } else {
+        // return an empty optional when we don't want to override the path's rotation
+        return Optional.empty();
+    }
   }
-}
+
   public Command driveToWaypoint(Pose2d targetPose){
 
     PathConstraints constraints = new PathConstraints(

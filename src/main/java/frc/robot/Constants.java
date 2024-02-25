@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.pathplanner.lib.util.PIDConstants;
 import com.revrobotics.CANSparkBase.IdleMode;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -161,7 +162,9 @@ public final class Constants {
     public static final double shooterD = 0.002;
     public static final double shooterFF = 0.00005;
 
-    public static final double ampTime = 1500;
+    public static final double ampTime = 0.2;
+
+    public static final PIDConstants rotationPID = new PIDConstants(10, 20,1, 5);
   }
 
   public static final class AutoConstants {

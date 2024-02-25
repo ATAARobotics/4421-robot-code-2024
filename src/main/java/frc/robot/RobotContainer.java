@@ -84,7 +84,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Stop Index", new InstantCommand(m_Shooter::stopIndex));
 
     s_Swerve = new Swerve();
-    shoot = new Shooting(m_Shooter, s_Swerve,joysticks::getXVelocity,
+    shoot = new Shooting(m_Shooter, mPivot, s_Swerve,joysticks::getXVelocity,
         joysticks::getYVelocity);
     NamedCommands.registerCommand("Auto Shooter", new RunCommand(() -> {shoot.execute();}).onlyWhile(m_Shooter::hasNote));
 
@@ -140,8 +140,8 @@ public class RobotContainer {
 
     joysticks.zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
-    joysticks.reverseIntake.onTrue(new InstantCommand(() -> m_Index.runIndex(1)));
-    joysticks.runShooter.onTrue(new InstantCommand(m_Shooter::Fire)).onFalse(new InstantCommand(() -> m_Index.stopIndex()));
+    // joysticks.reverseIntake.onTrue(new InstantCommand(() -> m_Shooter.scoreAmp(m_Index))).onFalse(new InstantCommand(() -> m_Shooter.stopScoreAmp(m_Index)));
+    joysticks.runShooter.onTrue(new InstantCommand(m_Shooter::Fire));
 
           
 
@@ -156,16 +156,19 @@ public class RobotContainer {
     joysticks.toWaypoint.whileTrue(new SequentialCommandGroup(
       s_Swerve.driveToWaypoint(new Pose2d((578.77/39.37), (323.00/39.37) - 1.5, Rotation2d.fromDegrees(90))),
       new WaitCommand(0.2),
-      new ChaseTag(s_Swerve, new Pose2d((578.77/39.37), (323.00/39.37) - 0.75, Rotation2d.fromDegrees(270)), false)
+      new GetToAmp(s_Swerve, false)
     ));
 
     joysticks.pivotUp.onTrue(new InstantCommand(mPivot::PivotUp)).onFalse(new InstantCommand(mPivot::stop));
     joysticks.pivotDown.onTrue(new InstantCommand(mPivot::PivotDown)).onFalse(new InstantCommand(mPivot::stop));
-    // joysticks.pivotGoSetpoint.onTrue(new InstantCommand(() -> mPivot.toSetpoint(45))).onFalse(new InstantCommand(mPivot::stop));
+    joysticks.pivotGoSetpoint.onTrue(new InstantCommand(() -> mPivot.toSetpoint(90))).onFalse(new InstantCommand(mPivot::stop));
 
   }
   public OI getOI() {
     return joysticks;
+  }
+  public Swerve getSwerve(){
+    return s_Swerve;
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

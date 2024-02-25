@@ -1,4 +1,5 @@
 package frc.robot.subsystems;
+import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel;
@@ -29,40 +30,31 @@ public class Pivot extends SubsystemBase{
 
     private boolean GoingToSetpoint = false;
     private CANSparkFlex PivotMotor;
-    private CANcoder pivotEncoder;
+    private CANCoder pivotEncoder;
 
-    private PIDController pivotPID = new PIDController(0.1, 0, 0);
+    private PIDController pivotPID = new PIDController(0.5, 0, 0.004);
 
-
+    private double ffConstant = 0.5;
 
     public Pivot(){
 
         PivotMotor = new CANSparkFlex(Constants.Subsystems.shooterPivot, CANSparkLowLevel.MotorType.kBrushless);
         
-        pivotEncoder = new CANcoder(22);
-
-        SmartDashboard.putNumber("Pivot P", 0);
-        SmartDashboard.putNumber("Pivot I", 0);
-        SmartDashboard.putNumber("Pivot D", 0);
-        SmartDashboard.putNumber("Pivot FF", 0);
+        pivotEncoder = new CANCoder(22);
 
     }
 
 
     @Override
     public void periodic(){
-        pivotPID.setP(SmartDashboard.getNumber("Pivot P", 0));
-        pivotPID.setI(SmartDashboard.getNumber("Pivot I", 0));
-        pivotPID.setD(SmartDashboard.getNumber("Pivot D", 0));
 
-        double ffConstant = SmartDashboard.getNumber("Pivot FF", 0);
-
-        double angle = Math.toDegrees(pivotEncoder.getPosition().getValueAsDouble()*2*Math.PI);
+        double angle = pivotEncoder.getAbsolutePosition();
         SmartDashboard.putNumber("Pivot Angle", angle);
+        SmartDashboard.putNumber("Pivot Setpoint", pivotPID.getSetpoint());
 
         if (GoingToSetpoint){
             double pidVal = pivotPID.calculate(angle);
-            double ffVal = ffConstant*Math.sin(angle);
+            double ffVal = ffConstant*Math.sin(Math.toRadians(angle));
             double val = MathUtil.clamp(pidVal+ffVal, -1, 1);
             PivotMotor.set(val);
         }
@@ -70,11 +62,11 @@ public class Pivot extends SubsystemBase{
 
     public void PivotUp(){
         GoingToSetpoint = false;
-        PivotMotor.set(0.1);
+        PivotMotor.set(0.5);
     }
     public void PivotDown(){
         GoingToSetpoint = false;
-        PivotMotor.set(-0.1);
+        PivotMotor.set(-0.5);
     }
     public void toSetpoint(double setPoint){
         GoingToSetpoint = true;
@@ -83,6 +75,9 @@ public class Pivot extends SubsystemBase{
     public void stop(){
         GoingToSetpoint = false;
         PivotMotor.set(0);
+    }
+    public boolean AtSetpoint(){
+        return (Math.abs(pivotPID.getSetpoint()-pivotEncoder.getAbsolutePosition()) <= 1.5);
     }
 
 

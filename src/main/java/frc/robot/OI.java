@@ -63,15 +63,15 @@ class OI {
         intake = driveStick.getWPIJoystickButton("Intake");
         zeroGyro = driveStick.getWPIJoystickButton("Zero");
 
-        // reverseIntake = driveStick.getWPIJoystickButton("ReverseIntake");
-        reverseIntake = gunnerStick.getWPIJoystickButton("pivotGoSetpoint");
+        reverseIntake = driveStick.getWPIJoystickButton("ReverseIntake");
+        // reverseIntake = gunnerStick.getWPIJoystickButton("pivotGoSetpoint");
 
         toWaypoint = driveStick.getWPIJoystickButton("ScoreAmp");
 
         runShooter = gunnerStick.getWPIJoystickButton("Shoot");
         pivotUp = gunnerStick.getWPIJoystickButton("PivotUp");
         pivotDown = gunnerStick.getWPIJoystickButton("PivotDown");
-        // pivotGoSetpoint = gunnerStick.getWPIJoystickButton("pivotGoSetpoint");
+        pivotGoSetpoint = gunnerStick.getWPIJoystickButton("pivotGoSetpoint");
 
         // Set up command-based stuff
         /** 
