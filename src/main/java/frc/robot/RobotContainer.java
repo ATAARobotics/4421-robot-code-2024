@@ -56,6 +56,7 @@ public class RobotContainer {
   /* Driver Buttons */
   /* Subsystems */
   public final Swerve s_Swerve;
+  public Lighting s_Lighting;
   public Shooter m_Shooter;
   public Index m_Index;
   public Intake m_Intake;
@@ -75,6 +76,8 @@ public class RobotContainer {
     m_Index = new Index();
     m_Intake = new Intake();
     m_Shooter = new Shooter(m_Index, m_Intake);
+    s_Swerve = new Swerve();
+    s_Lighting = new Lighting(s_Swerve, m_Shooter);
 
     // Register pathplanner commands
     NamedCommands.registerCommand("Fire Shooter", new InstantCommand(() -> {m_Shooter.Fire();}));
@@ -82,7 +85,6 @@ public class RobotContainer {
     NamedCommands.registerCommand("Index", new InstantCommand(m_Shooter::Index));
     NamedCommands.registerCommand("Stop Index", new InstantCommand(m_Shooter::stopIndex));
 
-    s_Swerve = new Swerve();
     shoot = new Shooting(m_Shooter, s_Swerve,joysticks::getXVelocity,
         joysticks::getYVelocity);
     NamedCommands.registerCommand("Auto Shooter", new RunCommand(() -> {shoot.execute();}).onlyWhile(m_Shooter::hasNote));

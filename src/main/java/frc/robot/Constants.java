@@ -159,7 +159,8 @@ public final class Constants {
     public static final double shooterP = 0.0007;
     public static final double shooterI = 0.000001;
     public static final double shooterD = 0.005;
-    public static final double shooterFF = 0.0001; 
+    public static final double shooterFF = 0.0001;
+    public static final int CandleID = 35; 
   }
 
   public static final class AutoConstants {
