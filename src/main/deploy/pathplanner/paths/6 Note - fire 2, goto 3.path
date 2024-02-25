@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4,
-        "y": 5.55
+        "x": 2.3500908540278633,
+        "y": 4.1046482092964185
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.65,
-        "y": 5.55
+        "x": 1.9159453703522806,
+        "y": 4.410523436431489
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.3,
-        "y": 5.55
+        "x": 2.3500908540278633,
+        "y": 5.545221859674489
       },
       "prevControl": {
-        "x": 2.051506886916552,
-        "y": 5.522592469098863
+        "x": 1.6100701432172113,
+        "y": 5.032140833512437
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
     {
       "name": "Velocity cull",
       "minWaypointRelativePos": 0.0,
-      "maxWaypointRelativePos": 1.0,
+      "maxWaypointRelativePos": 0.0,
       "constraints": {
         "maxVelocity": 3.0,
         "maxAcceleration": 1.5,
@@ -52,10 +52,13 @@
   "goalEndState": {
     "velocity": 0.0,
     "rotation": 180.0,
-    "rotateFast": true
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": "4 Note Speaker",
-  "previewStartingState": null,
+  "folder": "6 Note Speaker",
+  "previewStartingState": {
+    "rotation": 180.0,
+    "velocity": 0
+  },
   "useDefaultConstraints": false
 }

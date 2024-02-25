@@ -1,12 +1,6 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 1.4,
-      "y": 5.55
-    },
-    "rotation": 180.0
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
@@ -14,19 +8,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "5 Note - shoot 1, get 2"
+            "pathName": "2 Amp - amp 1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "4 Note - fire 2, goto 3"
+            "pathName": "2 Amp - goto 2, get 2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "4 Note - get 4, fire 4"
+            "pathName": "2 Amp - score 2"
           }
         }
       ]

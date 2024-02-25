@@ -8,31 +8,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right - fire 1, goto 2"
+            "pathName": "Devious Right - fire 1, goto 2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "6 Note - fire 2, goto 3"
+            "pathName": "Devious Right - fire 2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "6 Note - fire 3, goto 4"
+            "pathName": "Devious Right - goto 3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "6 Note - shoot 4, get 5"
+            "pathName": "Devious Right - fire 3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "6 Note - get 6, score 6"
+            "pathName": "Devious Right - goto 4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Devious Right - fire 4"
           }
         }
       ]
