@@ -32,6 +32,7 @@ public class Shooting extends Command {
     private Shooter mShooter;
     private Pivot mPivot;
     private Swerve mSwerve;
+    private Index mIndex;
     
     private final PIDController rotController = new PIDController(10, 20, 1);
 
@@ -79,14 +80,16 @@ public class Shooting extends Command {
     public Shooting(
           Shooter m_shooter, 
           Pivot m_Pivot,
+          Index m_Index,
           Swerve m_swerve,      
           DoubleSupplier translationSup,
           DoubleSupplier strafeSup
      ){
         this.mShooter = m_shooter;
+        this.mIndex = m_Index;
         this.mSwerve = m_swerve;
         this.mPivot = m_Pivot;
-        addRequirements(mSwerve, mShooter, mPivot);
+        addRequirements(mSwerve, mShooter, mPivot, m_Index);
           SmartDashboard.putNumber("Rot P", 10);
           SmartDashboard.putNumber("Rot I", 0);
           SmartDashboard.putNumber("Rot D", 0);
@@ -98,6 +101,7 @@ public class Shooting extends Command {
     @Override
     public void initialize(){
         rotController.setTolerance(Math.toRadians(5));
+        GoalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
 
     }
 
@@ -119,9 +123,9 @@ public class Shooting extends Command {
           Q = 0;
           R = -mSwerve.getChassisSpeeds().vyMetersPerSecond;
           // Note Postion
-          A = mSwerve.getPose().getX() + (-P*0.2);
+          A = mSwerve.getPose().getX() + (-P*0.05);
           B = 0.4572;
-          C = mSwerve.getPose().getY()+ (-R*0.2);
+          C = mSwerve.getPose().getY()+ (-R*0.5);
 
           //TODO change goal pose to be set based on color
           M = GoalPose.getX();
@@ -175,15 +179,17 @@ public class Shooting extends Command {
           
           if (rotController.atSetpoint() & mShooter.CanShoot() & mPivot.AtSetpoint()){
                SmartDashboard.putBoolean("Can Shoot", true);
+               mIndex.runIndex(1);
           }
           else{
                SmartDashboard.putBoolean("Can Shoot", false);
           }
+          mShooter.AutoFire();
 
           /* Drive */
           mSwerve.drive(
                new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
-               rotationVal,
+               -rotationVal,
                true,
                true);
 
@@ -192,6 +198,7 @@ public class Shooting extends Command {
      public void end(boolean interrupted) {
          mShooter.AutoStop();
          mPivot.stop();
+         mIndex.stopIndex();
      }
 
 

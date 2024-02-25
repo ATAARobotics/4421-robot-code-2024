@@ -189,11 +189,12 @@ public class Shooter extends SubsystemBase{
     }
     public void stopIndex(){
         IntakeLevel = IntakeLevels.NotRunning;
+        isAmpScoring = 0;
     }
 
     public void ReverseIndex(){
         IntakeLevel = IntakeLevels.Shooting;
-
+        isAmpScoring = 3;
     }
 
     public void IntakeIn(){
@@ -217,7 +218,7 @@ public class Shooter extends SubsystemBase{
     }
 
     public boolean CanShoot(){
-        return(5000<leftShooter.getEncoder().getVelocity() && leftShooter.getEncoder().getVelocity()<6000);
+        return(5400<leftShooter.getEncoder().getVelocity() && leftShooter.getEncoder().getVelocity()<5600);
     }
 
     public boolean hasNote() {

@@ -191,8 +191,8 @@ public class Swerve extends SubsystemBase {
     Rotation2d poseR = Rotation2d.fromDegrees(pose[5]);
     double timeStamp = Timer.getFPGATimestamp() - (pose[6] / 1000.0);
 
-    // SmartDashboard.putNumber("Pose Estimator ", PoseEstimator.getEstimatedPosition().getRotation().getDegrees());
-    // SmartDashboard.putNumber("Get Yaw ", getYaw().getDegrees());
+    SmartDashboard.putNumber("Pose Estimator ", PoseEstimator.getEstimatedPosition().getRotation().getDegrees());
+    SmartDashboard.putNumber("Get Yaw ", getYaw().getDegrees());
 
 
     if (Math.abs(pose[0]) >= 0.1) {

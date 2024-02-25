@@ -66,7 +66,7 @@ public class Pivot extends SubsystemBase{
     }
     public void PivotDown(){
         GoingToSetpoint = false;
-        PivotMotor.set(-0.5);
+        PivotMotor.set(-1);
     }
     public void toSetpoint(double setPoint){
         GoingToSetpoint = true;
