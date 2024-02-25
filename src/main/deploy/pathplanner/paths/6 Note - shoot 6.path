@@ -3,47 +3,43 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.3500908540278633,
-        "y": 4.1046482092964185
+        "x": 7.747308571540221,
+        "y": 5.8
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9159453703522806,
-        "y": 4.410523436431489
+        "x": 7.36249780191868,
+        "y": 5.819733885621617
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.3500908540278633,
-        "y": 5.545221859674489
+        "x": 5.0,
+        "y": 6.2
       },
       "prevControl": {
-        "x": 1.6100701432172113,
-        "y": 5.032140833512437
+        "x": 5.813387780621717,
+        "y": 6.058302885836541
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.7,
+      "rotationDegrees": 165.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [
     {
       "name": "Fire Shooter",
-      "waypointRelativePos": 0.1,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": []
-        }
-      }
-    },
-    {
-      "name": "Intake",
-      "waypointRelativePos": 0.65,
+      "waypointRelativePos": 0.6499999999999999,
       "command": {
         "type": "parallel",
         "data": {
@@ -59,7 +55,7 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0.0,
+    "velocity": 0,
     "rotation": 180.0,
     "rotateFast": false
   },

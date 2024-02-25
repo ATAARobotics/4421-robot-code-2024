@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.4285770110001765,
-        "y": 7.331138508430864
+        "x": 6.84941677575663,
+        "y": 7.390340165295715
       },
       "isLocked": false,
       "linkedName": null
@@ -20,24 +20,8 @@
         "y": 7.449541822160567
       },
       "prevControl": {
-        "x": 7.441433344405152,
-        "y": 7.548211250268655
-      },
-      "nextControl": {
-        "x": 8.149321938060249,
-        "y": 7.2759464065551525
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 5.0,
-        "y": 6.2
-      },
-      "prevControl": {
-        "x": 5.724585295324437,
-        "y": 6.433246712647272
+        "x": 7.520368886891621,
+        "y": 7.459408764971376
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.05,
+      "waypointRelativePos": 1,
       "rotationDegrees": 180.0,
       "rotateFast": false
     }
@@ -65,17 +49,7 @@
     },
     {
       "name": "Intake",
-      "waypointRelativePos": 0.7,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": []
-        }
-      }
-    },
-    {
-      "name": "Fire Shooter",
-      "waypointRelativePos": 1.7,
+      "waypointRelativePos": 0.6,
       "command": {
         "type": "parallel",
         "data": {

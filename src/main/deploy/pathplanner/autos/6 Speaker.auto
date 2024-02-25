@@ -26,13 +26,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "6 Note - shoot 4, get 5"
+            "pathName": "6 Note - shoot 4"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "6 Note - get 6, score 6"
+            "pathName": "6 Note - get 5, shoot 5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "6 Note - get 6"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "6 Note - shoot 6"
           }
         }
       ]
