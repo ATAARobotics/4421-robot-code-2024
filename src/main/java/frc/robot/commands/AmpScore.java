@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Index;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Pivot;
 
 public class AmpScore extends Command{
 
@@ -14,7 +15,9 @@ public class AmpScore extends Command{
 
     private Shooter s_Shooter;
     private Index s_Index;
-    public AmpScore(Shooter s_Shooter, Index s_Index){
+    private Pivot s_Pivot;
+
+    public AmpScore(Shooter s_Shooter, Index s_Index, Pivot s_Pivot){
         this.s_Shooter = s_Shooter;
         this.s_Index = s_Index;
         addRequirements(s_Shooter);
@@ -41,5 +44,8 @@ public class AmpScore extends Command{
     @Override
     public void end(boolean isInterrupted) {
         s_Shooter.stopScoreAmp(s_Index);
+
+        // actuator down
+        s_Pivot.toSetpoint(Constants.Subsystems.pivotMin);
     }
 }

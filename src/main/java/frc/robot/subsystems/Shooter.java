@@ -37,7 +37,6 @@ public class Shooter extends SubsystemBase{
     public SparkPIDController leftShooterPID;
     public SparkPIDController rightShooterPID;
 
-    private DigitalInput IndexStop;
     private DigitalInput AmpStop;
 
     private enum IntakeLevels{
@@ -63,7 +62,6 @@ public class Shooter extends SubsystemBase{
 
         SmartDashboard.setDefaultNumber("index p%", 0);
 
-        IndexStop = new DigitalInput(8);
         AmpStop = new DigitalInput(9);
 
         leftShooter.setInverted(false);
@@ -158,6 +156,7 @@ public class Shooter extends SubsystemBase{
     public void scoreAmp(Index sIndex){
         isAmpScoring = 1;
         sIndex.index.set(1);
+        
     }
     public void stopScoreAmp(Index sIndex){
         isAmpScoring = 0;

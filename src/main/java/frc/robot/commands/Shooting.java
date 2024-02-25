@@ -197,8 +197,10 @@ public class Shooting extends Command {
      @Override
      public void end(boolean interrupted) {
          mShooter.AutoStop();
-         mPivot.stop();
+         //mPivot.stop();
+         mPivot.toSetpoint(Constants.Subsystems.pivotMin);
          mIndex.stopIndex();
+
      }
 
 
