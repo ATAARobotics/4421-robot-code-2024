@@ -4,15 +4,10 @@
   "holonomicMode": true,
   "pathFolders": [
     "2 Amp",
-    "2 Speaker, 1 Amp",
-    "3 Note Speaker",
-    "3 Speaker, 1 Amp",
-    "4 Note Speaker",
-    "4 Note Speaker #2",
-    "6 Note Speaker",
+    "6 Speaker",
     "Devious 4 Speaker",
-    "Alternate Paths",
-    "Start poses"
+    "Init",
+    "extra"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,

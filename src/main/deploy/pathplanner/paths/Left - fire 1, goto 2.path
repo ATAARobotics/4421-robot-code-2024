@@ -55,7 +55,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Start poses",
+  "folder": "Init",
   "previewStartingState": {
     "rotation": -120.0,
     "velocity": 0

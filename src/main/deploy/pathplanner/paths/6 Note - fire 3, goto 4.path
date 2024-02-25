@@ -42,7 +42,28 @@
       }
     }
   ],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Fire Shooter",
+      "waypointRelativePos": 0.1,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    },
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0.8,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
@@ -55,7 +76,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "6 Note Speaker",
+  "folder": "6 Speaker",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0
