@@ -59,10 +59,12 @@ public class RobotContainer {
   public final Shooter m_Shooter;
   public final Index m_Index;
   public final Intake m_Intake;
+  public final IntakeCommand intake;
   public final Pivot mPivot;
   public SendableChooser<Command> autoChooser;
   public Command AutoCommand;
   private Shooting shoot;
+  private AutoShooter autoShoot;
 
 
 
@@ -78,15 +80,16 @@ public class RobotContainer {
     m_Shooter = new Shooter();
     mPivot = new Pivot();
     // Register pathplanner commands
-    NamedCommands.registerCommand("Fire Shooter", new InstantCommand(() -> {m_Shooter.Fire();}));
-    NamedCommands.registerCommand("Intake", new InstantCommand(m_Shooter::IntakeIn));
     NamedCommands.registerCommand("Index", new InstantCommand(m_Shooter::Index));
     NamedCommands.registerCommand("Stop Index", new InstantCommand(m_Shooter::stopIndex));
 
     s_Swerve = new Swerve();
     shoot = new Shooting(m_Shooter, mPivot, m_Index, s_Swerve,joysticks::getXVelocity,
         joysticks::getYVelocity);
-    NamedCommands.registerCommand("Auto Shooter", new RunCommand(() -> {shoot.execute();}).onlyWhile(m_Shooter::hasNote));
+    autoShoot = new AutoShooter(m_Shooter, mPivot, m_Index, s_Swerve);
+    intake = new IntakeCommand(m_Intake, m_Index);
+    NamedCommands.registerCommand("Intake", intake);
+    NamedCommands.registerCommand("Fire Shooter", autoShoot);
 
     NamedCommands.registerCommand("Abandon Path GOALPATH to ALTPATH", new AbandonPath().a_AbandonPath(
     () -> true, // whether we do abandon path, the boolean supplier will correlate to note/bot detection
@@ -114,7 +117,7 @@ public class RobotContainer {
             joysticks::getRotationVelocity // rotation
             ));
 
-    // PPHolonomicDriveController.setRotationTargetOverride(s_Swerve::getRotationTargetOverride);
+    PPHolonomicDriveController.setRotationTargetOverride(s_Swerve::getRotationTargetOverride);
     // Configure the button bindings
     autoChooser = AutoBuilder.buildAutoChooser();
   
@@ -137,12 +140,12 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // /* Driver Buttons */
-    joysticks.intake.onTrue(new InstantCommand(() -> {m_Intake.runIntake(0.3); m_Index.runIndex(1);}));
-    joysticks.intake.onFalse(new InstantCommand(() -> {m_Intake.stopIntake(); m_Index.stopIndex();}));
-
+    // joysticks.intake.onTrue(new InstantCommand(() -> {m_Intake.runIntake(0.3); m_Index.runIndex(1);}));
+    // joysticks.intake.onFalse(new InstantCommand(() -> {m_Intake.stopIntake(); m_Index.stopIndex();}));
+    joysticks.intake.whileTrue(intake);
     joysticks.zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
-    joysticks.reverseIntake.onTrue(new InstantCommand(() -> m_Shooter.scoreAmp(m_Index))).onFalse(new InstantCommand(() -> m_Shooter.stopScoreAmp(m_Index)));
+    joysticks.reverseIntake.onTrue(new InstantCommand(() -> m_Shooter.scoreAmp(m_Index))).onFalse(new InstantCommand(() -> {m_Shooter.stopScoreAmp(m_Index);mPivot.toSetpoint(Constants.Subsystems.pivotMin);}));
     joysticks.runShooter.onTrue(new InstantCommand(m_Shooter::Fire));
 
           

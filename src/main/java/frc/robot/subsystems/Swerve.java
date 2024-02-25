@@ -55,6 +55,7 @@ public class Swerve extends SubsystemBase {
   private Rotation2d Rotation2dOut;
 
   private BooleanSupplier hasNote;
+  private boolean autoLock = false;
 
   public Swerve() {
     // this.hasNote = hasNote;
@@ -231,9 +232,11 @@ public class Swerve extends SubsystemBase {
     //Rotatvoiion2d.fromDegrees(ang);
     Rotation2dOut = Rotation2d.fromDegrees(ang);
  }
-
+ public void setAutoLock(boolean lockState){
+    autoLock = lockState;
+ }
   public Optional<Rotation2d> getRotationTargetOverride(){
-    if(hasNote.getAsBoolean()) {
+    if(autoLock) {
       // Return an optional containing the rotation override (this should be a field relative rotation)
       return Optional.of(Rotation2dOut);
     } else {

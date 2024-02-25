@@ -148,6 +148,8 @@ public final class Constants {
   }
 
   public static final class Subsystems {
+    public static final double pivotMin = 25.0;
+
     public static final int intakeFront = 13;
     public static final int intakeBack = 14;
     public static final int index = 15;
@@ -156,6 +158,8 @@ public final class Constants {
     public static final int leftShooter = 18;
     public static final int rightShooter = 19;
     public static final int shooterPivot = 21;
+
+    
 
     public static final double shooterP = 0.0002;
     public static final double shooterI = 0.000003;
