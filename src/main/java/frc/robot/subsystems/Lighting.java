@@ -5,8 +5,10 @@ import java.time.Period;
 
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.CANdleConfiguration;
+import com.ctre.phoenix.led.ColorFlowAnimation;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
 import com.ctre.phoenix.led.CANdle.VBatOutputMode;
+import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
@@ -27,9 +29,15 @@ public class Lighting extends SubsystemBase{
 
     double distXY;
     int distColor;
+    int ledCount;
 
     double distanceLimit;
     double rotationLimit;
+
+    ColorFlowAnimation redFlow;
+    ColorFlowAnimation greenFlow;
+
+    double speed;
 
     Swerve sSwerve;
     Shooter sShooter;
@@ -39,6 +47,8 @@ public class Lighting extends SubsystemBase{
     public CANdle candle = new CANdle(Constants.Subsystems.CandleID);
 
     public Lighting(Swerve s_Swerve, Shooter s_Shooter) {
+        ledCount = 7 + 40; // 7 initial LEDs on the CANdle
+
         targetX = PathPlannerAuto.getStaringPoseFromAutoFile(getName()).getX();
         targetY = PathPlannerAuto.getStaringPoseFromAutoFile(getName()).getY();
         targetRot = PathPlannerAuto.getStaringPoseFromAutoFile(getName()).getRotation().getDegrees();
@@ -48,8 +58,13 @@ public class Lighting extends SubsystemBase{
         distanceLimit = 2.0; // Meters
         rotationLimit = 5; // Degrees
 
+        speed = 0.2;
+
         this.sSwerve = s_Swerve;
         this.sShooter = s_Shooter;
+        
+        redFlow = new ColorFlowAnimation(255, 0, 0, 0, speed, ledCount, Direction.Forward);
+        greenFlow = new ColorFlowAnimation(0, 255, 0, 0, speed, ledCount, Direction.Backward);
 
 
         CANdleConfiguration config = new CANdleConfiguration();
@@ -58,7 +73,7 @@ public class Lighting extends SubsystemBase{
         config.vBatOutputMode = VBatOutputMode.Off;
         candle.configAllSettings(config, 100);
 
-        candle.setLEDs(0, 0, 0);
+        candle.setLEDs(0, 0, 0, 0, 0, ledCount);
 
     }
 
@@ -72,7 +87,11 @@ public class Lighting extends SubsystemBase{
 
         if (isEnabled) {
             if (sShooter.hasNote()) {
-                candle.setLEDs(0, 255, 0);
+                candle.animate(redFlow);
+            }
+            else {
+                candle.animate(greenFlow);
+
             }
         }
 
@@ -100,7 +119,7 @@ public class Lighting extends SubsystemBase{
         
     }
 
-    public void setLights(int r, int g, int b) {
-        candle.setLEDs(r, g, b);
+    public void setLights(int r, int g, int b, int count) {
+        candle.setLEDs(r, g, b, 0, 0, count);
     }
 }
