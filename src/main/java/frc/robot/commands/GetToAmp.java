@@ -25,12 +25,11 @@ public class GetToAmp extends Command {
     private PoseEstimator poseEstimator;
 
     // Poses
-    private Pose2d targetPose;
     private Pose2d robotPose;
 
     // TODO: ADD BLUE GOAL POSE
-    private Pose2d BluegoalPose =  new Pose2d((72.5/39.37), (323.00/39.37) - 1.5, Rotation2d.fromDegrees(90));
-    private Pose2d RedgoalPose = new Pose2d((578.77/39.37), (323.00/39.37) - 1.5, Rotation2d.fromDegrees(90));
+    private Pose2d BluegoalPose =  new Pose2d((72.5/39.37), (323.00/39.37) - 0.5, Rotation2d.fromDegrees(270));
+    private Pose2d RedgoalPose = new Pose2d((578.77/39.37), (323.00/39.37) - 0.5, Rotation2d.fromDegrees(270));
 
     private Pose2d goalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
 
@@ -77,7 +76,6 @@ public class GetToAmp extends Command {
     public void initialize() {
         goalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
         m_swerveDriveSubsystem.setBrakes(true);
-        goalPose = targetPose;
 
 
           xController.setTolerance(0.05);

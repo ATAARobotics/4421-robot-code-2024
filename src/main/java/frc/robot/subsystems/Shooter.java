@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.commands.AmpScore;
 import frc.robot.subsystems.*;
 
 
@@ -140,7 +139,9 @@ public class Shooter extends SubsystemBase{
                         leftShooter.set(0.1);
                         rightShooter.set(0.1);
                      }else{
-                        isAmpScoring = 3;
+                        isAmpScoring = 4;
+                        leftShooter.stopMotor();
+                        rightShooter.stopMotor();
                     }                    
                     break;
                 case 3:
@@ -154,10 +155,26 @@ public class Shooter extends SubsystemBase{
     }
 
 
-    public void scoreAmp(Index sIndex){
-        isAmpScoring = 1;
-        sIndex.index.set(1);
-        
+    public void scoreAmp(Index sIndex, Pivot sPivot){
+        if(isAmpScoring != 4){
+            if (isAmpScoring != 3 && isAmpScoring != 1){
+
+                isAmpScoring = 1;
+                sIndex.index.set(1); 
+                sPivot.toSetpoint(100); 
+            }
+            else{
+                sPivot.toSetpoint(Constants.Subsystems.pivotMin);
+                sIndex.index.set(0);
+                leftShooter.set(0);
+                rightShooter.set(0);
+                isAmpScoring = 0;
+            }
+        }
+        else{
+                isAmpScoring = 3;
+        }
+ 
     }
     public void stopScoreAmp(Index sIndex){
         isAmpScoring = 0;

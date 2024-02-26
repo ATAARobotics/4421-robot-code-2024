@@ -23,7 +23,7 @@ import frc.robot.subsystems.*;
 public class Shooting extends Command {
      private Translation3d BluegoalPose = new Translation3d(-0.1651, 2.2, 5.5408);
      // private Translation3d RedgoalPose = new Translation3d(16.706342, 5.5408, 2.2);
-     private Translation3d RedgoalPose = new Translation3d(16.706342, 5.5408, 2.15);
+     private Translation3d RedgoalPose = new Translation3d(16.706342, 5.5408, 2.2);
 
 
      // SIDE FLIP
@@ -42,6 +42,8 @@ public class Shooting extends Command {
      private DoubleSupplier strafeSup;
      private DoubleSupplier rotationSup;
      private BooleanSupplier robotCentricSup;
+
+     private BooleanSupplier shooterOverridden;
 
      private SlewRateLimiter translationLimiter = new SlewRateLimiter(3.0);
      private SlewRateLimiter strafeLimiter = new SlewRateLimiter(3.0);
@@ -83,12 +85,14 @@ public class Shooting extends Command {
           Index m_Index,
           Swerve m_swerve,      
           DoubleSupplier translationSup,
-          DoubleSupplier strafeSup
+          DoubleSupplier strafeSup,
+          BooleanSupplier shooterOverridden
      ){
         this.mShooter = m_shooter;
         this.mIndex = m_Index;
         this.mSwerve = m_swerve;
         this.mPivot = m_Pivot;
+        this.shooterOverridden = shooterOverridden;
         addRequirements(mSwerve, mShooter, m_Index);
           SmartDashboard.putNumber("Rot P", 10);
           SmartDashboard.putNumber("Rot I", 0);
@@ -100,7 +104,7 @@ public class Shooting extends Command {
 
     @Override
     public void initialize(){
-        rotController.setTolerance(Math.toRadians(5));
+        rotController.setTolerance(Math.toRadians(2));
         GoalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
 
     }
@@ -177,7 +181,7 @@ public class Shooting extends Command {
                strafeLimiter.calculate(
                     MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.Swerve.stickDeadband));
           
-          if (rotController.atSetpoint() & mShooter.CanShoot() & mPivot.AtSetpoint()){
+          if ( (rotController.atSetpoint() & mShooter.CanShoot() & mPivot.AtSetpoint()) || shooterOverridden.getAsBoolean()){
                SmartDashboard.putBoolean("Can Shoot", true);
                mIndex.runIndex(1);
           }

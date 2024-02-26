@@ -34,7 +34,7 @@ public class Pivot extends SubsystemBase{
 
     private CANCoder pivotEncoder;
 
-    private PIDController pivotPID = new PIDController(0.5, 0, 0.004);
+    private PIDController pivotPID = new PIDController(0.55, 0.06, 0.006);
 
     private double ffConstant = 0.5;
 
@@ -52,23 +52,41 @@ public class Pivot extends SubsystemBase{
         PivotMotor.burnFlash();
         PivotMotorSecondary.burnFlash();
         pivotEncoder = new CANCoder(22);
-
+        pivotPID.setTolerance(Constants.Subsystems.pivotTolerance);
     }
-
-
     @Override
     public void periodic(){
 
         double angle = pivotEncoder.getAbsolutePosition();
         SmartDashboard.putNumber("Pivot Angle", angle);
         SmartDashboard.putNumber("Pivot Setpoint", pivotPID.getSetpoint());
+        SmartDashboard.putNumber("Pivot Error", (Math.abs(pivotPID.getSetpoint()-pivotEncoder.getAbsolutePosition())));
+        double pidVal = pivotPID.calculate(angle);
 
-        if (GoingToSetpoint){
-            double pidVal = pivotPID.calculate(angle);
-            double ffVal = ffConstant*Math.sin(Math.toRadians(angle));
-            double val = MathUtil.clamp(pidVal+ffVal, -1, 1);
-            PivotMotor.set(val);
-            PivotMotorSecondary.set(val);
+        if(pivotEncoder.getAbsolutePosition() <= 80){
+            if (GoingToSetpoint && !pivotPID.atSetpoint()){
+                double ffVal = ffConstant*Math.cos(Math.toRadians(angle));
+                double val = MathUtil.clamp(pidVal+ffVal, -1, 1);
+                PivotMotor.set(val);
+                PivotMotorSecondary.set(val);
+            }else{
+                if(GoingToSetpoint){
+                    PivotMotor.set(0);
+                    PivotMotorSecondary.set(0); 
+                }
+        }      
+        }
+        else{
+            if (GoingToSetpoint && (Math.abs(pivotPID.getSetpoint()-pivotEncoder.getAbsolutePosition()) >= 15)){
+                double val = MathUtil.clamp(pidVal, -1, 1);
+                PivotMotor.set(val);
+                PivotMotorSecondary.set(val);
+            }else{
+                if(GoingToSetpoint){
+                    PivotMotor.set(0);
+                    PivotMotorSecondary.set(0); 
+                }
+            }      
         }
     }
 
