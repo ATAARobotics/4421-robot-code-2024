@@ -89,7 +89,7 @@ public class Shooting extends Command {
         this.mIndex = m_Index;
         this.mSwerve = m_swerve;
         this.mPivot = m_Pivot;
-        addRequirements(mSwerve, mShooter, mPivot, m_Index);
+        addRequirements(mSwerve, mShooter, m_Index);
           SmartDashboard.putNumber("Rot P", 10);
           SmartDashboard.putNumber("Rot I", 0);
           SmartDashboard.putNumber("Rot D", 0);

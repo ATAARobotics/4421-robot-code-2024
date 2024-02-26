@@ -52,6 +52,18 @@
           "data": {
             "waitTime": 0.25
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4 mid - fire 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Fire Shooter"
+          }
         }
       ]
     }

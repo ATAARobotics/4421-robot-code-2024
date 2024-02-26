@@ -44,7 +44,13 @@ public class Pivot extends SubsystemBase{
         PivotMotorSecondary = new CANSparkFlex(23, CANSparkLowLevel.MotorType.kBrushless);
         PivotMotor.setInverted(false);
         PivotMotorSecondary.setInverted(true);
+
+   
+
+        PivotMotor.setIdleMode(IdleMode.kCoast);
         PivotMotorSecondary.setIdleMode(IdleMode.kCoast);
+        PivotMotor.burnFlash();
+        PivotMotorSecondary.burnFlash();
         pivotEncoder = new CANCoder(22);
 
     }
@@ -58,7 +64,6 @@ public class Pivot extends SubsystemBase{
         SmartDashboard.putNumber("Pivot Setpoint", pivotPID.getSetpoint());
 
         if (GoingToSetpoint){
-            System.out.println("hello");
             double pidVal = pivotPID.calculate(angle);
             double ffVal = ffConstant*Math.sin(Math.toRadians(angle));
             double val = MathUtil.clamp(pidVal+ffVal, -1, 1);
@@ -87,7 +92,7 @@ public class Pivot extends SubsystemBase{
         PivotMotorSecondary.set(0);
     }
     public boolean AtSetpoint(){
-        return (Math.abs(pivotPID.getSetpoint()-pivotEncoder.getAbsolutePosition()) <= 0.5);
+        return (Math.abs(pivotPID.getSetpoint()-pivotEncoder.getAbsolutePosition()) <= Constants.Subsystems.pivotTolerance);
     }
 
 

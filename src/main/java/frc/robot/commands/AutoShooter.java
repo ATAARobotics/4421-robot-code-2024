@@ -94,7 +94,7 @@ public class AutoShooter extends Command {
         this.mIndex = m_Index;
         this.mPivot = m_Pivot;      
 
-        addRequirements(mShooter, m_Index, m_Pivot);
+        addRequirements(mShooter, m_Index);
           SmartDashboard.putNumber("Rot P", 0);
           SmartDashboard.putNumber("Rot I", 0);
           SmartDashboard.putNumber("Rot D", 0);
@@ -170,6 +170,8 @@ public class AutoShooter extends Command {
                     mIndex.runIndex(1);
                     System.out.println("Auto Shooting");
                     shootTimer.start();
+               }else{
+                    mIndex.runIndex(0);
                }
                mSwerve.setAutoAngle(Math.toDegrees(RobotAngle));
                mPivot.toSetpoint(Math.toDegrees(ShooterAngle));

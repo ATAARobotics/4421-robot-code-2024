@@ -36,7 +36,7 @@ public class IntakeCommand extends Command{
         switch (intakePoint) {
             case beforeAnything:
                 if(!s_Intake.isIntaked()){
-                    s_Intake.runIntake(0.3);
+                    s_Intake.runIntake(0.2);
                     s_Index.runIndex(1);
                 }else{
                     intakePoint =IntakeTypes.inTook;
@@ -44,8 +44,8 @@ public class IntakeCommand extends Command{
                 break;
             case inTook:
                 if(s_Intake.isIntaked()){
-                    s_Intake.runIntake(0.3);
-                    s_Index.runIndex(1);
+                    s_Intake.runIntake(0.2);
+                    s_Index.runIndex(0.4);
                 }else{
                     intakePoint = IntakeTypes.afterAnything;
                 }
