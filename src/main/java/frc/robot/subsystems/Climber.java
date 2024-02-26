@@ -47,8 +47,8 @@ public class Climber extends SubsystemBase{
 
     @Override
     public void periodic(){
-        SmartDashboard.putNumber("Left Climb Position", leftClimb.getEncoder().getPosition());
-        SmartDashboard.putNumber("Right Climb Position", rightClimb.getEncoder().getPosition());
+        // SmartDashboard.putNumber("Left Climb Position", leftClimb.getEncoder().getPosition());
+        // SmartDashboard.putNumber("Right Climb Position", rightClimb.getEncoder().getPosition());
 
     }
     public void ClimbUp(){

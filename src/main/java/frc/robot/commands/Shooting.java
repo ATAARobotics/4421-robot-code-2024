@@ -189,7 +189,7 @@ public class Shooting extends Command {
           /* Drive */
           mSwerve.drive(
                new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
-               -rotationVal,
+               rotationVal,
                true,
                true);
 

@@ -27,7 +27,7 @@ public final class Constants {
     /* Drivetrain Constants */
     //TODO: change dimensions for compbot
     public static final double trackWidth = Units.inchesToMeters(19);
-    public static final double wheelBase = Units.inchesToMeters(24);
+    public static final double wheelBase = Units.inchesToMeters(20);
     public static final double wheelDiameter = Units.inchesToMeters(4.0);
     public static final double wheelCircumference = wheelDiameter * Math.PI;
 
@@ -40,10 +40,10 @@ public final class Constants {
     public static final double angleGearRatio = ((150.0 / 7.0) / 1.0); // 12.8:1 --> 150/7:1
 
     public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
-        new Translation2d(wheelBase / 2.0, trackWidth / 2.0),
-        new Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
+        new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0),
         new Translation2d(-wheelBase / 2.0, trackWidth / 2.0),
-        new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0));
+        new Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
+        new Translation2d(wheelBase / 2.0, trackWidth / 2.0));
 
     /* Swerve Voltage Co%mpensation */
     public static final double voltageComp = 12.0;
@@ -148,7 +148,7 @@ public final class Constants {
   }
 
   public static final class Subsystems {
-    public static final double pivotMin = 25.0;
+    public static final double pivotMin = 28.0;
 
     public static final int intakeFront = 13;
     public static final int intakeBack = 14;

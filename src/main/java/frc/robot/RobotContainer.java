@@ -102,7 +102,7 @@ public class RobotContainer {
         s_Swerve::autoDrive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
             new PIDConstants(5.0, 0.5, 0.01), // Translation PID constants
-            new PIDConstants(5.0, 0, 0), // Rotation PID constants
+            new PIDConstants(5.0, 0.5, 0), // Rotation PID constants
             4.5, // Max module speed, in m/s
             0.4, // Drive base radius in meters. Distance from robot center to furthest module.
             new ReplanningConfig() // Default path replanning config. See the API for the options here
@@ -117,7 +117,7 @@ public class RobotContainer {
             joysticks::getRotationVelocity // rotation
             ));
 
-    PPHolonomicDriveController.setRotationTargetOverride(s_Swerve::getRotationTargetOverride);
+    PPHolonomicDriveController.setRotationTargetOverride(() -> s_Swerve.getRotationTargetOverride());
     // Configure the button bindings
     autoChooser = AutoBuilder.buildAutoChooser();
   
@@ -166,8 +166,8 @@ public class RobotContainer {
 
     joysticks.ShooterIntake.onTrue(new InstantCommand(() -> {m_Shooter.ReverseIndex();m_Index.runIndex(-0.75);}))
       .onFalse(new InstantCommand(() -> {m_Shooter.stopIndex();m_Index.stopIndex();}));
-    joysticks.pivotUp.onTrue(new InstantCommand(mPivot::PivotUp)).onFalse(new InstantCommand(mPivot::stop));
-    joysticks.pivotDown.onTrue(new InstantCommand(mPivot::PivotDown)).onFalse(new InstantCommand(mPivot::stop));
+    joysticks.pivotUp.onTrue(new InstantCommand(mPivot::PivotUp, mPivot)).onFalse(new InstantCommand(mPivot::stop, mPivot));
+    joysticks.pivotDown.onTrue(new InstantCommand(mPivot::PivotDown, mPivot)).onFalse(new InstantCommand(mPivot::stop, mPivot));
     // joysticks.pivotGoSetpoint.onTrue(new InstantCommand(() -> mPivot.toSetpoint(90))).onFalse(new InstantCommand(mPivot::stop));
 
   }

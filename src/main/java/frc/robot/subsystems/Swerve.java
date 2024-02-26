@@ -234,12 +234,15 @@ public class Swerve extends SubsystemBase {
  }
  public void setAutoLock(boolean lockState){
     autoLock = lockState;
+    System.out.println(lockState);
  }
   public Optional<Rotation2d> getRotationTargetOverride(){
     if(autoLock) {
+      System.out.println("hey we locking n shit");
       // Return an optional containing the rotation override (this should be a field relative rotation)
       return Optional.of(Rotation2dOut);
     } else {
+        System.out.println("not locked");
         // return an empty optional when we don't want to override the path's rotation
         return Optional.empty();
     }

@@ -149,7 +149,7 @@ class OI {
     }
 
     public double getRotationVelocity() {
-        return rotationVelocity;
+        return -rotationVelocity;
     }
 
     public boolean getToggleFieldOriented() {

@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -217,11 +218,12 @@ public class Shooter extends SubsystemBase{
     }
 
     public boolean CanShoot(){
-        return(5400<leftShooter.getEncoder().getVelocity() && leftShooter.getEncoder().getVelocity()<5600);
+        return(4500<leftShooter.getEncoder().getVelocity() && leftShooter.getEncoder().getVelocity()<6000);
     }
 
     public boolean hasNote() {
         return hasNote;
     }
+
 
 }
