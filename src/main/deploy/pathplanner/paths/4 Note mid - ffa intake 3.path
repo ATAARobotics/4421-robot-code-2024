@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.6529766905687672,
-        "y": 4.25265235145855
+        "x": 1.9060784275414722,
+        "y": 4.9828061194583935
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3633965729469943,
-        "y": 4.262519294269359
+        "x": 1.6199370860280196,
+        "y": 4.1046482092964185
+      },
+      "isLocked": false,
+      "linkedName": "4 Note mid shoot 2"
+    },
+    {
+      "anchor": {
+        "x": 2.557296653059108,
+        "y": 4.1737168089674554
+      },
+      "prevControl": {
+        "x": 2.5931288995152015,
+        "y": 3.8153943444065175
+      },
+      "nextControl": {
+        "x": 2.5276958246266825,
+        "y": 4.469725093291716
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.3500908540278633,
-        "y": 4.1046482092964185
+        "x": 1.8962114847306633,
+        "y": 5.634024344971768
       },
       "prevControl": {
-        "x": 2.1015977409444155,
-        "y": 4.077240678395282
+        "x": 1.9196539220276898,
+        "y": 5.165344561458355
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,8 +48,8 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "intake",
-      "waypointRelativePos": 0.05,
+      "name": "inatke",
+      "waypointRelativePos": 0.4,
       "command": {
         "type": "parallel",
         "data": {
@@ -61,9 +77,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Init",
+  "folder": "4 Note Mid - furthest from amp",
   "previewStartingState": {
-    "rotation": 120.0,
+    "rotation": 180.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

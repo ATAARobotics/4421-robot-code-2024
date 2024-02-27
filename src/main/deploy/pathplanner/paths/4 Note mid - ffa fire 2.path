@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.6529766905687672,
-        "y": 4.25265235145855
+        "x": 2.3500908540278633,
+        "y": 4.1046482092964185
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3633965729469943,
-        "y": 4.262519294269359
+        "x": 2.005515569251728,
+        "y": 4.446464503109031
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.3500908540278633,
-        "y": 4.1046482092964185
+        "x": 1.8360659574640883,
+        "y": 5.573672790218109
       },
       "prevControl": {
-        "x": 2.1015977409444155,
-        "y": 4.077240678395282
+        "x": 1.8139638341874396,
+        "y": 5.2421409410683815
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "intake",
-      "waypointRelativePos": 0.05,
+      "waypointRelativePos": 0.0,
       "command": {
         "type": "parallel",
         "data": {
@@ -61,9 +61,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Init",
+  "folder": "4 Note Mid - furthest from amp",
   "previewStartingState": {
-    "rotation": 120.0,
+    "rotation": 180.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

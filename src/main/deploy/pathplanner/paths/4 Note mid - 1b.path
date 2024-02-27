@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.0639495125144114,
+        "y": 4.4795920361071495
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.221820597487351,
+        "y": 4.20331763740451
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.9356792559738978,
+        "y": 2.7726109298372448
+      },
+      "prevControl": {
+        "x": 2.0787499267306244,
+        "y": 3.4879642836208773
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "4 Note mid shoot 1"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 1.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "4 Note Mid - furthest from amp",
+  "previewStartingState": null,
+  "useDefaultConstraints": false
+}

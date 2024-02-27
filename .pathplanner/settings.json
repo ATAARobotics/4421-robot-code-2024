@@ -4,10 +4,11 @@
   "holonomicMode": true,
   "pathFolders": [
     "2 Amp",
+    "4 Note Mid",
     "6 Speaker",
     "Devious 4 Speaker",
     "Init",
-    "4 Note Mid",
+    "4 Note Mid - furthest from amp",
     "extra"
   ],
   "autoFolders": [],

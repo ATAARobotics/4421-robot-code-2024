@@ -24,9 +24,9 @@ import frc.robot.Constants;
 import frc.robot.subsystems.*;
 
 public class AutoShooter extends Command {
-     private Translation3d BluegoalPose = new Translation3d(-0.1651, 2.2, 5.5408);
+     private Translation3d BluegoalPose = new Translation3d(-0.1651+0.1, 2.2, 5.5408);
      // private Translation3d RedgoalPose = new Translation3d(16.706342, 5.5408, 2.2);
-     private Translation3d RedgoalPose = new Translation3d(16.706342, 5.5408, 2.15);
+     private Translation3d RedgoalPose = new Translation3d(16.706342-0.1, 5.5408, 2.15);
 
 
      // SIDE FLIP
@@ -103,11 +103,12 @@ public class AutoShooter extends Command {
 
     @Override
     public void initialize(){
-        rotController.setTolerance(Math.toRadians(5));
+        rotController.setTolerance(Math.toRadians(10));
         rotController.setIZone(Math.toRadians(5));
         mSwerve.setAutoLock(true);
         shootTimer.reset();
         shootTimer.stop();
+        mIndex.runIndex(0);
     }
 
     @Override
@@ -170,8 +171,6 @@ public class AutoShooter extends Command {
                     mIndex.runIndex(1);
                     System.out.println("Auto Shooting");
                     shootTimer.start();
-               }else{
-                    mIndex.runIndex(0);
                }
                mSwerve.setAutoAngle(Math.toDegrees(RobotAngle));
                mPivot.toSetpoint(Math.toDegrees(ShooterAngle));
@@ -185,7 +184,7 @@ public class AutoShooter extends Command {
      }
      @Override
      public boolean isFinished() {
-          return shootTimer.hasElapsed(0.5);
+          return shootTimer.hasElapsed(1);
      }
      @Override
      public void end(boolean interrupted) {
