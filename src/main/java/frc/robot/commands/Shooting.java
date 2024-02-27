@@ -105,7 +105,7 @@ public class Shooting extends Command {
 
     @Override
     public void initialize(){
-        rotController.setTolerance(Math.toRadians(2));
+        rotController.setTolerance(Math.toRadians(Constants.Subsystems.rotTolerance));
         GoalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
 
     }

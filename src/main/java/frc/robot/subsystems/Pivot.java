@@ -64,17 +64,12 @@ public class Pivot extends SubsystemBase{
         double pidVal = pivotPID.calculate(angle);
 
         if(pivotEncoder.getAbsolutePosition() <= 80){
-            if (GoingToSetpoint && !pivotPID.atSetpoint()){
+            if (GoingToSetpoint){
                 double ffVal = ffConstant*Math.cos(Math.toRadians(angle));
                 double val = MathUtil.clamp(pidVal+ffVal, -1, 1);
                 PivotMotor.set(val);
                 PivotMotorSecondary.set(val);
-            }else{
-                if(GoingToSetpoint){
-                    PivotMotor.set(0);
-                    PivotMotorSecondary.set(0); 
-                }
-        }      
+            }
         }
         else{
             if (GoingToSetpoint && (Math.abs(pivotPID.getSetpoint()-pivotEncoder.getAbsolutePosition()) >= 15)){
