@@ -3,47 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0639495125144114,
-        "y": 4.4795920361071495
+        "x": 1.9258123131630895,
+        "y": 5.101209433188098
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.221820597487351,
-        "y": 4.20331763740451
+        "x": 1.9554131415955156,
+        "y": 5.604423516539341
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "big dawg s 2"
     },
     {
       "anchor": {
-        "x": 1.9356792559738978,
-        "y": 2.7726109298372448
+        "x": 2.8533049373791073,
+        "y": 5.604423516539341
       },
       "prevControl": {
-        "x": 2.0787499267306244,
-        "y": 3.4879642836208773
+        "x": 2.133018112190072,
+        "y": 5.564955745296105
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "4 Note mid shoot 1"
+      "linkedName": "big dawg i 3"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
+    "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 0.0,
     "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "4 Note Mid - furthest from amp",
-  "previewStartingState": null,
+  "folder": "big dog",
+  "previewStartingState": {
+    "rotation": 180.0,
+    "velocity": 0
+  },
   "useDefaultConstraints": false
 }

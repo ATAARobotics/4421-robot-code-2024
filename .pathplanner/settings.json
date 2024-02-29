@@ -1,15 +1,18 @@
 {
-  "robotWidth": 0.61,
-  "robotLength": 1.02,
+  "robotWidth": 0.48,
+  "robotLength": 0.53,
   "holonomicMode": true,
   "pathFolders": [
+    "1 Note Variants",
     "2 Amp",
-    "4 Note Mid",
+    "3 Note - amp side",
+    "4 Note - source side",
+    "4 Note mid",
     "6 Speaker",
     "Devious 4 Speaker",
     "Init",
-    "4 Note Mid - furthest from amp",
-    "extra"
+    "2 Note Variants",
+    "big dog"
   ],
   "autoFolders": [],
   "defaultMaxVel": 1.0,

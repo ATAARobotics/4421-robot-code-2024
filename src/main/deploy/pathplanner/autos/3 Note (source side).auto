@@ -6,9 +6,15 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Fire Shooter"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "4 Note mid - 1a"
+            "pathName": "3 Note (source side) - ffa intake 2"
           }
         },
         {
@@ -20,25 +26,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "4 Note mid - ffa intake 2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "4 Note mid - ffa shoot 2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Fire Shooter"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "4 Note mid - ffa intake 3"
+            "pathName": "3 Note (source side) - ffa intake 3"
           }
         },
         {

@@ -12,15 +12,15 @@
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 0.25
+            "pathName": "b - intake 2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "4 mid - intake 2"
+            "pathName": "b - shoot 2"
           }
         },
         {
@@ -30,15 +30,15 @@
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 0.25
+            "pathName": "b - intake 3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "4 mid - fire 2"
+            "pathName": "b - shoot 3"
           }
         },
         {
@@ -48,15 +48,9 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.25
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "4 mid - fire 3"
+            "pathName": "b - intake 4"
           }
         },
         {
@@ -66,9 +60,21 @@
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 0
+            "pathName": "b - intake 5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "b - shoot 5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Fire Shooter"
           }
         }
       ]

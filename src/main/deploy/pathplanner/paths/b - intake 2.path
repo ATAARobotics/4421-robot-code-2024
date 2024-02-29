@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.9095172036497934,
-        "y": 6.591117797620211
+        "x": 0.6529766905687672,
+        "y": 4.25265235145855
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.9687188605146458,
-        "y": 7.1535335378363065
+        "x": 1.3633965729469943,
+        "y": 4.262519294269359
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.178914050135794,
-        "y": 6.985795510052559
+        "x": 2.616498309919698,
+        "y": 4.1046482092964185
       },
       "prevControl": {
-        "x": 1.1880718373529375,
-        "y": 6.880397981140526
+        "x": 2.36800519683625,
+        "y": 4.077240678395282
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,7 +32,7 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
+      "name": "intake",
       "waypointRelativePos": 0.05,
       "command": {
         "type": "parallel",
@@ -50,20 +50,20 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.5,
-    "maxAcceleration": 2.5,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0.0,
     "rotation": 180.0,
-    "rotateFast": true
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": "4 Note Mid",
+  "folder": "big dog",
   "previewStartingState": {
-    "rotation": 180.0,
+    "rotation": 120.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

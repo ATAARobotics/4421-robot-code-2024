@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.3500908540278633,
-        "y": 4.1046482092964185
+        "x": 7.993982141810438,
+        "y": 7.419940993728142
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.005515569251728,
-        "y": 4.446464503109031
+        "x": 6.504073777378324,
+        "y": 7.05486410972822
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.8360659574640883,
-        "y": 5.573672790218109
+        "x": 5.290439811648857,
+        "y": 6.60098474043102
       },
       "prevControl": {
-        "x": 1.8139638341874396,
-        "y": 5.2421409410683815
+        "x": 6.444872120513473,
+        "y": 6.926593853187707
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,25 +30,7 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "intake",
-      "waypointRelativePos": 0.0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Intake"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
@@ -61,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "4 Note Mid - furthest from amp",
+  "folder": "big dog",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0

@@ -1,26 +1,26 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 1.4,
-      "y": 5.55
-    },
-    "rotation": 180.0
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Centre - fire 1, goto 2"
+            "name": "Fire Shooter"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "2 Speaker, 1 Amp - score 2, get 3, amp 3"
+            "pathName": "2 Note (amp side) - a"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Fire Shooter"
           }
         }
       ]

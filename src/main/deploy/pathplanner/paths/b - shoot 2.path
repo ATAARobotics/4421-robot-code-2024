@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.546980324729882,
-        "y": 1.3715050507024094
+        "x": 2.577030538676463,
+        "y": 4.124382094918037
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7580742853793403,
-        "y": 1.2333678513510868
+        "x": 1.698872628514489,
+        "y": 4.17371680897208
       },
       "isLocked": false,
-      "linkedName": "4 Note mid intake 2"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.9060784275414722,
-        "y": 4.9828061194583935
+        "x": 1.9258123131630895,
+        "y": 5.101209433188098
       },
       "prevControl": {
-        "x": 0.1459740919481872,
-        "y": 4.538793692972002
+        "x": 1.7482073425685332,
+        "y": 4.815068091674645
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "4 Note mid shoot 2"
+      "linkedName": "big dawg s 2"
     }
   ],
   "rotationTargets": [],
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "4 Note Mid - furthest from amp",
+  "folder": "big dog",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0

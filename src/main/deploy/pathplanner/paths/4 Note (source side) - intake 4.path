@@ -3,51 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.198647935757412,
-        "y": 7.015396338484985
+        "x": 2.557296653054846,
+        "y": 3.10808698540474
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6594048572676807,
-        "y": 6.393778941405525
+        "x": 1.3633965729469937,
+        "y": 3.10808698540474
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.198647935757412,
-        "y": 5.5353549168651695
+        "x": 2.557296653054846,
+        "y": 4.114515152107228
       },
       "prevControl": {
-        "x": 0.40630312029497573,
-        "y": 5.29854828940576
+        "x": 1.5508684863523587,
+        "y": 4.449991207674724
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
-  "constraintZones": [
+  "rotationTargets": [
     {
-      "name": "velocity cull",
-      "minWaypointRelativePos": 0.0,
-      "maxWaypointRelativePos": 0.0,
-      "constraints": {
-        "maxVelocity": 1.25,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0
-      }
+      "waypointRelativePos": 0.0,
+      "rotationDegrees": 180.0,
+      "rotateFast": false
     }
   ],
+  "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "intake",
-      "waypointRelativePos": 0.8,
+      "name": "INTAKE",
+      "waypointRelativePos": 0.0,
       "command": {
-        "type": "sequential",
+        "type": "parallel",
         "data": {
           "commands": [
             {
@@ -62,18 +56,18 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.5,
-    "maxAcceleration": 2.5,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0.0,
     "rotation": 180.0,
-    "rotateFast": true
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": "4 Note Mid",
+  "folder": "4 Note - source side",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0
