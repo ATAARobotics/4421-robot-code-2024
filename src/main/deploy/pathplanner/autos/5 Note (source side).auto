@@ -14,85 +14,67 @@
         {
           "type": "path",
           "data": {
-            "pathName": "shoot 1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Index"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Stop Index"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake"
+            "pathName": "b - intake 2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "grab 2"
+            "pathName": "b - shoot 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Fire Shooter"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "shoot 1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Index"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Stop Index"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake"
+            "pathName": "b - intake 3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "grab 1"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "shoot 1"
+            "pathName": "b - shoot 3"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Index"
+            "name": "Fire Shooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "b - intake 4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Fire Shooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "b - intake 5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "b - shoot 5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Fire Shooter"
           }
         }
       ]

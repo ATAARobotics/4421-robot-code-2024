@@ -18,6 +18,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -85,26 +86,38 @@ public class RobotContainer {
 
     s_Swerve = new Swerve();
     shoot = new Shooting(m_Shooter, mPivot, m_Index, s_Swerve,joysticks::getXVelocity,
-        joysticks::getYVelocity);
+        joysticks::getYVelocity, () -> joysticks.OverrideShooter.getAsBoolean());
     autoShoot = new AutoShooter(m_Shooter, mPivot, m_Index, s_Swerve);
     intake = new IntakeCommand(m_Intake, m_Index);
     NamedCommands.registerCommand("Intake", intake);
     NamedCommands.registerCommand("Fire Shooter", autoShoot);
 
-    NamedCommands.registerCommand("abandon path", new AbandonPath().a_AbandonPath(() -> true, // we do abandon path
+    NamedCommands.registerCommand("Abandon Path GOALPATH to ALTPATH", new AbandonPath().a_AbandonPath(
+    () -> true, // whether we do abandon path, the boolean supplier will correlate to note/bot detection
     "Goal Path", "Alternate Path", s_Swerve));
+
     AutoBuilder.configureHolonomic(
         s_Swerve::getPose, // Robot pose supplier
         s_Swerve::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
         s_Swerve::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         s_Swerve::autoDrive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-            new PIDConstants(5.0, 0.5, 0.01), // Translation PID constants
-            new PIDConstants(5.0, 0, 0), // Rotation PID constants
+            new PIDConstants(6.0, 0.5, 0.01), // Translation PID constants
+            new PIDConstants(5.0, 0.5, 0), // Rotation PID constants
             4.5, // Max module speed, in m/s
             0.4, // Drive base radius in meters. Distance from robot center to furthest module.
             new ReplanningConfig() // Default path replanning config. See the API for the options here
-        ), () -> true,
+        ), () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+        },
         s_Swerve // Reference to this subsystem to set requirements
     );
     s_Swerve.setDefaultCommand(
@@ -115,7 +128,7 @@ public class RobotContainer {
             joysticks::getRotationVelocity // rotation
             ));
 
-    PPHolonomicDriveController.setRotationTargetOverride(s_Swerve::getRotationTargetOverride);
+    PPHolonomicDriveController.setRotationTargetOverride(() -> s_Swerve.getRotationTargetOverride());
     // Configure the button bindings
     autoChooser = AutoBuilder.buildAutoChooser();
   
@@ -143,10 +156,11 @@ public class RobotContainer {
     joysticks.intake.whileTrue(intake);
     joysticks.zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
-    joysticks.reverseIntake.onTrue(new InstantCommand(() -> m_Shooter.scoreAmp(m_Index))).onFalse(new InstantCommand(() -> {m_Shooter.stopScoreAmp(m_Index);mPivot.toSetpoint(Constants.Subsystems.pivotMin);}));
+    joysticks.reverseIntake.onTrue(new InstantCommand(() -> m_Shooter.scoreAmp(m_Index, mPivot)));
+    // .onFalse(new InstantCommand(() -> {m_Shooter.stopScoreAmp(m_Index);mPivot.toSetpoint(Constants.Subsystems.pivotMin);}));
     joysticks.runShooter.onTrue(new InstantCommand(m_Shooter::Fire));
 
-          
+    
 
     joysticks.shooterLock.whileTrue(shoot)
     .onFalse(new TeleopSwerve(
@@ -157,15 +171,15 @@ public class RobotContainer {
             ));
     // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     joysticks.toWaypoint.whileTrue(new SequentialCommandGroup(
-      s_Swerve.driveToWaypoint(new Pose2d((72.5/39.37), (323.00/39.37) - 1.5, Rotation2d.fromDegrees(90))),
+      s_Swerve.driveToWaypoint(new Pose2d(((DriverStation.getAlliance().get()==DriverStation.Alliance.Blue)?(72.5/39.37):(578.77/39.37)), (323.00/39.37) - 1.5, Rotation2d.fromDegrees(90))),
       new WaitCommand(0.2),
       new GetToAmp(s_Swerve, false)
     ));
 
     joysticks.ShooterIntake.onTrue(new InstantCommand(() -> {m_Shooter.ReverseIndex();m_Index.runIndex(-0.75);}))
       .onFalse(new InstantCommand(() -> {m_Shooter.stopIndex();m_Index.stopIndex();}));
-    joysticks.pivotUp.onTrue(new InstantCommand(mPivot::PivotUp)).onFalse(new InstantCommand(mPivot::stop));
-    joysticks.pivotDown.onTrue(new InstantCommand(mPivot::PivotDown)).onFalse(new InstantCommand(mPivot::stop));
+    joysticks.pivotUp.onTrue(new InstantCommand(mPivot::PivotUp, mPivot)).onFalse(new InstantCommand(mPivot::stop, mPivot));
+    joysticks.pivotDown.onTrue(new InstantCommand(mPivot::PivotDown, mPivot)).onFalse(new InstantCommand(mPivot::stop, mPivot));
     // joysticks.pivotGoSetpoint.onTrue(new InstantCommand(() -> mPivot.toSetpoint(90))).onFalse(new InstantCommand(mPivot::stop));
 
   }

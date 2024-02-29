@@ -1,26 +1,20 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 1.27,
-      "y": 5.53
-    },
-    "rotation": 180.0
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Init Path"
+            "name": "Fire Shooter"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "abandon path"
+            "pathName": "1 Note (amp side) - shoot 1"
           }
         }
       ]

@@ -165,10 +165,22 @@ public class Swerve extends SubsystemBase {
 
     return Constants.Swerve.swerveKinematics.toChassisSpeeds(states[0], states[1], states[2], states[3]);
   }
-  public void zeroGyro() {
+  // public void zeroGyro() {
 
-    gyro.setYaw(0);
-    System.out.println("gyro heading " + gyro.getYaw());
+  //   gyro.setYaw(0);
+  //   System.out.println("gyro heading " + gyro.getYaw());
+  // }
+  public void zeroGyro(){
+      pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
+      Rotation2d poseR = Rotation2d.fromDegrees(pose[5]);
+        if (Math.abs(pose[0]) >= 0.1) {
+            gyro.setYaw(poseR.getDegrees());
+            // this.lastPose = new Pose2d(poseX, poseY, poseR);
+            // if(!DriverStation.isEnabled() || check.getAsBoolean()){
+             
+            // }
+            //PoseEstimator.resetPosition(poseR, getPositions(), new Pose2d(poseX, poseY, poseR));
+        }
   }
 
   public Rotation2d getYaw() {
@@ -234,12 +246,15 @@ public class Swerve extends SubsystemBase {
  }
  public void setAutoLock(boolean lockState){
     autoLock = lockState;
+    System.out.println(lockState);
  }
   public Optional<Rotation2d> getRotationTargetOverride(){
     if(autoLock) {
+      System.out.println("hey we locking n shit");
       // Return an optional containing the rotation override (this should be a field relative rotation)
       return Optional.of(Rotation2dOut);
     } else {
+        System.out.println("not locked");
         // return an empty optional when we don't want to override the path's rotation
         return Optional.empty();
     }

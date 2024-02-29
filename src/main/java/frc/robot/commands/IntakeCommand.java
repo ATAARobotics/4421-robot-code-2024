@@ -15,7 +15,8 @@ public class IntakeCommand extends Command{
         beforeAnything, 
         inTook,
         afterAnything,
-        nothing
+        nothing,
+        end
     }
     private IntakeTypes intakePoint = IntakeTypes.nothing;
 
@@ -35,7 +36,7 @@ public class IntakeCommand extends Command{
         switch (intakePoint) {
             case beforeAnything:
                 if(!s_Intake.isIntaked()){
-                    s_Intake.runIntake(0.3);
+                    s_Intake.runIntake(0.4);
                     s_Index.runIndex(1);
                 }else{
                     intakePoint =IntakeTypes.inTook;
@@ -43,7 +44,7 @@ public class IntakeCommand extends Command{
                 break;
             case inTook:
                 if(s_Intake.isIntaked()){
-                    s_Intake.runIntake(0.3);
+                    s_Intake.runIntake(0.4);
                     s_Index.runIndex(1);
                 }else{
                     intakePoint = IntakeTypes.afterAnything;
@@ -54,7 +55,7 @@ public class IntakeCommand extends Command{
                     s_Intake.stopIntake();;
                     s_Index.runIndex(-0.3);
                 }else{
-                    intakePoint = IntakeTypes.nothing;
+                    intakePoint = IntakeTypes.end;
                 }
                 break;   
             default:
@@ -64,7 +65,7 @@ public class IntakeCommand extends Command{
 
     @Override
     public boolean isFinished() {
-        return (intakePoint == IntakeTypes.nothing);
+        return (intakePoint == IntakeTypes.end);
     }
     @Override
     public void end(boolean isInterrupted) {

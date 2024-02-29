@@ -26,6 +26,7 @@ class OI {
     private boolean toggleFieldOriented;
     private double speed;
     private boolean override = false;
+    private double inversionConstant = 1.0;
     // public Trigger RotateRight;
 
 
@@ -38,6 +39,7 @@ class OI {
     public JoystickButton reverseIntake;
     public JoystickButton toWaypoint;
     public JoystickButton ShooterIntake;
+    public JoystickButton OverrideShooter;
 
     public JoystickButton pivotUp;
     public JoystickButton pivotDown;
@@ -73,6 +75,7 @@ class OI {
         pivotUp = gunnerStick.getWPIJoystickButton("PivotUp");
         pivotDown = gunnerStick.getWPIJoystickButton("PivotDown");
         ShooterIntake = gunnerStick.getWPIJoystickButton("ShooterIntake");
+        OverrideShooter = gunnerStick.getWPIJoystickButton("OverrideShooter");
         // pivotGoSetpoint = gunnerStick.getWPIJoystickButton("pivotGoSetpoint");
 
         // Set up command-based stuff
@@ -137,11 +140,11 @@ class OI {
 
     // Getter functions for controls
     public double getXVelocity() {
-        return -yVelocity;
+        return inversionConstant*yVelocity;
     }
 
     public double getYVelocity() {
-        return -xVelocity;
+        return inversionConstant*xVelocity;
     }
 
     public double getSpeed() {
@@ -149,7 +152,7 @@ class OI {
     }
 
     public double getRotationVelocity() {
-        return rotationVelocity;
+        return -rotationVelocity;
     }
 
     public boolean getToggleFieldOriented() {
@@ -167,6 +170,14 @@ class OI {
     }
     public double getOuttakeInversed(){
         return gunnerStick.getAnalog("Quick");
+    }
+
+    public void setInvetered(boolean Inverted){
+        if(Inverted){
+            inversionConstant = -1.0;
+        }else{
+            inversionConstant = 1.0;
+        }
     }
 
 }

@@ -8,12 +8,12 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.commands.AmpScore;
 import frc.robot.subsystems.*;
 
 
@@ -98,8 +98,8 @@ public class Shooter extends SubsystemBase{
         // rightShooterPID.setIZone(2000);
         
 
-        SmartDashboard.putNumber("Left Shooter Ref", 5500);
-        SmartDashboard.putNumber("Right Shooter Ref", 5500);
+        SmartDashboard.putNumber("Left Shooter Ref", Constants.Subsystems.shooterSetPoint);
+        SmartDashboard.putNumber("Right Shooter Ref", Constants.Subsystems.shooterSetPoint);
         
         
         //SmartDashboard.putNumber("Left Index", 0.10);
@@ -114,8 +114,8 @@ public class Shooter extends SubsystemBase{
         SmartDashboard.putNumber("rpm r", rightShooter.getEncoder().getVelocity());
 
         if(isFiring && isAmpScoring == 0){
-            leftShooterPID.setReference(5500.0, ControlType.kVelocity);
-            rightShooterPID.setReference(4500, ControlType.kVelocity);
+            leftShooterPID.setReference(Constants.Subsystems.shooterSetPoint, ControlType.kVelocity);
+            rightShooterPID.setReference(Constants.Subsystems.shooterSetPointAlt, ControlType.kVelocity);
             // leftShooterPID.setReference(SmartDashboard.getNumber("Left Shooter Ref", 0), ControlType.kVelocity);
             // rightShooterPID.setReference(SmartDashboard.getNumber("Right Shooter Ref", 0), ControlType.kVelocity);
             // leftShooter.set(SmartDashboard.getNumber("left shooter p%", 0));
@@ -139,7 +139,9 @@ public class Shooter extends SubsystemBase{
                         leftShooter.set(0.1);
                         rightShooter.set(0.1);
                      }else{
-                        isAmpScoring = 3;
+                        isAmpScoring = 4;
+                        leftShooter.stopMotor();
+                        rightShooter.stopMotor();
                     }                    
                     break;
                 case 3:
@@ -153,10 +155,26 @@ public class Shooter extends SubsystemBase{
     }
 
 
-    public void scoreAmp(Index sIndex){
-        isAmpScoring = 1;
-        sIndex.index.set(1);
-        
+    public void scoreAmp(Index sIndex, Pivot sPivot){
+        if(isAmpScoring != 4){
+            if (isAmpScoring != 3 && isAmpScoring != 1){
+
+                isAmpScoring = 1;
+                sIndex.index.set(1); 
+                sPivot.toSetpoint(100); 
+            }
+            else{
+                sPivot.toSetpoint(Constants.Subsystems.pivotMin);
+                sIndex.index.set(0);
+                leftShooter.set(0);
+                rightShooter.set(0);
+                isAmpScoring = 0;
+            }
+        }
+        else{
+                isAmpScoring = 3;
+        }
+ 
     }
     public void stopScoreAmp(Index sIndex){
         isAmpScoring = 0;
@@ -217,11 +235,12 @@ public class Shooter extends SubsystemBase{
     }
 
     public boolean CanShoot(){
-        return(5400<leftShooter.getEncoder().getVelocity() && leftShooter.getEncoder().getVelocity()<5600);
+        return(Math.abs(leftShooter.getEncoder().getVelocity()-Constants.Subsystems.shooterSetPoint) < Constants.Subsystems.shooterTolerance);
     }
 
     public boolean hasNote() {
         return hasNote;
     }
+
 
 }

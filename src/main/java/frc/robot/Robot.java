@@ -4,7 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.config.CTREConfigs;
@@ -55,6 +57,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
     m_robotContainer.getSwerve().SetAbsMod();
+    m_robotContainer.getOI().setInvetered((DriverStation.getAlliance().get() == Alliance.Red));
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */

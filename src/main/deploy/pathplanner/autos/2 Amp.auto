@@ -1,12 +1,6 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 2,
-      "y": 2
-    },
-    "rotation": 0
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
@@ -14,13 +8,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Funny Arc"
+            "pathName": "2 Amp - amp 1"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Auto Shooter"
+            "pathName": "2 Amp - goto 2, get 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 Amp - score 2"
           }
         }
       ]

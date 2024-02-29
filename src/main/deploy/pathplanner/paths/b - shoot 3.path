@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.0,
-        "y": 5.0
+        "x": 2.8533049373791073,
+        "y": 5.604423516539341
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.7071067811865475,
-        "y": 4.292893218813452
+        "x": 2.123151169379263,
+        "y": 5.7721615443230885
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "big dawg i 3"
     },
     {
       "anchor": {
-        "x": 4.0,
-        "y": 4.0
+        "x": 2.113284226568455,
+        "y": 6.502315312322933
       },
       "prevControl": {
-        "x": 3.4696699141101015,
-        "y": 4.530330085889899
+        "x": 2.202086711865733,
+        "y": 5.722826830269045
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,18 +32,21 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 0,
+    "velocity": 0.0,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
-  "previewStartingState": null,
+  "folder": "big dog",
+  "previewStartingState": {
+    "rotation": 180.0,
+    "velocity": 0
+  },
   "useDefaultConstraints": false
 }

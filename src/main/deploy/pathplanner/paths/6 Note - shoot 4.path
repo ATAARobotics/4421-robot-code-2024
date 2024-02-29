@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.27,
-        "y": 5.527514849608872
+        "x": 2.35,
+        "y": 7.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2699999999999996,
-        "y": 5.527514849608872
+        "x": 6.84941677575663,
+        "y": 7.390340165295715
       },
       "isLocked": false,
-      "linkedName": "top middle"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.0,
-        "y": 5.0
+        "x": 7.697973857486177,
+        "y": 7.449541822160567
       },
       "prevControl": {
-        "x": 2.0,
-        "y": 5.0
+        "x": 7.520368886891621,
+        "y": 7.459408764971376
       },
       "nextControl": null,
       "isLocked": false,
@@ -36,9 +36,30 @@
     }
   ],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Fire Shooter",
+      "waypointRelativePos": 0.1,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    },
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0.6,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    }
+  ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
@@ -49,7 +70,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "6 Speaker",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0
