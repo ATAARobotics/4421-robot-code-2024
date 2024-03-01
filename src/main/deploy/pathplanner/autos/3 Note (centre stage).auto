@@ -6,33 +6,9 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "Fire Shooter"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "3 Note (source side) - ffa intake 2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Fire Shooter"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "4 Note (source side) - ffa intake 3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "4 Note (source side) - ffa shoot 3"
+            "pathName": "3 Note (centre stage) - shoot 1"
           }
         },
         {
@@ -44,7 +20,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "4 Note (source side) - intake 4"
+            "pathName": "3 Note (centre stage) - intake 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Fire Shooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3 Note (centre stage) - intake 3"
           }
         },
         {

@@ -5,17 +5,22 @@
   "pathFolders": [
     "1 Note Variants",
     "2 Amp",
-    "3 Note - amp side",
+    "2 Note Variants",
+    "3 Note (source side)",
+    "3 Note (stage)",
     "4 Note - source side",
     "4 Note mid",
+    "5 Note (source side)",
     "6 Speaker",
     "Devious 4 Speaker",
+    "Four note (speaker notes)",
     "Init",
-    "2 Note Variants",
-    "big dog"
+    "3 Note (centre stage)"
   ],
-  "autoFolders": [],
-  "defaultMaxVel": 1.0,
+  "autoFolders": [
+    "real"
+  ],
+  "defaultMaxVel": 4.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,

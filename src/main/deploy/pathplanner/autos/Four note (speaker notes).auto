@@ -6,21 +6,9 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "Fire Shooter"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "Five Note (source side) - intake 2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Five Note (source side) - shoot 2"
+            "pathName": "Four note (speaker notes) - shoot 1"
           }
         },
         {
@@ -32,13 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Five Note (source side) - intake 3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Five Note (source side) - shoot 3"
+            "pathName": "Four note (speaker notes) - intake 2"
           }
         },
         {
@@ -50,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Five Note (source side) - intake 4"
+            "pathName": "Four note (speaker notes) - intake 3"
           }
         },
         {
@@ -62,13 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Five Note (source side) - intake 5"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Five Note (source side) - shoot 5"
+            "pathName": "Four note (speaker notes) - intake 4"
           }
         },
         {
@@ -80,6 +56,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "real",
   "choreoAuto": false
 }

@@ -3,52 +3,34 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.096539731541003,
-        "y": 2.476602645512984
+        "x": 1.9258123131630895,
+        "y": 5.101209433188098
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.407233136205438,
-        "y": 2.5916982109342657
+        "x": 1.9554131415955156,
+        "y": 5.604423516539341
       },
       "isLocked": false,
-      "linkedName": "2"
+      "linkedName": "big dawg s 2"
     },
     {
       "anchor": {
-        "x": 2.5671635958656545,
-        "y": 4.09478126648561
+        "x": 2.8533049373791073,
+        "y": 5.604423516539341
       },
       "prevControl": {
-        "x": 1.5607354291631679,
-        "y": 4.035579609620759
+        "x": 2.133018112190072,
+        "y": 5.564955745296105
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "big dawg i 3"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "inatke",
-      "waypointRelativePos": 0.2,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Intake"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
@@ -61,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "3 Note (source side)",
+  "folder": "5 Note (source side)",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0

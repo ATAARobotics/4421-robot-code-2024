@@ -22,9 +22,9 @@ import frc.robot.subsystems.*;
 
 public class Shooting extends Command {
      // TODO: pos
-     private Translation3d BluegoalPose = new Translation3d(-0.1651+0.15, 2.2, 5.5408);
+     private Translation3d BluegoalPose = new Translation3d(-0.1651+0.1, 5.5408, 2.15 - 0.05);
      // private Translation3d RedgoalPose = new Translation3d(16.706342, 5.5408, 2.2);
-     private Translation3d RedgoalPose = new Translation3d(16.706342-0.15, 5.5408, 2.15);
+     private Translation3d RedgoalPose = new Translation3d(16.706342-0.1, 5.5408, 2.15 - 0.05);
 
 
      // SIDE FLIP
@@ -182,12 +182,16 @@ public class Shooting extends Command {
                strafeLimiter.calculate(
                     MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.Swerve.stickDeadband));
           
-          if ( (rotController.atSetpoint() & mShooter.CanShoot() & mPivot.AtSetpoint()) || shooterOverridden.getAsBoolean()){
-               SmartDashboard.putBoolean("Can Shoot", true);
-               mIndex.runIndex(1);
+          if ((rotController.atSetpoint() && mShooter.CanShoot() && mPivot.AtSetpoint())){
+               SmartDashboard.putBoolean("Can Shoot", true);    
           }
           else{
                SmartDashboard.putBoolean("Can Shoot", false);
+          }
+          if(shooterOverridden.getAsBoolean()){
+               mIndex.runIndex(1);
+          }else{
+               mIndex.stopIndex();
           }
           mShooter.AutoFire();
 

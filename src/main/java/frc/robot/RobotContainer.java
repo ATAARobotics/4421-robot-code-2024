@@ -180,6 +180,8 @@ public class RobotContainer {
       .onFalse(new InstantCommand(() -> {m_Shooter.stopIndex();m_Index.stopIndex();}));
     joysticks.pivotUp.onTrue(new InstantCommand(mPivot::PivotUp, mPivot)).onFalse(new InstantCommand(mPivot::stop, mPivot));
     joysticks.pivotDown.onTrue(new InstantCommand(mPivot::PivotDown, mPivot)).onFalse(new InstantCommand(mPivot::stop, mPivot));
+
+    joysticks.ReallyOverrideShooter.onTrue(new InstantCommand(() -> m_Index.runIndex(1), m_Index)).onFalse(new InstantCommand(m_Index::stopIndex, m_Index));
     // joysticks.pivotGoSetpoint.onTrue(new InstantCommand(() -> mPivot.toSetpoint(90))).onFalse(new InstantCommand(mPivot::stop));
 
   }

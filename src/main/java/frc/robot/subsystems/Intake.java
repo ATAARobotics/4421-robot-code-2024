@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -26,8 +27,13 @@ public class Intake extends SubsystemBase {
         backIntake.setIdleMode(IdleMode.kCoast);
     }
 
+    @Override
+    public void periodic(){
+        SmartDashboard.putBoolean("Is Intaked", isIntaked());
+    }
+
     public void runIntake(double speed) {
-        frontIntake.set(speed);
+        frontIntake.set(speed*1.2);
         backIntake.set(speed);
     }
 

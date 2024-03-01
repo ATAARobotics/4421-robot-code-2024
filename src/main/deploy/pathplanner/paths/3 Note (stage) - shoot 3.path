@@ -3,75 +3,81 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.096539731541003,
-        "y": 2.476602645512984
+        "x": 3.0605107364060893,
+        "y": 5.555088802485298
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.570152986459821,
-        "y": 3.690236611242454
+        "x": 5.9613919227838466,
+        "y": 4.055313495242375
       },
       "isLocked": false,
-      "linkedName": "2"
+      "linkedName": "middle shoot"
     },
     {
       "anchor": {
-        "x": 6.040327465270316,
-        "y": 3.5422324690803233
+        "x": 6.888884546999863,
+        "y": 4.075047380863993
       },
       "prevControl": {
-        "x": 5.245233766432051,
-        "y": 3.6233644791658604
+        "x": 6.369210872892593,
+        "y": 4.065598768607497
       },
       "nextControl": {
-        "x": 6.5238076629999435,
-        "y": 3.49289775502628
+        "x": 7.431566401594342,
+        "y": 4.084914323674802
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.230788769269848,
-        "y": 2.45
+        "x": 8.240655712080656,
+        "y": 4.075047380863993
       },
       "prevControl": {
-        "x": 6.267267149918916,
-        "y": 2.4371348742697485
+        "x": 8.862273109161604,
+        "y": 4.203317637404505
       },
       "nextControl": {
-        "x": 8.730778037219022,
-        "y": 2.453275963316395
+        "x": 5.804091097293959,
+        "y": 3.5722642063842027
       },
       "isLocked": false,
-      "linkedName": "4 note suorce side 2"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.30075613997382,
-        "y": 3.1771555850804014
+        "x": 3.0605107364060893,
+        "y": 5.555088802485298
       },
       "prevControl": {
-        "x": 3.869600046892403,
-        "y": 0.1973388562161738
+        "x": 3.428982305465556,
+        "y": 5.217111432244546
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
+  "rotationTargets": [],
+  "constraintZones": [
     {
-      "waypointRelativePos": 1.15,
-      "rotationDegrees": 180.0,
-      "rotateFast": false
+      "name": "velocity cull",
+      "minWaypointRelativePos": 0.95,
+      "maxWaypointRelativePos": 2.25,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
     }
   ],
-  "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "INTAKE",
-      "waypointRelativePos": 1.1500000000000001,
+      "name": "intake",
+      "waypointRelativePos": 0.7,
       "command": {
         "type": "parallel",
         "data": {
@@ -88,18 +94,18 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
+    "maxVelocity": 4.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0.0,
+    "velocity": 0,
     "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "4 Note - source side",
+  "folder": "3 Note (stage)",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0

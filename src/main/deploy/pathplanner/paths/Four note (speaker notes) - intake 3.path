@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.6529766905687672,
-        "y": 4.25265235145855
+        "x": 2.0738164553252196,
+        "y": 7.015396338484985
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3633965729469943,
-        "y": 4.262519294269359
+        "x": 2.3994255680819068,
+        "y": 7.005529395674177
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "four note speaker l1"
     },
     {
       "anchor": {
-        "x": 2.616498309919698,
-        "y": 4.1046482092964185
+        "x": 2.882905765811533,
+        "y": 7.015396338484985
       },
       "prevControl": {
-        "x": 2.36800519683625,
-        "y": 4.077240678395282
+        "x": 2.577030538676463,
+        "y": 7.005529395674177
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "intake",
-      "waypointRelativePos": 0.05,
+      "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
         "data": {
@@ -50,20 +50,20 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
+    "maxVelocity": 1.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0.0,
+    "velocity": 0,
     "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "big dog",
+  "folder": "Four note (speaker notes)",
   "previewStartingState": {
-    "rotation": 120.0,
+    "rotation": 180.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

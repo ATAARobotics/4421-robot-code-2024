@@ -165,23 +165,23 @@ public class Swerve extends SubsystemBase {
 
     return Constants.Swerve.swerveKinematics.toChassisSpeeds(states[0], states[1], states[2], states[3]);
   }
-  // public void zeroGyro() {
+  public void zeroGyro() {
 
-  //   gyro.setYaw(0);
-  //   System.out.println("gyro heading " + gyro.getYaw());
-  // }
-  public void zeroGyro(){
-      pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
-      Rotation2d poseR = Rotation2d.fromDegrees(pose[5]);
-        if (Math.abs(pose[0]) >= 0.1) {
-            gyro.setYaw(poseR.getDegrees());
-            // this.lastPose = new Pose2d(poseX, poseY, poseR);
-            // if(!DriverStation.isEnabled() || check.getAsBoolean()){
-             
-            // }
-            //PoseEstimator.resetPosition(poseR, getPositions(), new Pose2d(poseX, poseY, poseR));
-        }
+    gyro.setYaw(0);
+    System.out.println("gyro heading " + gyro.getYaw());
   }
+  // public void zeroGyro(){
+  //     pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
+  //     Rotation2d poseR = Rotation2d.fromDegrees(pose[5]);
+  //       if (Math.abs(pose[0]) >= 0.1) {
+  //           gyro.setYaw(poseR.getDegrees());
+  //           // this.lastPose = new Pose2d(poseX, poseY, poseR);
+  //           // if(!DriverStation.isEnabled() || check.getAsBoolean()){
+             
+  //           // }
+  //           //PoseEstimator.resetPosition(poseR, getPositions(), new Pose2d(poseX, poseY, poseR));
+  //       }
+  // }
 
   public Rotation2d getYaw() {
     return (Constants.Swerve.invertGyro)

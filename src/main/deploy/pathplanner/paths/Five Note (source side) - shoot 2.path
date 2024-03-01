@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.7645024520818287,
-        "y": 7.005529395674177
+        "x": 2.577030538676463,
+        "y": 4.124382094918037
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.471483558351733,
-        "y": 7.114065766593072
+        "x": 1.698872628514489,
+        "y": 4.17371680897208
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.993982141810438,
-        "y": 7.429807936538951
+        "x": 1.9258123131630895,
+        "y": 5.101209433188098
       },
       "prevControl": {
-        "x": 6.602743205486412,
-        "y": 7.301537679998438
+        "x": 1.7482073425685332,
+        "y": 4.815068091674645
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "big dawg s 2"
     }
   ],
   "rotationTargets": [],
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "big dog",
+  "folder": "5 Note (source side)",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0

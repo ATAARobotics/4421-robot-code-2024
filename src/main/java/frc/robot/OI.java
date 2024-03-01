@@ -40,6 +40,7 @@ class OI {
     public JoystickButton toWaypoint;
     public JoystickButton ShooterIntake;
     public JoystickButton OverrideShooter;
+    public JoystickButton ReallyOverrideShooter;
 
     public JoystickButton pivotUp;
     public JoystickButton pivotDown;
@@ -76,6 +77,7 @@ class OI {
         pivotDown = gunnerStick.getWPIJoystickButton("PivotDown");
         ShooterIntake = gunnerStick.getWPIJoystickButton("ShooterIntake");
         OverrideShooter = gunnerStick.getWPIJoystickButton("OverrideShooter");
+        ReallyOverrideShooter = gunnerStick.getWPIJoystickButton("ReallyOverrideShooter");
         // pivotGoSetpoint = gunnerStick.getWPIJoystickButton("pivotGoSetpoint");
 
         // Set up command-based stuff

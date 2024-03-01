@@ -8,11 +8,27 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.20580282309420128,
-        "y": 2.5469985676780453
+        "x": 1.9060784275414722,
+        "y": 2.8416795295129047
       },
       "isLocked": false,
       "linkedName": "1"
+    },
+    {
+      "anchor": {
+        "x": 6.425138234891857,
+        "y": 0.927492624216019
+      },
+      "prevControl": {
+        "x": 4.60120625288621,
+        "y": 1.3030080322759972
+      },
+      "nextControl": {
+        "x": 6.760614290459353,
+        "y": 0.8584240245403594
+      },
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -46,8 +62,13 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.0,
+      "waypointRelativePos": 2.0,
       "rotationDegrees": 180.0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 0.6000000000000001,
+      "rotationDegrees": 90.0,
       "rotateFast": false
     }
   ],
@@ -55,7 +76,7 @@
   "eventMarkers": [
     {
       "name": "INTAKE",
-      "waypointRelativePos": 0.7,
+      "waypointRelativePos": 1.4,
       "command": {
         "type": "parallel",
         "data": {
@@ -83,7 +104,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "3 Note - amp side",
+  "folder": "3 Note (source side)",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0

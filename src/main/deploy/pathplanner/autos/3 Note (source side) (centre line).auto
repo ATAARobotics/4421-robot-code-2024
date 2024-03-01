@@ -30,24 +30,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "4 Note (source side) - ffa shoot 3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Fire Shooter"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "4 Note (source side) - intake 4"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Fire Shooter"
