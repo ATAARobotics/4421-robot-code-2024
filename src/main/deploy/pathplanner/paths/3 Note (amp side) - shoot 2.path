@@ -3,41 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.6002032004064024,
-        "y": 3.2856919559992974
+        "x": 1.9948809128387501,
+        "y": 6.699654168539107
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.6091713721889,
-        "y": 3.552099411891132
+        "x": 1.8567437134874287,
+        "y": 7.074597995349838
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.270256540513081,
-        "y": 4.09478126648561
+        "x": 2.8533049373791073,
+        "y": 6.985795510052559
       },
       "prevControl": {
-        "x": 6.809949004513395,
-        "y": 4.084914323674802
+        "x": 2.3599577968386725,
+        "y": 6.985795510052559
       },
       "nextControl": {
-        "x": 8.548105830491616,
-        "y": 4.096658626553032
+        "x": 3.346652077919542,
+        "y": 6.985795510052559
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.3071843066763065,
-        "y": 3.2856919559992974
+        "x": 3.7906645044059335,
+        "y": 6.975928567241751
       },
       "prevControl": {
-        "x": 6.681678747972882,
-        "y": 3.8481076962153926
+        "x": 3.5686582911627376,
+        "y": 6.980862038647155
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,9 +47,9 @@
   "rotationTargets": [],
   "constraintZones": [
     {
-      "name": "velocity cull",
-      "minWaypointRelativePos": 0.7,
-      "maxWaypointRelativePos": 1.05,
+      "name": "v",
+      "minWaypointRelativePos": 0.75,
+      "maxWaypointRelativePos": 1.25,
       "constraints": {
         "maxVelocity": 1.0,
         "maxAcceleration": 3.0,
@@ -58,7 +58,25 @@
       }
     }
   ],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "intake",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
@@ -71,7 +89,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "3 Note (centre stage)",
+  "folder": "3 Note (amp side)",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0

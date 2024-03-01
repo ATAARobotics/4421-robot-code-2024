@@ -6,6 +6,7 @@
     "1 Note Variants",
     "2 Amp",
     "2 Note Variants",
+    "3 Note (centre stage)",
     "3 Note (source side)",
     "3 Note (stage)",
     "4 Note - source side",
@@ -15,7 +16,7 @@
     "Devious 4 Speaker",
     "Four note (speaker notes)",
     "Init",
-    "3 Note (centre stage)"
+    "3 Note (amp side)"
   ],
   "autoFolders": [
     "real"
