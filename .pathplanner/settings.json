@@ -3,24 +3,13 @@
   "robotLength": 0.53,
   "holonomicMode": true,
   "pathFolders": [
-    "1 Note Variants",
-    "2 Amp",
-    "2 Note Variants",
-    "3 Note (centre stage)",
-    "3 Note (source side)",
-    "3 Note (stage)",
-    "4 Note - source side",
-    "4 Note mid",
-    "5 Note (source side)",
-    "6 Speaker",
-    "Devious 4 Speaker",
-    "Four note (speaker notes)",
-    "Init",
-    "0 Note variants",
-    "Three note (speaker notes) starting variants"
+    "3 Note (source side) - 6,7",
+    "3 Note (centre speaker) - 2,6",
+    "4 note (centre speaker) - 2,1,3",
+    "3 Note (amp side) - 1,4"
   ],
   "autoFolders": [
-    "real"
+    "Victoria"
   ],
   "defaultMaxVel": 4.0,
   "defaultMaxAccel": 3.0,

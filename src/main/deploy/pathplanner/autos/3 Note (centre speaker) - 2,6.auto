@@ -8,7 +8,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Four note (speaker notes) - shoot 1"
+            "pathName": "3 Note (stage) - shoot 1"
           }
         },
         {
@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Four note (speaker notes) - intake 2"
+            "pathName": "3 Note (stage) - shoot 2"
           }
         },
         {
@@ -32,19 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Four note (speaker notes) - intake 3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Fire Shooter"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Four note (speaker notes) - intake 4"
+            "pathName": "3 Note (stage) - shoot 3"
           }
         },
         {
@@ -56,6 +44,6 @@
       ]
     }
   },
-  "folder": "real",
+  "folder": "Victoria",
   "choreoAuto": false
 }
