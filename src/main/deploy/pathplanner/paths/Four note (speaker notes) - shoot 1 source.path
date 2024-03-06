@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.254860202028098,
-        "y": 3.690236611242454
+        "x": 0.6431097477579587,
+        "y": 4.232918465836932
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5508684863523585,
-        "y": 3.4435630409722373
+        "x": 1.0476544030011152,
+        "y": 4.242785408647741
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.6002032004064024,
-        "y": 3.2856919559992974
+        "x": 2.2514214259197765,
+        "y": 5.525487974052871
       },
       "prevControl": {
-        "x": 1.2844610304605237,
-        "y": 3.5915671831343667
+        "x": 2.1514214259197764,
+        "y": 5.525487974052871
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "4 note speaker note l3"
     }
   ],
   "rotationTargets": [],
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "3 Note (centre stage)",
+  "folder": "Three note (speaker notes) starting variants",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0

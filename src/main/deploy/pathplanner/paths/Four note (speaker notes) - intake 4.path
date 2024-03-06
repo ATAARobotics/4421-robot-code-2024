@@ -4,24 +4,40 @@
     {
       "anchor": {
         "x": 2.882905765811533,
-        "y": 7.015396338484985
+        "y": 5.535354916863679
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9554131415955156,
-        "y": 4.54866063578281
+        "x": 0.5543072624606802,
+        "y": 4.09478126648561
+      },
+      "isLocked": false,
+      "linkedName": "four note speaker l2"
+    },
+    {
+      "anchor": {
+        "x": 2.882905765811533,
+        "y": 4.114515152107228
+      },
+      "prevControl": {
+        "x": 2.399123613104373,
+        "y": 4.114515152107228
+      },
+      "nextControl": {
+        "x": 3.0309099079736637,
+        "y": 4.114515152107228
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.882905765811533,
-        "y": 4.09478126648561
+        "x": 2.30075613997382,
+        "y": 4.578261464215237
       },
       "prevControl": {
-        "x": 2.0442156268927936,
-        "y": 3.8283738105937757
+        "x": 2.4783611105683763,
+        "y": 4.410523436431489
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,11 +45,23 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "v",
+      "minWaypointRelativePos": 0.35,
+      "maxWaypointRelativePos": 1.2,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    }
+  ],
   "eventMarkers": [
     {
       "name": "intake",
-      "waypointRelativePos": 0.0,
+      "waypointRelativePos": 0.15,
       "command": {
         "type": "parallel",
         "data": {

@@ -81,8 +81,8 @@ public class RobotContainer {
     m_Shooter = new Shooter();
     mPivot = new Pivot();
     // Register pathplanner commands
-    NamedCommands.registerCommand("Index", new InstantCommand(m_Shooter::Index));
-    NamedCommands.registerCommand("Stop Index", new InstantCommand(m_Shooter::stopIndex));
+    NamedCommands.registerCommand("Index", new InstantCommand(() ->  m_Index.runIndex(1)));
+    NamedCommands.registerCommand("Stop Index", new InstantCommand(m_Index::stopIndex));
 
     s_Swerve = new Swerve();
     shoot = new Shooting(m_Shooter, mPivot, m_Index, s_Swerve,joysticks::getXVelocity,
@@ -128,7 +128,7 @@ public class RobotContainer {
             joysticks::getRotationVelocity // rotation
             ));
 
-    PPHolonomicDriveController.setRotationTargetOverride(() -> s_Swerve.getRotationTargetOverride());
+    // PPHolonomicDriveController.setRotationTargetOverride(() -> s_Swerve.getRotationTargetOverride());
     // Configure the button bindings
     autoChooser = AutoBuilder.buildAutoChooser();
   
@@ -157,7 +157,6 @@ public class RobotContainer {
     joysticks.zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
     joysticks.reverseIntake.onTrue(new InstantCommand(() -> m_Shooter.scoreAmp(m_Index, mPivot)));
-    // .onFalse(new InstantCommand(() -> {m_Shooter.stopScoreAmp(m_Index);mPivot.toSetpoint(Constants.Subsystems.pivotMin);}));
     joysticks.runShooter.onTrue(new InstantCommand(m_Shooter::Fire));
 
     
@@ -182,7 +181,7 @@ public class RobotContainer {
     joysticks.pivotDown.onTrue(new InstantCommand(mPivot::PivotDown, mPivot)).onFalse(new InstantCommand(mPivot::stop, mPivot));
 
     joysticks.ReallyOverrideShooter.onTrue(new InstantCommand(() -> m_Index.runIndex(1), m_Index)).onFalse(new InstantCommand(m_Index::stopIndex, m_Index));
-    // joysticks.pivotGoSetpoint.onTrue(new InstantCommand(() -> mPivot.toSetpoint(90))).onFalse(new InstantCommand(mPivot::stop));
+    // joysticks.pivotGoSetpoint.onTrue(new InstantCommand(() -> mPivot.toSetpoint(45))).onFalse(new InstantCommand(mPivot::stop));
 
   }
   public OI getOI() {

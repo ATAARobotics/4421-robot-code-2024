@@ -14,6 +14,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -196,14 +197,28 @@ public class Swerve extends SubsystemBase {
       mod.resetToAbsolute();
     }
   }
+
+  double poseX = 0; 
+  double poseY = 0; 
+  Rotation2d poseR = new Rotation2d(); 
+  double timeStamp = 0;
+
   @Override
   public void periodic() {
-    pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
-    double poseX = pose[0];
-    double poseY = pose[1];
-    Rotation2d poseR = Rotation2d.fromDegrees(pose[5]);
-    double timeStamp = Timer.getFPGATimestamp() - (pose[6] / 1000.0);
+    
+    try {
+      pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
+      poseX = pose[0];
+      poseY = pose[1];
+      poseR = Rotation2d.fromDegrees(pose[5]);
+      timeStamp = Timer.getFPGATimestamp() - (pose[6] / 1000.0);
+      SmartDashboard.putBoolean("Limelight Status", true);
 
+    } catch (Exception e) {
+      DriverStation.reportError("LIMELIGHT FAIL: RESTART ROBOT CODE", e.getStackTrace());
+      SmartDashboard.putBoolean("Limelight Status", false);
+    }
+   
     SmartDashboard.putNumber("Pose Estimator ", PoseEstimator.getEstimatedPosition().getRotation().getDegrees());
     SmartDashboard.putNumber("Get Yaw ", getYaw().getDegrees());
 
@@ -244,21 +259,21 @@ public class Swerve extends SubsystemBase {
     //Rotatvoiion2d.fromDegrees(ang);
     Rotation2dOut = Rotation2d.fromDegrees(ang);
  }
- public void setAutoLock(boolean lockState){
-    autoLock = lockState;
-    System.out.println(lockState);
- }
-  public Optional<Rotation2d> getRotationTargetOverride(){
-    if(autoLock) {
-      System.out.println("hey we locking n shit");
-      // Return an optional containing the rotation override (this should be a field relative rotation)
-      return Optional.of(Rotation2dOut);
-    } else {
-        System.out.println("not locked");
-        // return an empty optional when we don't want to override the path's rotation
-        return Optional.empty();
-    }
-  }
+//  public void setAutoLock(boolean lockState){
+//     autoLock = lockState;
+//     System.out.println(lockState);
+//  }
+//   public Optional<Rotation2d> getRotationTargetOverride(){
+//     if(autoLock) {
+//       System.out.println("hey we locking n shit");
+//       // Return an optional containing the rotation override (this should be a field relative rotation)
+//       return Optional.of(Rotation2dOut);
+//     } else {
+//         System.out.println("not locked");
+//         // return an empty optional when we don't want to override the path's rotation
+//         return Optional.empty();
+//     }
+//   }
 
   public Command driveToWaypoint(Pose2d targetPose){
 

@@ -6,6 +6,12 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "1 Note (source side) - shoot 1"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Fire Shooter"
@@ -14,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1 Note (source side) - shoot 1"
+            "pathName": "1 Note (source side) - exit"
           }
         }
       ]

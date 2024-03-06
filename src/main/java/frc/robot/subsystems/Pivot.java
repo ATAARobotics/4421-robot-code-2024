@@ -29,26 +29,27 @@ public class Pivot extends SubsystemBase{
 
 
     private boolean GoingToSetpoint = false;
+    private boolean ClimbingDown = false;
     private CANSparkFlex PivotMotor;
     private CANSparkFlex PivotMotorSecondary;
 
     private CANCoder pivotEncoder;
 
-    private PIDController pivotPID = new PIDController(0.55, 0.06, 0.006);
+    private PIDController pivotPID = new PIDController(0.5, 0.0, 0.0);
 
-    private double ffConstant = 0.5;
-
+    private double ffConstant = 0.02;
+    private double speed = 0.0;
     public Pivot(){
 
         PivotMotor = new CANSparkFlex(Constants.Subsystems.shooterPivot, CANSparkLowLevel.MotorType.kBrushless);
         PivotMotorSecondary = new CANSparkFlex(23, CANSparkLowLevel.MotorType.kBrushless);
-        PivotMotor.setInverted(false);
-        PivotMotorSecondary.setInverted(true);
+        PivotMotor.setInverted(true);
+        PivotMotorSecondary.setInverted(false);
 
    
 
-        PivotMotor.setIdleMode(IdleMode.kCoast);
-        PivotMotorSecondary.setIdleMode(IdleMode.kCoast);
+        PivotMotor.setIdleMode(IdleMode.kBrake);
+        PivotMotorSecondary.setIdleMode(IdleMode.kBrake);
         PivotMotor.burnFlash();
         PivotMotorSecondary.burnFlash();
         pivotEncoder = new CANCoder(22);
@@ -66,41 +67,67 @@ public class Pivot extends SubsystemBase{
         if(pivotEncoder.getAbsolutePosition() <= 80){
             if (GoingToSetpoint){
                 double ffVal = ffConstant*Math.cos(Math.toRadians(angle));
-                double val = MathUtil.clamp(pidVal+ffVal, -1, 1);
-                PivotMotor.set(val);
-                PivotMotorSecondary.set(val);
+                speed = MathUtil.clamp(pidVal+ffVal, -1, 1);
             }
         }
         else{
-            if (GoingToSetpoint && (Math.abs(pivotPID.getSetpoint()-pivotEncoder.getAbsolutePosition()) >= 15)){
-                double val = MathUtil.clamp(pidVal, -1, 1);
-                PivotMotor.set(val);
-                PivotMotorSecondary.set(val);
+            if (GoingToSetpoint && (Math.abs(pivotPID.getSetpoint()-pivotEncoder.getAbsolutePosition()) >= 5)){
+                speed = MathUtil.clamp(pidVal, -1, 1);
             }else{
                 if(GoingToSetpoint){
-                    PivotMotor.set(0);
-                    PivotMotorSecondary.set(0); 
+                    speed = 0;
                 }
             }      
         }
-    }
 
+        if (speed < 0){
+            if(pivotEncoder.getAbsolutePosition() >= 35){
+                PivotMotor.set(speed);
+                PivotMotorSecondary.set(speed);
+            }
+            else if(pivotEncoder.getAbsolutePosition() >=32){
+                PivotMotor.set(speed * 0.8);
+                PivotMotorSecondary.set(speed * 0.8);
+            }
+            else{
+                PivotMotor.stopMotor();
+                PivotMotorSecondary.stopMotor();
+            }
+        }else{
+            if(pivotEncoder.getAbsolutePosition() <= 95){
+                PivotMotor.set(speed);
+                PivotMotorSecondary.set(speed);
+            }else if(pivotEncoder.getAbsolutePosition()<=105){
+                PivotMotor.set(speed * 0.8);
+                PivotMotorSecondary.set(speed * 0.8);
+            }else{
+                PivotMotor.stopMotor();
+                PivotMotorSecondary.stopMotor();
+            }          
+        }
+    }
     public void PivotUp(){
         GoingToSetpoint = false;
-        PivotMotor.set(0.5);
-        PivotMotorSecondary.set(0.5);
+        speed = 0.5;
     }
     public void PivotDown(){
         GoingToSetpoint = false;
-        PivotMotor.set(-1);
-        PivotMotorSecondary.set(-1);
+        speed = -1;
     }
     public void toSetpoint(double setPoint){
+        // pivotPID.setP(SmartDashboard.getNumber("pivot p", 0));
+        // pivotPID.setI(SmartDashboard.getNumber("pivot i", 0));
+        // pivotPID.setD(SmartDashboard.getNumber("pivot d", 0));
+        // pivotff = (SmartDashboard.getNumber("pivot ff", 0));
+
         GoingToSetpoint = true;
+        ClimbingDown = false;
         pivotPID.setSetpoint(setPoint);
     }
     public void stop(){
         GoingToSetpoint = false;
+        ClimbingDown = false;
+        speed = 0;
         PivotMotor.set(0);
         PivotMotorSecondary.set(0);
     }

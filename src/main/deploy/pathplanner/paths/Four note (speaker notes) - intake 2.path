@@ -3,41 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0738164553252196,
+        "x": 2.2514214259197765,
         "y": 5.525487974052871
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1738164553252197,
+        "x": 2.3514214259197765,
         "y": 5.525487974052871
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "4 note speaker note l3"
     },
     {
       "anchor": {
-        "x": 2.882905765811533,
-        "y": 5.535354916863679
+        "x": 2.912506594243959,
+        "y": 5.525487974052871
       },
       "prevControl": {
-        "x": 2.528361110568376,
-        "y": 5.530421445458275
-      },
-      "nextControl": {
-        "x": 3.2374504210546897,
-        "y": 5.540288388269083
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.0738164553252196,
-        "y": 7.015396338484985
-      },
-      "prevControl": {
-        "x": 2.7099016236494027,
-        "y": 6.332110548836481
+        "x": 2.6362321955413157,
+        "y": 5.564955745296107
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.1,
+      "waypointRelativePos": 0.55,
       "rotationDegrees": 180.0,
       "rotateFast": false
     }
@@ -72,7 +56,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
+    "maxVelocity": 1.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0

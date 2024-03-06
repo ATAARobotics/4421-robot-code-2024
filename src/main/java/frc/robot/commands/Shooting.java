@@ -24,7 +24,7 @@ public class Shooting extends Command {
      // TODO: pos
      private Translation3d BluegoalPose = new Translation3d(-0.1651+0.1, 5.5408, 2.15 - 0.05);
      // private Translation3d RedgoalPose = new Translation3d(16.706342, 5.5408, 2.2);
-     private Translation3d RedgoalPose = new Translation3d(16.706342-0.1, 5.5408, 2.15 - 0.05);
+     private Translation3d RedgoalPose = new Translation3d(16.706342-0.1, 5.5408, 2.15 + 0.02);
 
 
      // SIDE FLIP
@@ -107,7 +107,6 @@ public class Shooting extends Command {
     public void initialize(){
         rotController.setTolerance(Math.toRadians(Constants.Subsystems.rotTolerance));
         GoalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
-
     }
 
     @Override

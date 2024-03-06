@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 2.0738164553252196,
+        "x": 2.261288368730585,
         "y": 5.525487974052871
       },
       "prevControl": {
-        "x": 1.9738164553252195,
+        "x": 2.161288368730585,
         "y": 5.525487974052871
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "4 note speaker note l3"
     }
   ],
   "rotationTargets": [],

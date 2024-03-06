@@ -100,6 +100,7 @@ public class Shooter extends SubsystemBase{
 
         SmartDashboard.putNumber("Left Shooter Ref", Constants.Subsystems.shooterSetPoint);
         SmartDashboard.putNumber("Right Shooter Ref", Constants.Subsystems.shooterSetPoint);
+        SmartDashboard.setDefaultBoolean("SHOOTER REVVED", false);
         
         
         //SmartDashboard.putNumber("Left Index", 0.10);
@@ -112,6 +113,8 @@ public class Shooter extends SubsystemBase{
 
         SmartDashboard.putNumber("rpm l", leftShooter.getEncoder().getVelocity());
         SmartDashboard.putNumber("rpm r", rightShooter.getEncoder().getVelocity());
+
+        SmartDashboard.putBoolean("SHOOTER REVVED", (leftShooter.getEncoder().getVelocity() > 5000));
 
         if(isFiring && isAmpScoring == 0){
             leftShooterPID.setReference(Constants.Subsystems.shooterSetPoint, ControlType.kVelocity);
@@ -136,8 +139,8 @@ public class Shooter extends SubsystemBase{
                     break;
                 case 2:
                     if(!AmpStop.get()){
-                        leftShooter.set(0.1);
-                        rightShooter.set(0.1);
+                        leftShooter.set(0.07);
+                        rightShooter.set(0.07);
                      }else{
                         isAmpScoring = 4;
                         leftShooter.stopMotor();
@@ -158,10 +161,9 @@ public class Shooter extends SubsystemBase{
     public void scoreAmp(Index sIndex, Pivot sPivot){
         if(isAmpScoring != 4){
             if (isAmpScoring != 3 && isAmpScoring != 1){
-
                 isAmpScoring = 1;
                 sIndex.index.set(1); 
-                sPivot.toSetpoint(100); 
+                sPivot.toSetpoint(105); 
             }
             else{
                 sPivot.toSetpoint(Constants.Subsystems.pivotMin);
