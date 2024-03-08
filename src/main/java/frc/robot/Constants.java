@@ -148,13 +148,13 @@ public final class Constants {
   }
 
   public static final class Subsystems {
-    public static final double rotTolerance = 3;
+    public static final double rotTolerance = 1;
     public static final double pivotTolerance = 1.5; // in degrees
     public static final double pivotMin = 28.0;
 
-    public static final double shooterTolerance = 350; // rpm
-    public static final double shooterSetPoint = 5500; // rpm
-    public static final double shooterSetPointAlt = 4500; 
+    public static final double shooterTolerance = 100; // rpm
+    public static final double shooterSetPoint = 5500; // rpm 5500
+    public static final double shooterSetPointAlt = 4500; //rpm 4500
 
     public static final int intakeFront = 13;
     public static final int intakeBack = 14;
@@ -169,7 +169,7 @@ public final class Constants {
 
     public static final double shooterP = 0.0002;
     public static final double shooterI = 0.000003;
-    public static final double shooterD = 0.002;
+    public static final double shooterD = 0.02;
     public static final double shooterFF = 0.00005;
 
     public static final double ampTime = 0.2;

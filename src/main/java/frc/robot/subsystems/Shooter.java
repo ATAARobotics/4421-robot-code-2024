@@ -163,7 +163,7 @@ public class Shooter extends SubsystemBase{
             if (isAmpScoring != 3 && isAmpScoring != 1){
                 isAmpScoring = 1;
                 sIndex.index.set(1); 
-                sPivot.toSetpoint(105); 
+                sPivot.toSetpoint(114); 
             }
             else{
                 sPivot.toSetpoint(Constants.Subsystems.pivotMin);

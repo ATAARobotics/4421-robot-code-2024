@@ -85,9 +85,9 @@ public class Pivot extends SubsystemBase{
                 PivotMotor.set(speed);
                 PivotMotorSecondary.set(speed);
             }
-            else if(pivotEncoder.getAbsolutePosition() >=32){
-                PivotMotor.set(speed * 0.8);
-                PivotMotorSecondary.set(speed * 0.8);
+            else if(pivotEncoder.getAbsolutePosition() >=26){
+                PivotMotor.set(speed * 0.4);
+                PivotMotorSecondary.set(speed * 0.4);
             }
             else{
                 PivotMotor.stopMotor();
@@ -97,9 +97,9 @@ public class Pivot extends SubsystemBase{
             if(pivotEncoder.getAbsolutePosition() <= 95){
                 PivotMotor.set(speed);
                 PivotMotorSecondary.set(speed);
-            }else if(pivotEncoder.getAbsolutePosition()<=105){
-                PivotMotor.set(speed * 0.8);
-                PivotMotorSecondary.set(speed * 0.8);
+            }else if(pivotEncoder.getAbsolutePosition()<=114){
+                PivotMotor.set(speed * 0.4);
+                PivotMotorSecondary.set(speed * 0.4);
             }else{
                 PivotMotor.stopMotor();
                 PivotMotorSecondary.stopMotor();
