@@ -41,6 +41,7 @@ class OI {
     public JoystickButton ShooterIntake;
     public JoystickButton OverrideShooter;
     public JoystickButton ReallyOverrideShooter;
+    public JoystickButton DriveStraight;
 
     public JoystickButton pivotUp;
     public JoystickButton pivotDown;
@@ -71,6 +72,7 @@ class OI {
         reverseIntake = gunnerStick.getWPIJoystickButton("pivotGoSetpoint");
 
         toWaypoint = driveStick.getWPIJoystickButton("ScoreAmp");
+        DriveStraight = driveStick.getWPIJoystickButton("DriveStraight");
 
         runShooter = gunnerStick.getWPIJoystickButton("Shoot");
         pivotUp = gunnerStick.getWPIJoystickButton("PivotUp");
@@ -78,6 +80,7 @@ class OI {
         ShooterIntake = gunnerStick.getWPIJoystickButton("ShooterIntake");
         OverrideShooter = gunnerStick.getWPIJoystickButton("OverrideShooter");
         ReallyOverrideShooter = gunnerStick.getWPIJoystickButton("ReallyOverrideShooter");
+        
         // pivotGoSetpoint = gunnerStick.getWPIJoystickButton("pivotGoSetpoint");
 
         // Set up command-based stuff
