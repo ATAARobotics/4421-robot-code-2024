@@ -35,9 +35,9 @@ public class Pivot extends SubsystemBase{
 
     private CANCoder pivotEncoder;
 
-    private PIDController pivotPID = new PIDController(0.5, 0.0, 0.0);
+    private PIDController pivotPID = new PIDController(Constants.Subsystems.pivotP, Constants.Subsystems.pivotI, Constants.Subsystems.pivotD);
 
-    private double ffConstant = 0.02;
+    private double ffConstant = Constants.Subsystems.pivotFF;
     private double speed = 0.0;
     public Pivot(){
 
@@ -45,15 +45,13 @@ public class Pivot extends SubsystemBase{
         PivotMotorSecondary = new CANSparkFlex(23, CANSparkLowLevel.MotorType.kBrushless);
         PivotMotor.setInverted(true);
         PivotMotorSecondary.setInverted(false);
-
-   
-
         PivotMotor.setIdleMode(IdleMode.kBrake);
         PivotMotorSecondary.setIdleMode(IdleMode.kBrake);
         PivotMotor.burnFlash();
         PivotMotorSecondary.burnFlash();
         pivotEncoder = new CANCoder(22);
         pivotPID.setTolerance(Constants.Subsystems.pivotTolerance);
+        
     }
     @Override
     public void periodic(){
@@ -85,9 +83,9 @@ public class Pivot extends SubsystemBase{
                 PivotMotor.set(speed);
                 PivotMotorSecondary.set(speed);
             }
-            else if(pivotEncoder.getAbsolutePosition() >=32){
-                PivotMotor.set(speed * 0.8);
-                PivotMotorSecondary.set(speed * 0.8);
+            else if(pivotEncoder.getAbsolutePosition() >=26){
+                PivotMotor.set(speed * 0.4);
+                PivotMotorSecondary.set(speed * 0.4);
             }
             else{
                 PivotMotor.stopMotor();
@@ -97,9 +95,9 @@ public class Pivot extends SubsystemBase{
             if(pivotEncoder.getAbsolutePosition() <= 95){
                 PivotMotor.set(speed);
                 PivotMotorSecondary.set(speed);
-            }else if(pivotEncoder.getAbsolutePosition()<=105){
-                PivotMotor.set(speed * 0.8);
-                PivotMotorSecondary.set(speed * 0.8);
+            }else if(pivotEncoder.getAbsolutePosition()<=114){
+                PivotMotor.set(speed * 0.4);
+                PivotMotorSecondary.set(speed * 0.4);
             }else{
                 PivotMotor.stopMotor();
                 PivotMotorSecondary.stopMotor();
@@ -118,7 +116,7 @@ public class Pivot extends SubsystemBase{
         // pivotPID.setP(SmartDashboard.getNumber("pivot p", 0));
         // pivotPID.setI(SmartDashboard.getNumber("pivot i", 0));
         // pivotPID.setD(SmartDashboard.getNumber("pivot d", 0));
-        // pivotff = (SmartDashboard.getNumber("pivot ff", 0));
+        // ffConstant = (SmartDashboard.getNumber("pivot ff", 0));
 
         GoingToSetpoint = true;
         ClimbingDown = false;

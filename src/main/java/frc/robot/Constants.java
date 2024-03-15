@@ -50,7 +50,7 @@ public final class Constants {
 
     /* Swerve Current Limiting */
     public static final int angleContinuousCurrentLimit = 20;
-    public static final int driveContinuousCurrentLimit = 30;
+    public static final int driveContinuousCurrentLimit = 40;
 
     /* Angle Motor PID Values */
     public static final double angleKP = 0.039;
@@ -121,7 +121,8 @@ public final class Constants {
       public static final int driveMotorID = 2;
       public static final int angleMotorID = 6;
       public static final int canCoderID = 10;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(99.228515625); //310.69
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(248.3789); //310.69
+      //82.529296875 + 17.79644966 + 5.0 + 20.0 - 10.0 - 3.5
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
           canCoderID, angleOffset);
     }
@@ -152,9 +153,9 @@ public final class Constants {
     public static final double pivotTolerance = 1.5; // in degrees
     public static final double pivotMin = 28.0;
 
-    public static final double shooterTolerance = 350; // rpm
-    public static final double shooterSetPoint = 5500; // rpm
-    public static final double shooterSetPointAlt = 4500; 
+    public static final double shooterTolerance = 200; // rpm
+    public static final double shooterSetPoint = 5500; // rpm 5500
+    public static final double shooterSetPointAlt = 4500; //rpm 4500
 
     public static final int intakeFront = 13;
     public static final int intakeBack = 14;
@@ -167,10 +168,15 @@ public final class Constants {
 
     
 
-    public static final double shooterP = 0.0002;
-    public static final double shooterI = 0.000003;
-    public static final double shooterD = 0.002;
+    public static final double shooterP = 0.00055;
+    public static final double shooterI = 0.00000056;
+    public static final double shooterD = 0.015;
     public static final double shooterFF = 0.00005;
+
+    public static final double pivotP = 0.5;
+    public static final double pivotI = 0;
+    public static final double pivotD = 0.015;
+    public static final double pivotFF = 0.1;
 
     public static final double ampTime = 0.2;
 

@@ -24,13 +24,14 @@ import frc.robot.Constants;
 import frc.robot.subsystems.*;
 
 public class AutoShooter extends Command {
-     private Translation3d BluegoalPose = new Translation3d(-0.1651+0.05, 5.5408, 2.15 - 0.05);
+     private Translation3d[] BluegoalPose = new Translation3d[]{new Translation3d(-0.1651+0.05, 5.5408, 2.15 - 0.05), new Translation3d(-0.1651+0.05, 5.5408, 2.15 - 0.05)};
      // private Translation3d RedgoalPose = new Translation3d(16.706342, 5.5408, 2.2);
-     private Translation3d RedgoalPose = new Translation3d(16.706342-0.05, 5.5408, 2.15 +0.02); 
+     private Translation3d[] RedgoalPose = new Translation3d[]{new Translation3d(16.706342-0.05, 5.5408, 2.15 +0.02), new Translation3d(16.706342-0.05, 5.5408, 2.15 +0.02)}; 
+
 
 
      // SIDE FLIP
-     private Translation3d GoalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
+     private Translation3d[] GoalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
 
     private Shooter mShooter;
     private Swerve mSwerve;
@@ -145,9 +146,9 @@ public class AutoShooter extends Command {
           C = mSwerve.getPose().getY()+ (-R*0.05);
 
           //TODO change goal pose to be set based on color
-          M = GoalPose.getX();
-          N = GoalPose.getZ();
-          O = GoalPose.getY();
+          M = GoalPose[0].getX();
+          N = GoalPose[0].getZ();
+          O = GoalPose[0].getY();
           S = 12;
 
           H = M - A;
@@ -177,7 +178,7 @@ public class AutoShooter extends Command {
                RobotAngle = Math.atan2(f, d);
                rotController.setSetpoint(RobotAngle);
                rotController.calculate(mSwerve.getPose().getRotation().getRadians());
-               if (!overrideTimer.hasElapsed(2)){
+               if (!overrideTimer.hasElapsed(1)){
                     if (rotController.atSetpoint()&& mShooter.CanShoot() && mPivot.AtSetpoint()){
                          SmartDashboard.putBoolean("Can Shoot", true);
                          System.out.println("Auto Shooting");

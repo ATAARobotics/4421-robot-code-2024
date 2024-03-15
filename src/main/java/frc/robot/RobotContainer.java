@@ -157,7 +157,7 @@ public class RobotContainer {
     joysticks.zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
     joysticks.reverseIntake.onTrue(new InstantCommand(() -> m_Shooter.scoreAmp(m_Index, mPivot)));
-    joysticks.runShooter.onTrue(new InstantCommand(m_Shooter::Fire));
+    joysticks.runShooter.onTrue(new InstantCommand(m_Shooter::AutoFire));
 
     
 
@@ -182,6 +182,12 @@ public class RobotContainer {
 
     joysticks.ReallyOverrideShooter.onTrue(new InstantCommand(() -> m_Index.runIndex(1), m_Index)).onFalse(new InstantCommand(m_Index::stopIndex, m_Index));
     // joysticks.pivotGoSetpoint.onTrue(new InstantCommand(() -> mPivot.toSetpoint(45))).onFalse(new InstantCommand(mPivot::stop));
+    joysticks.DriveStraight.whileTrue(new TeleopSwerve(
+            s_Swerve,
+            () -> 0.25, // translation
+            () -> 0, // strafe
+            () -> 0 // rotation
+            ));
 
   }
   public OI getOI() {

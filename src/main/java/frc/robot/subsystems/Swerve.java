@@ -221,10 +221,11 @@ public class Swerve extends SubsystemBase {
    
     SmartDashboard.putNumber("Pose Estimator ", PoseEstimator.getEstimatedPosition().getRotation().getDegrees());
     SmartDashboard.putNumber("Get Yaw ", getYaw().getDegrees());
+    
 
 
     if (Math.abs(pose[0]) >= 0.1) {
-      PoseEstimator.addVisionMeasurement(new Pose2d(poseX, poseY, poseR), timeStamp);
+      // PoseEstimator.addVisionMeasurement(new Pose2d(poseX, poseY, poseR), timeStamp);
       double angleError = Math.abs(getYaw().minus(poseR).getDegrees());
       if(!DriverStation.isEnabled()){
         gyro.setYaw(poseR.getDegrees());
@@ -243,6 +244,9 @@ public class Swerve extends SubsystemBase {
       SmartDashboard.putNumber(
         // mod.getAngleOffset().getDegrees() is used to add angle offset to canCoder values
           "Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees() - mod.getAngleOffset().getDegrees());
+      SmartDashboard.putNumber(
+        // mod.getAngleOffset().getDegrees() is used to add angle offset to canCoder values
+          "Mod " + mod.moduleNumber + " Raw Cancoder", mod.getCanCoder().getDegrees());
       SmartDashboard.putNumber(
           "Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
       SmartDashboard.putNumber(

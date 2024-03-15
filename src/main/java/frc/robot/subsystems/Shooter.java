@@ -37,6 +37,8 @@ public class Shooter extends SubsystemBase{
     public SparkPIDController leftShooterPID;
     public SparkPIDController rightShooterPID;
 
+    
+
     private DigitalInput AmpStop;
 
     private enum IntakeLevels{
@@ -82,6 +84,8 @@ public class Shooter extends SubsystemBase{
         rightShooterPID.setI(Constants.Subsystems.shooterI);
         rightShooterPID.setD(Constants.Subsystems.shooterD);
         rightShooterPID.setFF(Constants.Subsystems.shooterFF);
+        // leftShooterPID.setIZone(1000);
+        // rightShooterPID.setIZone(1000);
         
 
         // SmartDashboard.putNumber("left velocity", leftShooter.getEncoder().getVelocity());
@@ -114,10 +118,15 @@ public class Shooter extends SubsystemBase{
         SmartDashboard.putNumber("rpm l", leftShooter.getEncoder().getVelocity());
         SmartDashboard.putNumber("rpm r", rightShooter.getEncoder().getVelocity());
 
+
+
         SmartDashboard.putBoolean("SHOOTER REVVED", (leftShooter.getEncoder().getVelocity() > 5000));
 
         if(isFiring && isAmpScoring == 0){
+
+
             leftShooterPID.setReference(Constants.Subsystems.shooterSetPoint, ControlType.kVelocity);
+            // leftShooter.set(1);
             rightShooterPID.setReference(Constants.Subsystems.shooterSetPointAlt, ControlType.kVelocity);
             // leftShooterPID.setReference(SmartDashboard.getNumber("Left Shooter Ref", 0), ControlType.kVelocity);
             // rightShooterPID.setReference(SmartDashboard.getNumber("Right Shooter Ref", 0), ControlType.kVelocity);
@@ -163,7 +172,7 @@ public class Shooter extends SubsystemBase{
             if (isAmpScoring != 3 && isAmpScoring != 1){
                 isAmpScoring = 1;
                 sIndex.index.set(1); 
-                sPivot.toSetpoint(105); 
+                sPivot.toSetpoint(114); 
             }
             else{
                 sPivot.toSetpoint(Constants.Subsystems.pivotMin);
@@ -192,6 +201,15 @@ public class Shooter extends SubsystemBase{
 
     public void Fire(){
         isFiring = !isFiring;
+        rightShooterPID.setP(SmartDashboard.getNumber("shooter p", 0));
+        rightShooterPID.setI(SmartDashboard.getNumber("shooter i", 0));
+        rightShooterPID.setD(SmartDashboard.getNumber("shooter d", 0));
+        leftShooterPID.setP(SmartDashboard.getNumber("shooter p", 0));
+        leftShooterPID.setI(SmartDashboard.getNumber("shooter i", 0));
+        leftShooterPID.setD(SmartDashboard.getNumber("shooter d", 0));
+
+        rightShooterPID.setFF(SmartDashboard.getNumber("shooter ff", 0));
+        leftShooterPID.setFF(SmartDashboard.getNumber("shooter ff", 0));
     }
     public void AutoFire(){
         isFiring = true;
@@ -210,7 +228,9 @@ public class Shooter extends SubsystemBase{
         IntakeLevel = IntakeLevels.NotRunning;
         isAmpScoring = 0;
     }
-
+    public double getRPM(){
+        return leftShooter.getEncoder().getVelocity();
+    }
     public void ReverseIndex(){
         IntakeLevel = IntakeLevels.Shooting;
         isAmpScoring = 3;

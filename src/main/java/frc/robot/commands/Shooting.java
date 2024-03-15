@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import java.util.stream.IntStream;
 
 import org.opencv.core.Mat;
 
@@ -15,20 +16,26 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.*;
+//import org.apache.commons.math3.geometry.euclidean.threed;
 
 public class Shooting extends Command {
      // TODO: pos
-     private Translation3d BluegoalPose = new Translation3d(-0.1651+0.1, 5.5408, 2.15 - 0.05);
+     private Translation3d[] BluegoalPose = new Translation3d[]{new Translation3d(-0.1651+0.05, 5.5408, 2.15 - 0.05), new Translation3d(-0.1651+0.05, 5.5408, 2.15 - 0.05)};
      // private Translation3d RedgoalPose = new Translation3d(16.706342, 5.5408, 2.2);
-     private Translation3d RedgoalPose = new Translation3d(16.706342-0.1, 5.5408, 2.15 + 0.02);
-
+     private Translation3d[] RedgoalPose = new Translation3d[]{
+          new Translation3d(16.706342, 5.5408 - (23.25/39.37), (80/39.37)), 
+          new Translation3d(16.706342- (21/39.37), 5.5408 - (23.25/39.37), (83/39.37)), 
+          new Translation3d(16.706342, 5.5408 + (23.25/39.37), (80/39.37)),
+          new Translation3d(16.706342 - (21/39.37), 5.5408 + (23.25/39.37), (83/39.37))
+     }; //the 20 was 23.25
 
      // SIDE FLIP
-     private Translation3d GoalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
+     private Translation3d[] GoalPoses = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
 
     private Shooter mShooter;
     private Pivot mPivot;
@@ -80,6 +87,8 @@ public class Shooting extends Command {
      private double f = 0;
 
      private double rotationVal = 0;
+     private Timer shootTimer = new Timer();
+
     public Shooting(
           Shooter m_shooter, 
           Pivot m_Pivot,
@@ -98,6 +107,7 @@ public class Shooting extends Command {
           SmartDashboard.putNumber("Rot P", 10);
           SmartDashboard.putNumber("Rot I", 0);
           SmartDashboard.putNumber("Rot D", 0);
+
         this.translationSup = translationSup;
         this.strafeSup = strafeSup;
         rotController.enableContinuousInput(-Math.PI, Math.PI);
@@ -106,11 +116,15 @@ public class Shooting extends Command {
     @Override
     public void initialize(){
         rotController.setTolerance(Math.toRadians(Constants.Subsystems.rotTolerance));
-        GoalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
+        GoalPoses = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
+        shootTimer.reset();
+        shootTimer.stop();
+        rotController.setIZone(Math.toRadians(10));
     }
 
     @Override
     public void execute(){
+          mShooter.AutoFire();
           // # g = 9.81
           // # A = proj_pos.x
           // # B = proj_pos.y
@@ -127,52 +141,95 @@ public class Shooting extends Command {
           Q = 0;
           R = -mSwerve.getChassisSpeeds().vyMetersPerSecond;
           // Note Postion
-          A = mSwerve.getPose().getX() + (-P*0.05);
+          A = mSwerve.getPose().getX();
           B = 0.4572;
-          C = mSwerve.getPose().getY()+ (-R*0.5);
+          C = mSwerve.getPose().getY();
 
           //TODO change goal pose to be set based on color
-          M = GoalPose.getX();
-          N = GoalPose.getZ();
-          O = GoalPose.getY();
-          S = 12;
-
-          SmartDashboard.putNumber("x velocity", P);
-          SmartDashboard.putNumber("y velocity", R);
-
-          H = M - A;
-          J = O - C;
-          K = N - B;
-          L = -0.5 * G;
-
-          c0 = L*L;
-          c1 = -2*Q*L;
-          c2 = Q*Q - 2*K*L - S*S + P*P + R*R;
-          c3 = 2*K*Q + 2*H*P + 2*J*R;
-          c4 = K*K + H*H + J*J;
-          double[] ts = solveQuartic(c0, c1, c2, c3, c4);
-          double t = 1000000000;
           rotationVal = 0;
-          if(ts != null){
-               for (int i=0; i<ts.length; i++){
-                    if (ts[i] >= 0 & ts[i]<t){
-                         t = ts[i];
+          d = 0;
+          e = 0;
+          f = 0;
+          S = 11.5;
+          boolean doesExist = true;
+          ShooterAngle = 0;
+          RobotAngle = 0;
+          for(Translation3d GoalPose : GoalPoses) {
+               M = GoalPose.getX();
+               N = GoalPose.getZ();
+               O = GoalPose.getY();
+
+               SmartDashboard.putNumber("x velocity", P);
+               SmartDashboard.putNumber("y velocity", R);
+
+               H = M - A;
+               J = O - C;
+               K = N - B;
+               L = -0.5 * G;
+
+               c0 = L*L;
+               c1 = -2*Q*L;
+               c2 = Q*Q - 2*K*L - S*S + P*P + R*R;
+               c3 = 2*K*Q + 2*H*P + 2*J*R;
+               c4 = K*K + H*H + J*J;
+               double[] ts = solveQuartic(c0, c1, c2, c3, c4);  
+               double t = 1000000000;
+               if(ts != null){
+                    for (int i=0; i<ts.length; i++){
+                         if (ts[i] >= 0 & ts[i]<t){
+                              t = ts[i];
+                         }
                     }
-               }
-               d = ((H+P*t)/t);
-               e = ((K+Q*t-L*t*t)/t);
-               f = ((J+R*t)/t);
+                    d += ((H+P*t)/t);
+                    e += ((K+Q*t-L*t*t)/t);
+                    f += ((J+R*t)/t);
+                    ShooterAngle = Math.atan2(e, Math.sqrt(Math.pow(d,2) + Math.pow(f,2)));
+                    RobotAngle = Math.atan2(f, d);   
+                    System.out.println(Math.toDegrees(ShooterAngle));                 
+                    
+               }else{
+                    System.out.println("Cannot Shoot");
+                    doesExist = false;
+               }       
+          }
+          SmartDashboard.putBoolean("Shooter At Setpoint", mShooter.CanShoot());
+          SmartDashboard.putBoolean("Rotation At Setpoint", rotController.atSetpoint());
+          SmartDashboard.putBoolean("Pivot At Setpoint", mPivot.AtSetpoint());
+          if(doesExist){
+               d = d/4;
+               e = e/4;
+               f = f/4;
+
+
 
                ShooterAngle = Math.atan2(e, Math.sqrt(Math.pow(d,2) + Math.pow(f,2)));
                RobotAngle = Math.atan2(f, d);
-               rotController.setIZone(Math.toRadians(5));
+
 
                rotController.setSetpoint(RobotAngle);
-
-
                mPivot.toSetpoint(Math.toDegrees(ShooterAngle));
+               SmartDashboard.putNumber("Shooter Angle", Math.toDegrees(ShooterAngle));
+               SmartDashboard.putNumber("Rotation Angle", Math.toDegrees(RobotAngle));
                rotationVal = MathUtil.clamp(rotController.calculate(mSwerve.getPose().getRotation().getRadians()), -Constants.Swerve.maxAngularVelocity, Constants.Swerve.maxAngularVelocity);
           }
+
+          
+
+
+          if (rotController.atSetpoint()&& mShooter.CanShoot() && mPivot.AtSetpoint()){
+               SmartDashboard.putBoolean("Can Shoot", true);
+               shootTimer.start();
+          }
+          if(shootTimer.hasElapsed(0.2)){
+               if(rotController.atSetpoint() && mPivot.AtSetpoint() && mShooter.CanShoot()){
+                    mIndex.runIndex(1);
+               }else{
+                    shootTimer.reset();
+                    shootTimer.stop();
+               }
+          }   
+          SmartDashboard.putNumber("x velocity", P);
+          SmartDashboard.putNumber("y velocity", R);
  
           double translationVal =
                translationLimiter.calculate(
@@ -189,14 +246,12 @@ public class Shooting extends Command {
           }
           if(shooterOverridden.getAsBoolean()){
                mIndex.runIndex(1);
-          }else{
-               mIndex.stopIndex();
           }
-          mShooter.AutoFire();
+          
 
           /* Drive */
           mSwerve.drive(
-               new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
+               new Translation2d(translationVal, strafeVal).times(2.0),
                rotationVal,
                true,
                true);
@@ -208,6 +263,8 @@ public class Shooting extends Command {
          //mPivot.stop();
          mPivot.toSetpoint(Constants.Subsystems.pivotMin);
          mIndex.stopIndex();
+         shootTimer.reset();
+         shootTimer.stop();
 
      }
 
