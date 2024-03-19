@@ -102,7 +102,7 @@ public class RobotContainer {
         s_Swerve::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         s_Swerve::autoDrive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-            new PIDConstants(6.0, 0.5, 0.01), // Translation PID constants
+            new PIDConstants(7.0, 0.0, 0.0), // Translation PID constants
             new PIDConstants(5.0, 0.5, 0), // Rotation PID constants
             4.5, // Max module speed, in m/s
             0.4, // Drive base radius in meters. Distance from robot center to furthest module.
@@ -170,7 +170,7 @@ public class RobotContainer {
             ));
     // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     joysticks.toWaypoint.whileTrue(new SequentialCommandGroup(
-      s_Swerve.driveToWaypoint(new Pose2d(((DriverStation.getAlliance().get()==DriverStation.Alliance.Blue)?(72.5/39.37):(578.77/39.37)), (323.00/39.37) - 1.5, Rotation2d.fromDegrees(90))),
+      s_Swerve.driveToWaypoint(new Pose2d(((DriverStation.getAlliance().get()==DriverStation.Alliance.Blue)?(72.5/39.37):(578.77/39.37)), (323.00/39.37) - 2, Rotation2d.fromDegrees(90))),
       new WaitCommand(0.2),
       new GetToAmp(s_Swerve, false)
     ));

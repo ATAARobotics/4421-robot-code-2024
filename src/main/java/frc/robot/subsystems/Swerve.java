@@ -101,6 +101,7 @@ public class Swerve extends SubsystemBase {
 
     for (SwerveModule mod : mSwerveMods) {
       mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
+      SmartDashboard.putNumber("Mod "+mod.moduleNumber + " velocity commanded", swerveModuleStates[mod.moduleNumber].speedMetersPerSecond);
     }
   }
   public void autoDrive(ChassisSpeeds speeds) {
@@ -225,7 +226,7 @@ public class Swerve extends SubsystemBase {
 
 
     if (Math.abs(pose[0]) >= 0.1) {
-      // PoseEstimator.addVisionMeasurement(new Pose2d(poseX, poseY, poseR), timeStamp);
+      PoseEstimator.addVisionMeasurement(new Pose2d(poseX, poseY, poseR), timeStamp);
       double angleError = Math.abs(getYaw().minus(poseR).getDegrees());
       if(!DriverStation.isEnabled()){
         gyro.setYaw(poseR.getDegrees());

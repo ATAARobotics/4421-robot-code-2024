@@ -7,6 +7,7 @@ import java.util.stream.IntStream;
 import org.opencv.core.Mat;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -25,7 +26,12 @@ import frc.robot.subsystems.*;
 
 public class Shooting extends Command {
      // TODO: pos
-     private Translation3d[] BluegoalPose = new Translation3d[]{new Translation3d(-0.1651+0.05, 5.5408, 2.15 - 0.05), new Translation3d(-0.1651+0.05, 5.5408, 2.15 - 0.05)};
+     private Translation3d[] BluegoalPose = new Translation3d[]{
+          new Translation3d(-0.1651+0.05, 5.5408, 2.15 - 0.05), 
+          new Translation3d(-0.1651+0.05, 5.5408, 2.15 - 0.05), 
+          new Translation3d(-0.1651+0.05, 5.5408, 2.15 - 0.05), 
+          new Translation3d(-0.1651+0.05, 5.5408, 2.15 - 0.05)
+     };
      // private Translation3d RedgoalPose = new Translation3d(16.706342, 5.5408, 2.2);
      private Translation3d[] RedgoalPose = new Translation3d[]{
           new Translation3d(16.706342, 5.5408 - (23.25/39.37), (80/39.37)), 
@@ -150,7 +156,7 @@ public class Shooting extends Command {
           d = 0;
           e = 0;
           f = 0;
-          S = 11.5;
+          S = 12;
           boolean doesExist = true;
           ShooterAngle = 0;
           RobotAngle = 0;
@@ -220,7 +226,7 @@ public class Shooting extends Command {
                SmartDashboard.putBoolean("Can Shoot", true);
                shootTimer.start();
           }
-          if(shootTimer.hasElapsed(0.2)){
+          if(shootTimer.hasElapsed(0.1)){
                if(rotController.atSetpoint() && mPivot.AtSetpoint() && mShooter.CanShoot()){
                     mIndex.runIndex(1);
                }else{

@@ -32,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Four note (speaker notes) - intake 3"
+            "pathName": "Copy of Four note (speaker notes) - intake 3"
           }
         },
         {
@@ -56,6 +56,6 @@
       ]
     }
   },
-  "folder": "Victoria",
+  "folder": null,
   "choreoAuto": false
 }
