@@ -4,6 +4,10 @@ import java.util.Optional;
 import java.util.function.BooleanSupplier;
 
 import org.opencv.core.Mat;
+import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 import com.ctre.phoenix.sensors.Pigeon2.AxisDirection;
@@ -15,11 +19,16 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -56,6 +65,15 @@ public class Swerve extends SubsystemBase {
 
   private BooleanSupplier hasNote;
 
+  private PhotonCamera camera = new PhotonCamera("Arducam_OV2311_USB_Camera");
+
+  private Transform3d robotToCam;
+
+  private AprilTagFieldLayout layout;
+
+  private PhotonPoseEstimator photonEstimator;
+
+
   public Swerve() {
     // this.hasNote = hasNote;
     gyro = new Pigeon2(Constants.Swerve.pigeonID);
@@ -86,6 +104,12 @@ public class Swerve extends SubsystemBase {
   
     lastPose = PoseEstimator.getEstimatedPosition();
     Rotation2dOut = Rotation2d.fromDegrees(0);
+
+    layout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+
+    robotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0));
+
+    photonEstimator = new PhotonPoseEstimator(layout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
 
   }
 
@@ -181,6 +205,11 @@ public class Swerve extends SubsystemBase {
   }
   @Override
   public void periodic() {
+    Optional<EstimatedRobotPose> photonPose = photonEstimator.update();
+    if (photonPose.isPresent()) {
+      EstimatedRobotPose pose = photonPose.get();
+      PoseEstimator.addVisionMeasurement(pose.estimatedPose.toPose2d(), pose.timestampSeconds);
+    }
     // pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
     // double poseX = pose[0];
     // double poseY = pose[1];
