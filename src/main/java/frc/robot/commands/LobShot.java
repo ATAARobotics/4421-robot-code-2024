@@ -24,20 +24,14 @@ import frc.robot.Constants;
 import frc.robot.subsystems.*;
 //import org.apache.commons.math3.geometry.euclidean.threed;
 
-public class Shooting extends Command {
+public class LobShot extends Command {
      // TODO: pos
      private Translation3d[] BluegoalPose = new Translation3d[]{
-          new Translation3d(-0.1651+0.05, 5.5408, 2.15 - 0.05), 
-          new Translation3d(-0.1651+0.05, 5.5408, 2.15 - 0.05), 
-          new Translation3d(-0.1651+0.05, 5.5408, 2.15 - 0.05), 
           new Translation3d(-0.1651+0.05, 5.5408, 2.15 - 0.05)
      };
      // private Translation3d RedgoalPose = new Translation3d(16.706342, 5.5408, 2.2);
      private Translation3d[] RedgoalPose = new Translation3d[]{
-          new Translation3d(16.706342, 5.5408 - (23.25/39.37), (80/39.37)), 
-          new Translation3d(16.706342- (21/39.37), 5.5408 - (23.25/39.37), (83/39.37)), 
-          new Translation3d(16.706342, 5.5408 + (23.25/39.37), (80/39.37)),
-          new Translation3d(16.706342 - (21/39.37), 5.5408 + (23.25/39.37), (83/39.37))
+          new Translation3d(16.706342-2, 5.5408, (5/39.37))
      }; //the 20 was 23.25
 
      // SIDE FLIP
@@ -95,7 +89,7 @@ public class Shooting extends Command {
      private double rotationVal = 0;
      private Timer shootTimer = new Timer();
 
-    public Shooting(
+    public LobShot(
           Shooter m_shooter, 
           Pivot m_Pivot,
           Index m_Index,
@@ -130,7 +124,7 @@ public class Shooting extends Command {
 
     @Override
     public void execute(){
-          mShooter.AutoFire();
+          mShooter.LobFire();
           // # g = 9.81
           // # A = proj_pos.x
           // # B = proj_pos.y
@@ -143,12 +137,9 @@ public class Shooting extends Command {
           // # R = target_velocity.z
           // # S = proj_speed;
           //velocity
-          // P = -mSwerve.getChassisSpeeds().vxMetersPerSecond;
-          Translation2d vec = mSwerve.getVelocityFromChassisSpeeds();
-          P = -vec.getX();
+          P = -mSwerve.getChassisSpeeds().vxMetersPerSecond;
           Q = 0;
-          // R = -mSwerve.getChassisSpeeds().vyMetersPerSecond;
-          R = -vec.getY();
+          R = -mSwerve.getChassisSpeeds().vyMetersPerSecond;
           // Note Postion
           A = mSwerve.getPose().getX();
           B = 0.4572;
@@ -159,7 +150,7 @@ public class Shooting extends Command {
           d = 0;
           e = 0;
           f = 0;
-          S = 12;
+          S = 25;
           boolean doesExist = true;
           ShooterAngle = 0;
           RobotAngle = 0;
@@ -182,10 +173,10 @@ public class Shooting extends Command {
                c3 = 2*K*Q + 2*H*P + 2*J*R;
                c4 = K*K + H*H + J*J;
                double[] ts = solveQuartic(c0, c1, c2, c3, c4);  
-               double t = 1000000000;
+               double t = 0;
                if(ts != null){
                     for (int i=0; i<ts.length; i++){
-                         if (ts[i] >= 0 & ts[i]<t){
+                         if (ts[i] >= 0 & ts[i]>t){
                               t = ts[i];
                          }
                     }
@@ -205,38 +196,26 @@ public class Shooting extends Command {
           SmartDashboard.putBoolean("Rotation At Setpoint", rotController.atSetpoint());
           SmartDashboard.putBoolean("Pivot At Setpoint", mPivot.AtSetpoint());
           if(doesExist){
-               d = d/4;
-               e = e/4;
-               f = f/4;
+               d = d/1;
+               e = e/1;
+               f = f/1;
 
 
 
-               ShooterAngle = Math.atan2(e, Math.sqrt(Math.pow(d,2) + Math.pow(f,2)));
                RobotAngle = Math.atan2(f, d);
 
 
                rotController.setSetpoint(RobotAngle);
-               mPivot.toSetpoint(Math.toDegrees(ShooterAngle));
+               mPivot.toSetpoint(45);
                SmartDashboard.putNumber("Shooter Angle", Math.toDegrees(ShooterAngle));
                SmartDashboard.putNumber("Rotation Angle", Math.toDegrees(RobotAngle));
                rotationVal = MathUtil.clamp(rotController.calculate(mSwerve.getPose().getRotation().getRadians()), -Constants.Swerve.maxAngularVelocity, Constants.Swerve.maxAngularVelocity);
           }
 
-          
+          mPivot.toSetpoint(45);
 
 
-          if (rotController.atSetpoint()&& mShooter.CanShoot() && mPivot.AtSetpoint()){
-               SmartDashboard.putBoolean("Can Shoot", true);
-               shootTimer.start();
-          }
-          if(shootTimer.hasElapsed(0.1)){
-               if(rotController.atSetpoint() && mPivot.AtSetpoint() && mShooter.CanShoot()){
-                    mIndex.runIndex(1);
-               }else{
-                    shootTimer.reset();
-                    shootTimer.stop();
-               }
-          }   
+    
           SmartDashboard.putNumber("x velocity", P);
           SmartDashboard.putNumber("y velocity", R);
  
@@ -247,12 +226,6 @@ public class Shooting extends Command {
                strafeLimiter.calculate(
                     MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.Swerve.stickDeadband));
           
-          if ((rotController.atSetpoint() && mShooter.CanShoot() && mPivot.AtSetpoint())){
-               SmartDashboard.putBoolean("Can Shoot", true);    
-          }
-          else{
-               SmartDashboard.putBoolean("Can Shoot", false);
-          }
           if(shooterOverridden.getAsBoolean()){
                mIndex.runIndex(1);
           }

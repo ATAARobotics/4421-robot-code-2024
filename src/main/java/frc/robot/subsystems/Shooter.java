@@ -22,6 +22,7 @@ import frc.robot.subsystems.*;
 
 public class Shooter extends SubsystemBase{
     private boolean isFiring = false;
+    private boolean isLob = false;
     private boolean isIntaking = false;
     private boolean indexing = false;
     private double indexPower = 0.75;
@@ -123,11 +124,16 @@ public class Shooter extends SubsystemBase{
         SmartDashboard.putBoolean("SHOOTER REVVED", (leftShooter.getEncoder().getVelocity() > 5000));
 
         if(isFiring && isAmpScoring == 0){
-
-
-            leftShooterPID.setReference(Constants.Subsystems.shooterSetPoint, ControlType.kVelocity);
+            if (!isLob) {
+                leftShooterPID.setReference(Constants.Subsystems.shooterSetPoint, ControlType.kVelocity);
+                // leftShooter.set(1);
+                rightShooterPID.setReference(Constants.Subsystems.shooterSetPointAlt, ControlType.kVelocity);                
+            }else{
+            leftShooterPID.setReference(Constants.Subsystems.shooterSetPoint*0.75, ControlType.kVelocity);
             // leftShooter.set(1);
-            rightShooterPID.setReference(Constants.Subsystems.shooterSetPointAlt, ControlType.kVelocity);
+            rightShooterPID.setReference(Constants.Subsystems.shooterSetPointAlt*0.75, ControlType.kVelocity);
+            }
+
             // leftShooterPID.setReference(SmartDashboard.getNumber("Left Shooter Ref", 0), ControlType.kVelocity);
             // rightShooterPID.setReference(SmartDashboard.getNumber("Right Shooter Ref", 0), ControlType.kVelocity);
             // leftShooter.set(SmartDashboard.getNumber("left shooter p%", 0));
@@ -157,8 +163,8 @@ public class Shooter extends SubsystemBase{
                     }                    
                     break;
                 case 3:
-                    leftShooter.set(-0.5);
-                    rightShooter.set(-0.5);                
+                    leftShooter.set(-0.25);
+                    rightShooter.set(-0.25);                
                     break;
                 default:
                     break;
@@ -213,9 +219,16 @@ public class Shooter extends SubsystemBase{
     }
     public void AutoFire(){
         isFiring = true;
+        isLob = false;
+    }
+    public void LobFire(){
+        isFiring = true;
+        isLob = true;
     }
     public void AutoStop(){
         isFiring = false;
+        isLob = false;
+
     }
     public void Index(){
         IntakeLevel = IntakeLevels.Shooting;

@@ -164,9 +164,13 @@ public class Swerve extends SubsystemBase {
   }
   public ChassisSpeeds getChassisSpeeds(){
     SwerveModuleState[] states = getStates();
-
     return Constants.Swerve.swerveKinematics.toChassisSpeeds(states[0], states[1], states[2], states[3]);
   }
+  public Translation2d getVelocityFromChassisSpeeds(){
+    ChassisSpeeds speeds = getChassisSpeeds();
+    return new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond).rotateBy(Rotation2d.fromDegrees(0 - getYaw().getDegrees()));
+  }
+
   public void zeroGyro() {
 
     gyro.setYaw(0);

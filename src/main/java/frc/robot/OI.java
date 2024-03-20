@@ -23,6 +23,7 @@ class OI {
     private double xVelocity;
     private double yVelocity;
     private double rotationVelocity;
+    private double rotationAbs;
     private boolean toggleFieldOriented;
     private double speed;
     private boolean override = false;
@@ -46,6 +47,7 @@ class OI {
     public JoystickButton pivotUp;
     public JoystickButton pivotDown;
     public JoystickButton pivotGoSetpoint;
+    public JoystickButton lobShot;
 
     public OI() {
         // Configure the button bindings
@@ -80,6 +82,7 @@ class OI {
         ShooterIntake = gunnerStick.getWPIJoystickButton("ShooterIntake");
         OverrideShooter = gunnerStick.getWPIJoystickButton("OverrideShooter");
         ReallyOverrideShooter = gunnerStick.getWPIJoystickButton("ReallyOverrideShooter");
+        lobShot = gunnerStick.getWPIJoystickButton("lobShot");
         
         // pivotGoSetpoint = gunnerStick.getWPIJoystickButton("pivotGoSetpoint");
 
@@ -122,6 +125,7 @@ class OI {
         xVelocity = -driveStick.getAnalog("XVelocity");
         yVelocity = -driveStick.getAnalog("YVelocity");
         rotationVelocity = rotationStick.getAnalog("XVelocity");
+        rotationAbs = rotationStick.getAnalog("YVelocity");
         //rotationVelocity = driveStick.getAnalog("RotationVelocity");
 
         speed = (-driveStick.getAnalog("Speed") + 1) / 4 + 0.5;
@@ -157,6 +161,9 @@ class OI {
     }
 
     public double getRotationVelocity() {
+        return -rotationVelocity;
+    }
+    public double getRotationUp() {
         return -rotationVelocity;
     }
 

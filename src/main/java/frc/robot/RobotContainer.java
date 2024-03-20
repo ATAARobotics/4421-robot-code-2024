@@ -65,6 +65,7 @@ public class RobotContainer {
   public SendableChooser<Command> autoChooser;
   public Command AutoCommand;
   private Shooting shoot;
+  private LobShot lobShot;
   private AutoShooter autoShoot;
 
 
@@ -86,6 +87,8 @@ public class RobotContainer {
 
     s_Swerve = new Swerve();
     shoot = new Shooting(m_Shooter, mPivot, m_Index, s_Swerve,joysticks::getXVelocity,
+        joysticks::getYVelocity, () -> joysticks.OverrideShooter.getAsBoolean());
+    lobShot = new LobShot(m_Shooter, mPivot, m_Index, s_Swerve,joysticks::getXVelocity,
         joysticks::getYVelocity, () -> joysticks.OverrideShooter.getAsBoolean());
     autoShoot = new AutoShooter(m_Shooter, mPivot, m_Index, s_Swerve);
     intake = new IntakeCommand(m_Intake, m_Index);
@@ -125,7 +128,8 @@ public class RobotContainer {
             s_Swerve,
             joysticks::getXVelocity, // translation
             joysticks::getYVelocity, // strafe
-            joysticks::getRotationVelocity // rotation
+            joysticks::getRotationVelocity,
+            joysticks::getRotationUp // rotation
             ));
 
     // PPHolonomicDriveController.setRotationTargetOverride(() -> s_Swerve.getRotationTargetOverride());
@@ -166,7 +170,16 @@ public class RobotContainer {
             s_Swerve,
             joysticks::getXVelocity,
             joysticks::getYVelocity,
-            joysticks::getRotationVelocity
+            joysticks::getRotationVelocity,
+            joysticks::getRotationUp
+            ));
+    joysticks.lobShot.whileTrue(lobShot)
+    .onFalse(new TeleopSwerve(
+            s_Swerve,
+            joysticks::getXVelocity,
+            joysticks::getYVelocity,
+            joysticks::getRotationVelocity,
+            joysticks::getRotationUp
             ));
     // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     joysticks.toWaypoint.whileTrue(new SequentialCommandGroup(
@@ -186,6 +199,7 @@ public class RobotContainer {
             s_Swerve,
             () -> 0.25, // translation
             () -> 0, // strafe
+            () -> 0,
             () -> 0 // rotation
             ));
 
