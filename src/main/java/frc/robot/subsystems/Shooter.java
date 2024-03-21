@@ -174,23 +174,29 @@ public class Shooter extends SubsystemBase{
 
 
     public void scoreAmp(Index sIndex, Pivot sPivot){
-        if(isAmpScoring != 4){
-            if (isAmpScoring != 3 && isAmpScoring != 1){
-                isAmpScoring = 1;
-                sIndex.index.set(1); 
-                sPivot.toSetpoint(114); 
+        if(isAmpScoring == 0){
+            sPivot.toSetpoint(80); 
+            isAmpScoring = 5;
+        }else{
+            if(isAmpScoring != 4){
+                if (isAmpScoring != 3 && isAmpScoring != 1){
+                    isAmpScoring = 1;
+                    sIndex.index.set(1); 
+                    sPivot.toSetpoint(114); 
+                }
+                else{
+                    sPivot.toSetpoint(Constants.Subsystems.pivotMin);
+                    sIndex.index.set(0);
+                    leftShooter.set(0);
+                    rightShooter.set(0);
+                    isAmpScoring = 0;
+                }
             }
             else{
-                sPivot.toSetpoint(Constants.Subsystems.pivotMin);
-                sIndex.index.set(0);
-                leftShooter.set(0);
-                rightShooter.set(0);
-                isAmpScoring = 0;
+                    isAmpScoring = 3;
             }
         }
-        else{
-                isAmpScoring = 3;
-        }
+
  
     }
     public void stopScoreAmp(Index sIndex){

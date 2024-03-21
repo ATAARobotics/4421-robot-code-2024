@@ -62,7 +62,7 @@ public class Pivot extends SubsystemBase{
         SmartDashboard.putNumber("Pivot Error", (Math.abs(pivotPID.getSetpoint()-pivotEncoder.getAbsolutePosition())));
         double pidVal = pivotPID.calculate(angle);
 
-        if(pivotEncoder.getAbsolutePosition() <= 80){
+        if(pivotEncoder.getAbsolutePosition() <= 75){
             if (GoingToSetpoint){
                 double ffVal = ffConstant*Math.cos(Math.toRadians(angle));
                 speed = MathUtil.clamp(pidVal+ffVal, -1, 1);
