@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
@@ -134,11 +135,11 @@ public class Shooting extends Command {
           // # S = proj_speed;
           //velocity
           // P = -mSwerve.getChassisSpeeds().vxMetersPerSecond;
-          Translation2d vec = mSwerve.getVelocityFromChassisSpeeds();
-          P = -vec.getX();
+          ChassisSpeeds vec = mSwerve.getVelocityFromChassisSpeeds();
+          P = -vec.vxMetersPerSecond;
           Q = 0;
           // R = -mSwerve.getChassisSpeeds().vyMetersPerSecond;
-          R = -vec.getY();
+          R = -vec.vyMetersPerSecond;
           // Note Postion
           A = mSwerve.getPose().getX();
           B = 0.4572;
@@ -147,9 +148,6 @@ public class Shooting extends Command {
           //TODO change goal pose to be set based on color
           rotationVal = 0;
           S = 12;
-          boolean doesExist = true;
-          ShooterAngle = 0;
-          RobotAngle = 0;
           M = GoalPose.getX();
           N = GoalPose.getZ();
           O = GoalPose.getY();
@@ -205,7 +203,6 @@ public class Shooting extends Command {
                }
           }else{
                System.out.println("Cannot Shoot");
-               doesExist = false;
           }       
           
           SmartDashboard.putBoolean("Shooter At Setpoint", mShooter.CanShoot());
