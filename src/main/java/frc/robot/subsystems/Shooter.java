@@ -1,4 +1,6 @@
 package frc.robot.subsystems;
+import java.util.function.BooleanSupplier;
+
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
@@ -280,6 +282,7 @@ public class Shooter extends SubsystemBase{
     }
 
     public boolean hasNote() {
+
         return hasNote;
     }
 

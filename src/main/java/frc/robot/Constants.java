@@ -165,7 +165,6 @@ public final class Constants {
     public static final int leftShooter = 18;
     public static final int rightShooter = 19;
     public static final int shooterPivot = 21;
-
     
 
     public static final double shooterP = 0.00055;
@@ -181,6 +180,7 @@ public final class Constants {
     public static final double ampTime = 0.2;
 
     public static final PIDConstants rotationPID = new PIDConstants(10, 20,1, 5);
+    public static final int CandleID = 35; 
   }
 
   public static final class AutoConstants {
