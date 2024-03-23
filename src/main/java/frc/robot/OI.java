@@ -43,6 +43,7 @@ class OI {
     public JoystickButton OverrideShooter;
     public JoystickButton ReallyOverrideShooter;
     public JoystickButton DriveStraight;
+    public JoystickButton turnToAmp;
 
     public JoystickButton pivotUp;
     public JoystickButton pivotDown;
@@ -75,6 +76,7 @@ class OI {
 
         toWaypoint = driveStick.getWPIJoystickButton("ScoreAmp");
         DriveStraight = driveStick.getWPIJoystickButton("DriveStraight");
+        turnToAmp = rotationStick.getWPIJoystickButton("turnToAmp");
 
         runShooter = gunnerStick.getWPIJoystickButton("Shoot");
         pivotUp = gunnerStick.getWPIJoystickButton("PivotUp");

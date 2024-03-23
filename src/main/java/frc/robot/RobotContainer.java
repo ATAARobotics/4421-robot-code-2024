@@ -65,6 +65,7 @@ public class RobotContainer {
   public final Lighting s_Lighting;
   public SendableChooser<Command> autoChooser;
   public Command AutoCommand;
+  public TurnToAmp TurnToAmp;
   private Shooting shoot;
   private LobShot lobShot;
   private AutoShooter autoShoot;
@@ -93,6 +94,7 @@ public class RobotContainer {
     lobShot = new LobShot(m_Shooter, mPivot, m_Index, s_Swerve,joysticks::getXVelocity,
         joysticks::getYVelocity, () -> joysticks.OverrideShooter.getAsBoolean());
     autoShoot = new AutoShooter(m_Shooter, mPivot, m_Index, s_Swerve);
+    TurnToAmp = new TurnToAmp(s_Swerve);
     intake = new IntakeCommand(m_Intake, m_Index);
     NamedCommands.registerCommand("Intake", intake);
     NamedCommands.registerCommand("Fire Shooter", autoShoot);
@@ -160,11 +162,12 @@ public class RobotContainer {
     // joysticks.intake.onTrue(new InstantCommand(() -> {m_Intake.runIntake(0.3); m_Index.runIndex(1);}));
     // joysticks.intake.onFalse(new InstantCommand(() -> {m_Intake.stopIntake(); m_Index.stopIndex();}));
     joysticks.intake.whileTrue(intake);
+    joysticks.turnToAmp.whileTrue(TurnToAmp);
     joysticks.zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
     joysticks.reverseIntake.onTrue(new InstantCommand(() -> m_Shooter.scoreAmp(m_Index, mPivot)));
     joysticks.runShooter.onTrue(new InstantCommand(m_Shooter::AutoFire));
-
+    
     
 
     joysticks.shooterLock.whileTrue(shoot)
