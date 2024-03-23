@@ -40,13 +40,13 @@ public class Lighting extends SubsystemBase{
     double speed;
 
     Swerve sSwerve;
-    Shooter sShooter;
+    Intake sIntake;
 
     public boolean isEnabled = DriverStation.isEnabled();
 
     public CANdle candle = new CANdle(Constants.Subsystems.CandleID);
 
-    public Lighting(Swerve s_Swerve, Shooter s_Shooter) {
+    public Lighting(Swerve s_Swerve, Intake sIntake) {
         ledCount = 7 + 40; // 7 initial LEDs on the CANdle
 
 
@@ -57,7 +57,7 @@ public class Lighting extends SubsystemBase{
         speed = 0.2;
 
         this.sSwerve = s_Swerve;
-        this.sShooter = s_Shooter;
+        this.sIntake = sIntake;
         
         redFlow = new ColorFlowAnimation(255, 0, 0, 0, speed, ledCount, Direction.Forward);
         greenFlow = new ColorFlowAnimation(0, 255, 0, 0, speed, ledCount, Direction.Backward);
@@ -76,12 +76,12 @@ public class Lighting extends SubsystemBase{
     @Override
     public void periodic() {
 
-        if (isEnabled) {
-            if (sShooter.hasNote()) {
-                candle.animate(redFlow);
+        if (DriverStation.isEnabled()) {
+            if (sIntake.isIntaked()) {
+                candle.setLEDs(255, 0 ,0, 0 ,9, 100000);
             }
             else {
-                candle.animate(greenFlow);
+                candle.setLEDs(0, 255 ,0, 0 ,9, 100000);
 
             }
         }

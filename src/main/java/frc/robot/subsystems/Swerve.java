@@ -16,6 +16,7 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -169,7 +170,7 @@ public class Swerve extends SubsystemBase {
   public ChassisSpeeds getVelocityFromChassisSpeeds(){
     ChassisSpeeds speeds = getChassisSpeeds();
     // return new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond).rotateBy(Rotation2d.fromDegrees(0 - getYaw().getDegrees()));
-    return ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getYaw());
+    return ChassisSpeeds.fromRobotRelativeSpeeds(speeds, getYaw());
   }
 
   public void zeroGyro() {
@@ -211,7 +212,7 @@ public class Swerve extends SubsystemBase {
 
   @Override
   public void periodic() {
-    
+    poseX = 0;
     try {
       pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
       poseX = pose[0];
@@ -219,7 +220,42 @@ public class Swerve extends SubsystemBase {
       poseR = Rotation2d.fromDegrees(pose[5]);
       timeStamp = Timer.getFPGATimestamp() - (pose[6] / 1000.0);
       SmartDashboard.putBoolean("Limelight Status", true);
+      Pose2d visionBotPose = new Pose2d(poseX, poseY, poseR);
 
+
+    // distance from current pose to vision estimated pose
+      double poseDifference = PoseEstimator.getEstimatedPosition().getTranslation().getDistance(visionBotPose.getTranslation());
+
+    if (Math.abs(pose[0]) >= 0.1) {
+      double xyStds;
+      double degStds;
+      // multiple targets detected
+      if (pose[7] >= 2) {
+        if(!DriverStation.isEnabled()){
+          gyro.setYaw(poseR.getDegrees());
+        }
+        xyStds = 0.5;
+        degStds = 6;
+      }
+      // 1 target with large area and close to estimated pose
+      else if (pose[9]> 0.8 && poseDifference < 0.5) {
+        xyStds = 1.0;
+        degStds = 12;
+      }
+      // 1 target farther away and estimated pose is close
+      else if (pose[9] > 0.1 && poseDifference < 0.3) {
+        xyStds = 2.0;
+        degStds = 30;
+      }
+      // conditions don't match to add a vision measurement
+      else {
+        return;
+      }
+
+      PoseEstimator.setVisionMeasurementStdDevs(
+          VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
+      PoseEstimator.addVisionMeasurement(visionBotPose, timeStamp);
+    }
     } catch (Exception e) {
       DriverStation.reportError("LIMELIGHT FAIL: RESTART ROBOT CODE", e.getStackTrace());
       SmartDashboard.putBoolean("Limelight Status", false);
@@ -227,17 +263,6 @@ public class Swerve extends SubsystemBase {
    
     SmartDashboard.putNumber("Pose Estimator ", PoseEstimator.getEstimatedPosition().getRotation().getDegrees());
     SmartDashboard.putNumber("Get Yaw ", getYaw().getDegrees());
-    
-
-
-    if (Math.abs(pose[0]) >= 0.1) {
-      PoseEstimator.addVisionMeasurement(new Pose2d(poseX, poseY, poseR), timeStamp);
-      double angleError = Math.abs(getYaw().minus(poseR).getDegrees());
-      if(!DriverStation.isEnabled()){
-        gyro.setYaw(poseR.getDegrees());
-      }
-      //PoseEstimator.resetPosition(poseR, getPositions(), new Pose2d(poseX, poseY, poseR));
-    }
 
     PoseEstimator.update(getYaw(), getPositions());
     vecPose = new Pose2d((PoseEstimator.getEstimatedPosition().getX() - lastPose.getX())/ (Timer.getFPGATimestamp()-lastTimeStamp), (PoseEstimator.getEstimatedPosition().getY() - lastPose.getY())/(Timer.getFPGATimestamp()-lastTimeStamp), PoseEstimator.getEstimatedPosition().getRotation());
@@ -269,21 +294,21 @@ public class Swerve extends SubsystemBase {
     //Rotatvoiion2d.fromDegrees(ang);
     Rotation2dOut = Rotation2d.fromDegrees(ang);
  }
-//  public void setAutoLock(boolean lockState){
-//     autoLock = lockState;
-//     System.out.println(lockState);
-//  }
-//   public Optional<Rotation2d> getRotationTargetOverride(){
-//     if(autoLock) {
-//       System.out.println("hey we locking n shit");
-//       // Return an optional containing the rotation override (this should be a field relative rotation)
-//       return Optional.of(Rotation2dOut);
-//     } else {
-//         System.out.println("not locked");
-//         // return an empty optional when we don't want to override the path's rotation
-//         return Optional.empty();
-//     }
-//   }
+ public void setAutoLock(boolean lockState){
+    autoLock = lockState;
+    System.out.println(lockState);
+ }
+  public Optional<Rotation2d> getRotationTargetOverride(){
+    if(autoLock) {
+      System.out.println("hey we locking n shit");
+      // Return an optional containing the rotation override (this should be a field relative rotation)
+      return Optional.of(Rotation2dOut);
+    } else {
+        System.out.println("not locked");
+        // return an empty optional when we don't want to override the path's rotation
+        return Optional.empty();
+    }
+  }
 
   public Command driveToWaypoint(Pose2d targetPose){
 

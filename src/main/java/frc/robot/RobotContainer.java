@@ -87,7 +87,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Stop Index", new InstantCommand(m_Index::stopIndex));
 
     s_Swerve = new Swerve();
-    s_Lighting = new Lighting(s_Swerve, m_Shooter);
+    s_Lighting = new Lighting(s_Swerve, m_Intake);
     shoot = new Shooting(m_Shooter, mPivot, m_Index, s_Swerve,joysticks::getXVelocity,
         joysticks::getYVelocity, () -> joysticks.OverrideShooter.getAsBoolean());
     lobShot = new LobShot(m_Shooter, mPivot, m_Index, s_Swerve,joysticks::getXVelocity,
@@ -134,7 +134,7 @@ public class RobotContainer {
             joysticks::getRotationUp // rotation
             ));
 
-    // PPHolonomicDriveController.setRotationTargetOverride(() -> s_Swerve.getRotationTargetOverride());
+    PPHolonomicDriveController.setRotationTargetOverride(() -> s_Swerve.getRotationTargetOverride());
     // Configure the button bindings
     autoChooser = AutoBuilder.buildAutoChooser();
   
@@ -185,8 +185,8 @@ public class RobotContainer {
             ));
     // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     joysticks.toWaypoint.whileTrue(new SequentialCommandGroup(
-      s_Swerve.driveToWaypoint(new Pose2d(((DriverStation.getAlliance().get()==DriverStation.Alliance.Blue)?(72.5/39.37):(578.77/39.37)), (323.00/39.37) - 2, Rotation2d.fromDegrees(90))),
-      new WaitCommand(0.2),
+      // s_Swerve.driveToWaypoint(new Pose2d(((DriverStation.getAlliance().get()==DriverStation.Alliance.Blue)?(72.5/39.37):(578.77/39.37)), (323.00/39.37) - 2, Rotation2d.fromDegrees(90))),
+      // new WaitCommand(0.2),
       new GetToAmp(s_Swerve, false)
     ));
 

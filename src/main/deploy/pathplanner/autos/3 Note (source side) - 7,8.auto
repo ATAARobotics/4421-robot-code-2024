@@ -6,28 +6,9 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Four note (speaker notes) - shoot 1"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Fire Shooter"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "Four note (speaker notes) - intake 2"
+            "pathName": "3 Note (7,8) - shoot 1"
           }
         },
         {
@@ -39,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Four note (speaker notes) - intake 4"
+            "pathName": "3 Note (7,8) - intake 2"
           }
         },
         {
@@ -51,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Four note (speaker notes) - intake 3"
+            "pathName": "3 Note (7,8) - intaek 3"
           }
         },
         {

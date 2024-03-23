@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
@@ -24,14 +25,14 @@ import frc.robot.Constants;
 import frc.robot.subsystems.*;
 
 public class AutoShooter extends Command {
-     private Translation3d[] BluegoalPose = new Translation3d[]{new Translation3d(-0.1651+0.05, 5.5408, 2.15 - 0.05), new Translation3d(-0.1651+0.05, 5.5408, 2.15 - 0.05)};
+     private Translation3d BluegoalPose = new Translation3d((8.84/39.37), 5.5408, (80.91/39.37));
      // private Translation3d RedgoalPose = new Translation3d(16.706342, 5.5408, 2.2);
-     private Translation3d[] RedgoalPose = new Translation3d[]{new Translation3d(16.706342-0.05, 5.5408, 2.15 +0.02), new Translation3d(16.706342-0.05, 5.5408, 2.15 +0.02)}; 
+     private Translation3d RedgoalPose = new Translation3d((642.38/39.37), 5.5408, (80.91/39.37)); //the 20 was 23.25
 
 
 
      // SIDE FLIP
-     private Translation3d[] GoalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
+     private Translation3d GoalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
 
     private Shooter mShooter;
     private Swerve mSwerve;
@@ -97,7 +98,7 @@ public class AutoShooter extends Command {
         this.mIndex = m_Index;
         this.mPivot = m_Pivot;      
 
-        addRequirements(mShooter, m_Index);
+        addRequirements(mShooter);
           SmartDashboard.putNumber("Rot P", 0);
           SmartDashboard.putNumber("Rot I", 0);
           SmartDashboard.putNumber("Rot D", 0);
@@ -124,6 +125,7 @@ public class AutoShooter extends Command {
 
     @Override
     public void execute(){
+          mSwerve.setAutoLock(true);
           // # g = 9.81
           // # A = proj_pos.x
           // # B = proj_pos.y
@@ -137,19 +139,21 @@ public class AutoShooter extends Command {
           // # S = proj_speed;
           // Note Postion
           //velocity
-          P = -mSwerve.getChassisSpeeds().vxMetersPerSecond;
+          ChassisSpeeds vec = mSwerve.getVelocityFromChassisSpeeds();
+          P = -vec.vxMetersPerSecond;
           Q = 0;
-          R = -mSwerve.getChassisSpeeds().vyMetersPerSecond;
+          // R = -mSwerve.getChassisSpeeds().vyMetersPerSecond;
+          R = -vec.vyMetersPerSecond;
           // Note Postion
           A = mSwerve.getPose().getX() + (-P*0.05);
           B = 0.4572;
           C = mSwerve.getPose().getY()+ (-R*0.05);
 
           //TODO change goal pose to be set based on color
-          M = GoalPose[0].getX();
-          N = GoalPose[0].getZ();
-          O = GoalPose[0].getY();
-          S = 12;
+          M = GoalPose.getX();
+          N = GoalPose.getZ();
+          O = GoalPose.getY();
+          S = 11.8;
 
           H = M - A;
           J = O - C;
@@ -197,15 +201,18 @@ public class AutoShooter extends Command {
                     mIndex.runIndex(1);
                     indexTimer.start();
                }
-               // mSwerve.setAutoAngle(Math.toDegrees(RobotAngle));
+               mSwerve.setAutoAngle(Math.toDegrees(RobotAngle));
                mPivot.toSetpoint(Math.toDegrees(ShooterAngle));
                rotationVal = MathUtil.clamp(rotController.calculate(mSwerve.getPose().getRotation().getRadians()), -Constants.Swerve.maxAngularVelocity, Constants.Swerve.maxAngularVelocity);
           }
-          mSwerve.drive(
-               new Translation2d(0, 0).times(Constants.Swerve.maxSpeed),
-               rotationVal,
-               true,
-               true);
+          if (Math.abs(P) <= 0.01 || Math.abs(R) <= 0.01){
+               mSwerve.drive(
+                    new Translation2d(0, 0).times(Constants.Swerve.maxSpeed),
+                    rotationVal,
+                    true,
+                    true);
+          }
+
      }
      @Override
      public boolean isFinished() {
@@ -214,11 +221,11 @@ public class AutoShooter extends Command {
      @Override
      public void end(boolean interrupted) {
           System.out.println("Auto Shooter Ended");
-          // mSwerve.setAutoLock(false);
-     //    mPivot.stop();
+          mSwerve.setAutoLock(false);
+     //  mPivot.stop();
 
          // actuator down
-          mPivot.toSetpoint(Constants.Subsystems.pivotMin);
+          // mPivot.toSetpoint(Constants.Subsystems.pivotMin);
      }
 
 

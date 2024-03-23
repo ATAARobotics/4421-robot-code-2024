@@ -3,10 +3,11 @@
   "robotLength": 0.53,
   "holonomicMode": true,
   "pathFolders": [
-    "3 Note (source side) - 6,7",
+    "3 Note (amp side) - 1,4",
     "3 Note (centre speaker) - 2,6",
+    "3 Note (source side) - 6,7",
     "4 note (centre speaker) - 2,1,3",
-    "3 Note (amp side) - 1,4"
+    "3 Note (source side) - 7,8"
   ],
   "autoFolders": [
     "Victoria"

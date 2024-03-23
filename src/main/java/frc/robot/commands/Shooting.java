@@ -53,12 +53,15 @@ public class Shooting extends Command {
      private SlewRateLimiter translationLimiter = new SlewRateLimiter(3.0);
      private SlewRateLimiter strafeLimiter = new SlewRateLimiter(3.0);
 
+     private double maxRMP = 0;
+     private double rpmDrop = 0;
+     private double lowestRMP = 7000;
+     private boolean isShooting = false;
      private double G = 9.81;
           // Note Postion
      private double A = 0;
      private double B = 0.4572;
      private double C = 0;
-          //TODO change goal pose to be set based on color
      private double M = 0;
      private double N = 0;
      private double O = 0;
@@ -118,6 +121,7 @@ public class Shooting extends Command {
         shootTimer.reset();
         shootTimer.stop();
         rotController.setIZone(Math.toRadians(10));
+        isShooting = false;
     }
 
     @Override
@@ -136,10 +140,14 @@ public class Shooting extends Command {
           //velocity
           // P = -mSwerve.getChassisSpeeds().vxMetersPerSecond;
           ChassisSpeeds vec = mSwerve.getVelocityFromChassisSpeeds();
-          P = -vec.vxMetersPerSecond;
-          Q = 0;
+          P = -vec.vyMetersPerSecond;
+          // Q = 0;
           // R = -mSwerve.getChassisSpeeds().vyMetersPerSecond;
-          R = -vec.vyMetersPerSecond;
+          R = -vec.vxMetersPerSecond;
+          // P = 0;
+          // R = 0;
+          SmartDashboard.putNumber("Y velocity", vec.vyMetersPerSecond);
+          SmartDashboard.putNumber("X velocity", vec.vxMetersPerSecond);
           // Note Postion
           A = mSwerve.getPose().getX();
           B = 0.4572;
@@ -147,10 +155,13 @@ public class Shooting extends Command {
 
           //TODO change goal pose to be set based on color
           rotationVal = 0;
-          S = 12;
           M = GoalPose.getX();
           N = GoalPose.getZ();
           O = GoalPose.getY();
+          if(!isShooting){
+               S = (17.0/5500.0) * (mShooter.getRPM()-rpmDrop);
+          }
+          
 
           SmartDashboard.putNumber("x velocity", P);
           SmartDashboard.putNumber("y velocity", R);
@@ -180,7 +191,8 @@ public class Shooting extends Command {
                RobotAngle = Math.atan2(f, d);   
                rotController.setSetpoint(RobotAngle);
                rotationVal = MathUtil.clamp(rotController.calculate(mSwerve.getPose().getRotation().getRadians()), -Constants.Swerve.maxAngularVelocity, Constants.Swerve.maxAngularVelocity);
-               if(shooterOverridden.getAsBoolean()){
+               // if(shooterOverridden.getAsBoolean()){
+               if(true){
                     forceShoot = true;
                     mPivot.toSetpoint(Math.toDegrees(ShooterAngle));
                     mShooter.AutoFire();
@@ -190,7 +202,9 @@ public class Shooting extends Command {
                     }
                     if(shootTimer.hasElapsed(0.1)){
                          if(rotController.atSetpoint() && mPivot.AtSetpoint() && mShooter.CanShoot()){
+                              maxRMP = mShooter.getRPM();
                               mIndex.runIndex(1);
+                              isShooting = true;
                          }else{
                               shootTimer.reset();
                               shootTimer.stop();
@@ -202,8 +216,14 @@ public class Shooting extends Command {
                     }
                }
           }else{
-               System.out.println("Cannot Shoot");
+               System.out.println(S);
+
           }       
+          if(isShooting){
+               if(lowestRMP >= mShooter.getRPM()){
+                    lowestRMP = mShooter.getRPM();
+               }
+          }
           
           SmartDashboard.putBoolean("Shooter At Setpoint", mShooter.CanShoot());
           SmartDashboard.putBoolean("Rotation At Setpoint", rotController.atSetpoint());
@@ -226,8 +246,10 @@ public class Shooting extends Command {
           else{
                SmartDashboard.putBoolean("Can Shoot", false);
           }
-
           if(shooterOverridden.getAsBoolean()){
+               mIndex.runIndex(1);
+          }
+          if(true){
                /* Drive */
                mSwerve.drive(
                     new Translation2d(translationVal, strafeVal).times(2.0),
@@ -250,13 +272,17 @@ public class Shooting extends Command {
      @Override
      public void end(boolean interrupted) {
          forceShoot = false;
+         if(isShooting){
+          rpmDrop = maxRMP-lowestRMP;
+         }
+         
          mShooter.AutoStop();
          //mPivot.stop();
          mPivot.toSetpoint(Constants.Subsystems.pivotMin);
          mIndex.stopIndex();
          shootTimer.reset();
          shootTimer.stop();
-
+         isShooting = false;
      }
 
 

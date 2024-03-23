@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.882905765811533,
-        "y": 5.535354916863679
+        "x": 2.6490549985426632,
+        "y": 5.527514849604002
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.5543072624606802,
-        "y": 4.09478126648561
+        "x": 2.110722481083475,
+        "y": 5.199611426322119
       },
       "isLocked": false,
-      "linkedName": "four note speaker l2"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -45,19 +45,7 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [
-    {
-      "name": "v",
-      "minWaypointRelativePos": 0.35,
-      "maxWaypointRelativePos": 1.2,
-      "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0
-      }
-    }
-  ],
+  "constraintZones": [],
   "eventMarkers": [
     {
       "name": "intake",

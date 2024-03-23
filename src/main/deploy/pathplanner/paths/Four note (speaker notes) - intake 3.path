@@ -3,67 +3,49 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.912506594243959,
-        "y": 5.525487974052871
+        "x": 2.250886555981385,
+        "y": 4.89512967613667
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5706023719739761,
-        "y": 6.5220491979445505
+        "x": 1.51310385359715,
+        "y": 6.2770083885388885
       },
       "isLocked": false,
       "linkedName": "four note speaker l1"
     },
     {
       "anchor": {
-        "x": 3.119712393270942,
-        "y": 6.423379769836463
+        "x": 2.883271729453586,
+        "y": 7.003080254377342
       },
       "prevControl": {
-        "x": 2.725034680838594,
-        "y": 6.4628475410796975
+        "x": 1.9346939692452834,
+        "y": 7.167031966018283
       },
       "nextControl": {
-        "x": 3.5776975150617187,
-        "y": 6.377581257657385
+        "x": 3.336816450015154,
+        "y": 6.924689808848182
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.882905765811533,
-        "y": 5.535354916863679
+        "x": 4.651608047866594,
+        "y": 6.0193699845316955
       },
       "prevControl": {
-        "x": 3.3367851351087334,
-        "y": 5.742560715890662
+        "x": 3.9723795282112664,
+        "y": 6.312140898176234
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "four note speaker l2"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.75,
-      "rotationDegrees": -140.0,
-      "rotateFast": false
-    }
-  ],
-  "constraintZones": [
-    {
-      "name": "V",
-      "minWaypointRelativePos": 0.4,
-      "maxWaypointRelativePos": 1.45,
-      "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0
-      }
-    }
-  ],
+  "rotationTargets": [],
+  "constraintZones": [],
   "eventMarkers": [
     {
       "name": "intake",
