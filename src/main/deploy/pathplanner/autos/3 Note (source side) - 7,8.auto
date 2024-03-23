@@ -6,9 +6,35 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "3 Note (7,8) - shoot 1"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "3 Note (7,8) - shoot 1"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Fire Shooter"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 15.0
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
@@ -20,7 +46,45 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Note (7,8) - intake 2"
+            "pathName": "3 Note (7,8) - intake 2 a a"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3 Note (7,8) - intake 2 a b"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "3 Note (7,8) - intake 2 b"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Fire Shooter"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 15.0
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
@@ -32,7 +96,39 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Note (7,8) - intaek 3"
+            "pathName": "3 Note (7,8) - intaek 3 a"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "3 Note (7,8) - intaek 3 b"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Fire Shooter"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 15.0
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {

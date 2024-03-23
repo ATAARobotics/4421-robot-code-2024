@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.6002032004064024,
-        "y": 3.2856919559992974
+        "x": 2.250886555981385,
+        "y": 3.3843613841073843
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.967800634602694,
-        "y": 1.1359511449408048
+        "x": 6.336335749594578,
+        "y": 0.7992223676755058
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "3 note 1 to 2"
     },
     {
       "anchor": {
@@ -20,24 +20,40 @@
         "y": 0.7963368851131419
       },
       "prevControl": {
-        "x": 7.836955588319166,
-        "y": 0.772915212021579
+        "x": 6.957953146675526,
+        "y": 0.7992223676755058
       },
       "nextControl": {
-        "x": 8.56646105849036,
-        "y": 0.810325748953435
+        "x": 8.393677980274289,
+        "y": 0.7961208619283491
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.0472234410945274,
-        "y": 2.974552482628502
+        "x": 8.082784627107717,
+        "y": 0.7963368851131419
       },
       "prevControl": {
-        "x": 5.108330673152073,
-        "y": 1.616095443317848
+        "x": 8.181454055215804,
+        "y": 0.7597545964322702
+      },
+      "nextControl": {
+        "x": 7.98411519899963,
+        "y": 0.8329191737940137
+      },
+      "isLocked": false,
+      "linkedName": "3 note 2a to 2b b"
+    },
+    {
+      "anchor": {
+        "x": 2.25,
+        "y": 2.55
+      },
+      "prevControl": {
+        "x": 5.132568726675916,
+        "y": 1.5491100212969666
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,9 +62,9 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.95,
+      "waypointRelativePos": 0.8,
       "rotationDegrees": 180.0,
-      "rotateFast": false
+      "rotateFast": true
     }
   ],
   "constraintZones": [],
@@ -78,8 +94,8 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 130.0,
+    "velocity": 1.0,
+    "rotation": 120.0,
     "rotateFast": false
   },
   "reversed": false,

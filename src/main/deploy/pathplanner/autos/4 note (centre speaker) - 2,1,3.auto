@@ -6,7 +6,7 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
@@ -16,18 +16,44 @@
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "Fire Shooter"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Fire Shooter"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 15.0
+                      }
+                    }
+                  ]
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Four note (speaker notes) - intake 2"
+            "name": "Fire Shooter"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Four note (speaker notes) - intake 2"
+                }
+              }
+            ]
           }
         },
         {
@@ -37,9 +63,35 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "Four note (speaker notes) - intake 4"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Four note (speaker notes) - intake 4"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Fire Shooter"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 15.0
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
@@ -49,9 +101,35 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "Four note (speaker notes) - intake 3"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Four note (speaker notes) - intake 3 b"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Fire Shooter"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 15.0
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {

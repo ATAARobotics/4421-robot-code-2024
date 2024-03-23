@@ -3,51 +3,51 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.0472234410945274,
-        "y": 2.974552482628502
+        "x": 2.2415544831089678,
+        "y": 2.3285985033508547
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.5462105189545605,
-        "y": 1.4989870778600332
+        "x": 5.3205755100196725,
+        "y": 0.22951550566768714
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "3 note 2 to 3"
     },
     {
       "anchor": {
-        "x": 8.281967377058862,
-        "y": 2.4709865111598974
+        "x": 8.132119341161761,
+        "y": 2.48
       },
       "prevControl": {
-        "x": 6.677582770286794,
-        "y": 2.0611072320575445
+        "x": 7.184892831324126,
+        "y": 2.6773388562161737
       },
       "nextControl": {
-        "x": 8.56766279266353,
-        "y": 2.5439743910589
+        "x": 8.230017383135516,
+        "y": 2.459604574588801
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.0472234410945274,
-        "y": 2.974552482628502
+        "x": 8.132119341161761,
+        "y": 2.2891307321076186
       },
       "prevControl": {
-        "x": 4.5579213555003415,
-        "y": 1.0773969622118975
+        "x": 8.231460623733165,
+        "y": 2.3005897712064534
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "3 note 3a to 3b"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.9,
-      "rotationDegrees": -170.0,
+      "waypointRelativePos": 0.95,
+      "rotationDegrees": 180.0,
       "rotateFast": false
     }
   ],
@@ -72,15 +72,15 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.5,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 130.0,
-    "rotateFast": false
+    "velocity": 1.0,
+    "rotation": 140.0,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "3 Note (source side) - 7,8",

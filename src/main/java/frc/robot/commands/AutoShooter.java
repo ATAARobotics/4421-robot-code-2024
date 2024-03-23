@@ -109,8 +109,8 @@ public class AutoShooter extends Command {
 
     @Override
     public void initialize(){
-        rotController.setTolerance(Math.toRadians(5));
-        rotController.setIZone(Math.toRadians(5));
+        rotController.setTolerance(Math.toRadians(Constants.Subsystems.rotTolerance));
+        rotController.setIZone(Math.toRadians(10));
         GoalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
      //    mSwerve.setAutoLock(true);
         shootTimer.reset();
@@ -140,10 +140,12 @@ public class AutoShooter extends Command {
           // Note Postion
           //velocity
           ChassisSpeeds vec = mSwerve.getVelocityFromChassisSpeeds();
-          P = -vec.vxMetersPerSecond;
+          // P = -vec.vyMetersPerSecond;
+          P = 0;
           Q = 0;
           // R = -mSwerve.getChassisSpeeds().vyMetersPerSecond;
-          R = -vec.vyMetersPerSecond;
+          // R = -vec.vxMetersPerSecond;
+          R = 0;
           // Note Postion
           A = mSwerve.getPose().getX() + (-P*0.05);
           B = 0.4572;
@@ -153,7 +155,7 @@ public class AutoShooter extends Command {
           M = GoalPose.getX();
           N = GoalPose.getZ();
           O = GoalPose.getY();
-          S = 11.8;
+          S = 12.2;
 
           H = M - A;
           J = O - C;
@@ -168,6 +170,7 @@ public class AutoShooter extends Command {
           double[] ts = solveQuartic(c0, c1, c2, c3, c4);
           double t = 1000000000;
           mShooter.AutoFire();
+          ChassisSpeeds moving = mSwerve.getVelocityFromChassisSpeeds();
           rotationVal = 0;
           if(ts != null){
                for (int i=0; i<ts.length; i++){
@@ -182,41 +185,43 @@ public class AutoShooter extends Command {
                RobotAngle = Math.atan2(f, d);
                rotController.setSetpoint(RobotAngle);
                rotController.calculate(mSwerve.getPose().getRotation().getRadians());
-               if (!overrideTimer.hasElapsed(1)){
-                    if (rotController.atSetpoint()&& mShooter.CanShoot() && mPivot.AtSetpoint()){
-                         SmartDashboard.putBoolean("Can Shoot", true);
-                         System.out.println("Auto Shooting");
-                         shootTimer.start();
-                    }
-                    if(shootTimer.hasElapsed(0.3)){
-                         if(rotController.atSetpoint()&& mShooter.CanShoot() && mPivot.AtSetpoint()){
-                              mIndex.runIndex(1);
-                              indexTimer.start();
-                         }else{
-                              shootTimer.reset();
-                              shootTimer.stop();
+               if(Math.abs(moving.vxMetersPerSecond) <= 0.05 || Math.abs(moving.vyMetersPerSecond) <= 0.05){
+                    if (!overrideTimer.hasElapsed(15)){
+                         if (rotController.atSetpoint()&& mShooter.CanShoot() && mPivot.AtSetpoint()){
+                              SmartDashboard.putBoolean("Can Shoot", true);
+                              System.out.println("Auto Shooting");
+                              shootTimer.start();
                          }
-                    }                    
-               }else{
-                    mIndex.runIndex(1);
-                    indexTimer.start();
-               }
+                         if(shootTimer.hasElapsed(0.15)){
+                              if(rotController.atSetpoint()&& mShooter.CanShoot() && mPivot.AtSetpoint()){
+                                   mIndex.runIndex(1);
+                                   indexTimer.start();
+                              }else{
+                                   shootTimer.reset();
+                                   shootTimer.stop();
+                              }
+                         }                    
+                    }else{
+                         // mIndex.runIndex(1);
+                         indexTimer.start();
+                    }
+               }    
                mSwerve.setAutoAngle(Math.toDegrees(RobotAngle));
                mPivot.toSetpoint(Math.toDegrees(ShooterAngle));
                rotationVal = MathUtil.clamp(rotController.calculate(mSwerve.getPose().getRotation().getRadians()), -Constants.Swerve.maxAngularVelocity, Constants.Swerve.maxAngularVelocity);
           }
-          if (Math.abs(P) <= 0.01 || Math.abs(R) <= 0.01){
-               mSwerve.drive(
-                    new Translation2d(0, 0).times(Constants.Swerve.maxSpeed),
-                    rotationVal,
-                    true,
-                    true);
-          }
+          // if(Math.abs(moving.vxMetersPerSecond) <= 0.1 || Math.abs(moving.vyMetersPerSecond) <= 0.1){
+          //      mSwerve.drive(
+          //           new Translation2d(0, 0).times(Constants.Swerve.maxSpeed),
+          //           rotationVal,
+          //           true,
+          //           true);
+          // }
 
      }
      @Override
      public boolean isFinished() {
-          return indexTimer.hasElapsed(0.5);
+          return indexTimer.hasElapsed(0.3);
      }
      @Override
      public void end(boolean interrupted) {
@@ -225,7 +230,6 @@ public class AutoShooter extends Command {
      //  mPivot.stop();
 
          // actuator down
-          // mPivot.toSetpoint(Constants.Subsystems.pivotMin);
      }
 
 

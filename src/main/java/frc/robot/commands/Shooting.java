@@ -139,15 +139,15 @@ public class Shooting extends Command {
           // # S = proj_speed;
           //velocity
           // P = -mSwerve.getChassisSpeeds().vxMetersPerSecond;
-          ChassisSpeeds vec = mSwerve.getVelocityFromChassisSpeeds();
-          P = -vec.vyMetersPerSecond;
+          Pose2d vec = mSwerve.getVelocity();
+          P = -vec.getX();
           // Q = 0;
           // R = -mSwerve.getChassisSpeeds().vyMetersPerSecond;
-          R = -vec.vxMetersPerSecond;
+          R = -vec.getY();
           // P = 0;
           // R = 0;
-          SmartDashboard.putNumber("Y velocity", vec.vyMetersPerSecond);
-          SmartDashboard.putNumber("X velocity", vec.vxMetersPerSecond);
+          SmartDashboard.putNumber("Y velocity", P);
+          SmartDashboard.putNumber("X velocity", R);
           // Note Postion
           A = mSwerve.getPose().getX();
           B = 0.4572;
@@ -159,7 +159,8 @@ public class Shooting extends Command {
           N = GoalPose.getZ();
           O = GoalPose.getY();
           if(!isShooting){
-               S = (17.0/5500.0) * (mShooter.getRPM()-rpmDrop);
+               // S = (17.0/5500.0) * (mShooter.getRPM()-rpmDrop);
+               S = 12.2;
           }
           
 
