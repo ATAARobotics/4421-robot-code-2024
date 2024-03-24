@@ -3,43 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.2514214259197765,
-        "y": 5.525487974052871
+        "x": 2.356284084893418,
+        "y": 4.8248646568619815
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3514214259197765,
-        "y": 5.525487974052871
+        "x": 2.0986456808862255,
+        "y": 4.947828440592688
       },
       "isLocked": false,
-      "linkedName": "4 note speaker note l3"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.2931510085559395,
-        "y": 5.525487974052871
+        "x": 2.1806215367066955,
+        "y": 5.4806715034257465
       },
       "prevControl": {
-        "x": 3.0140717217118325,
-        "y": 5.525487974052871
+        "x": 2.2098986280711497,
+        "y": 5.220105390282109
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.55,
-      "rotationDegrees": 180.0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "intake",
-      "waypointRelativePos": 0,
+      "name": "fire",
+      "waypointRelativePos": 0.05,
       "command": {
         "type": "parallel",
         "data": {
@@ -47,7 +41,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Intake"
+                "name": "Fire Shooter"
               }
             }
           ]
@@ -67,10 +61,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "4 note (centre speaker) - 2,1,3",
-  "previewStartingState": {
-    "rotation": 180.0,
-    "velocity": 0
-  },
+  "folder": "5 note (center) - 1, 2 , 3, 4",
+  "previewStartingState": null,
   "useDefaultConstraints": false
 }

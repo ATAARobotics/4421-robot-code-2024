@@ -6,14 +6,15 @@
     "3 Note (amp side) - 1,4",
     "3 Note (centre speaker) - 2,6",
     "3 Note (source side) - 6,7",
+    "3 Note (source side) - 7,8",
     "4 note (centre speaker) - 2,1,3",
-    "3 Note (source side) - 7,8"
+    "5 note (center) - 1, 2 , 3, 4"
   ],
   "autoFolders": [
     "Victoria"
   ],
-  "defaultMaxVel": 4.0,
-  "defaultMaxAccel": 3.0,
+  "defaultMaxVel": 4.5,
+  "defaultMaxAccel": 4.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "maxModuleSpeed": 4.5

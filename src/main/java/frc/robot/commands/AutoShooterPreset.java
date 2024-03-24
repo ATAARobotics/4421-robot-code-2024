@@ -2,18 +2,18 @@ package frc.robot.commands;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-import java.util.stream.IntStream;
 
 import org.opencv.core.Mat;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -24,20 +24,20 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.*;
-//import org.apache.commons.math3.geometry.euclidean.threed;
 
-public class Shooting extends Command {
-     // TODO: pos
+public class AutoShooterPreset extends Command {
      private Translation3d BluegoalPose = new Translation3d((8.84/39.37), 5.5408, (80.91/39.37));
      // private Translation3d RedgoalPose = new Translation3d(16.706342, 5.5408, 2.2);
      private Translation3d RedgoalPose = new Translation3d((642.38/39.37), 5.5408, (80.91/39.37)); //the 20 was 23.25
+
+
 
      // SIDE FLIP
      private Translation3d GoalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
 
     private Shooter mShooter;
-    private Pivot mPivot;
     private Swerve mSwerve;
+    private Pivot mPivot;
     private Index mIndex;
     
     private final PIDController rotController = new PIDController(10, 20, 1);
@@ -47,22 +47,17 @@ public class Shooting extends Command {
      private DoubleSupplier translationSup;
      private DoubleSupplier strafeSup;
      private DoubleSupplier rotationSup;
-     private BooleanSupplier robotCentricSup;
-
-     private BooleanSupplier shooterOverridden;
+     private BooleanSupplier flipSup;
 
      private SlewRateLimiter translationLimiter = new SlewRateLimiter(3.0);
      private SlewRateLimiter strafeLimiter = new SlewRateLimiter(3.0);
 
-     private double maxRMP = 0;
-     private double rpmDrop = 0;
-     private double lowestRMP = 7000;
-     private boolean isShooting = false;
      private double G = 9.81;
           // Note Postion
      private double A = 0;
      private double B = 0.4572;
      private double C = 0;
+          //TODO change goal pose to be set based on color
      private double M = 0;
      private double N = 0;
      private double O = 0;
@@ -70,7 +65,7 @@ public class Shooting extends Command {
      private double P = 0;
      private double Q = 0;
      private double R = 0;
-     private double S = 15.2;
+     private double S = 12;
 
      private double H = M - A;
      private double J = O - C;
@@ -86,47 +81,57 @@ public class Shooting extends Command {
      private double d = 0;
      private double e = 0;
      private double f = 0;
-
-     private double rotationVal = 0;
+     private double X = 0;
      private Timer shootTimer = new Timer();
-     private boolean forceShoot = false;
+     private Timer indexTimer = new Timer();
+     private Timer overrideTimer = new Timer();
+     private double rotationVal = 0;
 
-    public Shooting(
+     private boolean hasNote = true;
+
+    public AutoShooterPreset(
           Shooter m_shooter, 
           Pivot m_Pivot,
-          Index m_Index,
-          Swerve m_swerve,      
-          DoubleSupplier translationSup,
-          DoubleSupplier strafeSup,
-          BooleanSupplier shooterOverridden
+          Swerve m_swerve,
+          Double X,
+          Double Y,
+          BooleanSupplier flip
      ){
         this.mShooter = m_shooter;
-        this.mIndex = m_Index;
         this.mSwerve = m_swerve;
-        this.mPivot = m_Pivot;
-        this.shooterOverridden = shooterOverridden;
-        addRequirements(mSwerve, mShooter, m_Index);
-          SmartDashboard.putNumber("Rot P", 10);
+        this.mPivot = m_Pivot; 
+  
+        this.X = X;
+        this.C = Y;
+        this.flipSup = flip;
+
+        addRequirements(mShooter);
+          SmartDashboard.putNumber("Rot P", 0);
           SmartDashboard.putNumber("Rot I", 0);
           SmartDashboard.putNumber("Rot D", 0);
+          rotController.enableContinuousInput(-Math.PI, Math.PI);
 
-        this.translationSup = translationSup;
-        this.strafeSup = strafeSup;
-        rotController.enableContinuousInput(-Math.PI, Math.PI);
     }
+
 
     @Override
     public void initialize(){
         rotController.setTolerance(Math.toRadians(Constants.Subsystems.rotTolerance));
+        rotController.setIZone(Math.toRadians(10));
         GoalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
+     //    mSwerve.setAutoLock(true);
         shootTimer.reset();
         shootTimer.stop();
-        rotController.setIZone(Math.toRadians(10));
-        isShooting = false;
+        indexTimer.reset();
+        indexTimer.stop();
+        overrideTimer.reset();
+        overrideTimer.stop();
+        overrideTimer.start();
     }
 
     @Override
     public void execute(){
+          mSwerve.setAutoLock(true);
           // # g = 9.81
           // # A = proj_pos.x
           // # B = proj_pos.y
@@ -138,35 +143,29 @@ public class Shooting extends Command {
           // # Q = target_velocity.y
           // # R = target_velocity.z
           // # S = proj_speed;
-          //velocity
-          // P = -mSwerve.getChassisSpeeds().vxMetersPerSecond;
-          Pose2d vec = mSwerve.getVelocity();
-          P = -0;
-          // Q = 0;
-          // R = -mSwerve.getChassisSpeeds().vyMetersPerSecond;
-          R = -0;
-          // P = 0;
-          // R = 0;
-          SmartDashboard.putNumber("Y velocity", P);
-          SmartDashboard.putNumber("X velocity", R);
           // Note Postion
-          A = mSwerve.getPose().getX();
+          //velocity
+          ChassisSpeeds vec = mSwerve.getVelocityFromChassisSpeeds();
+          // P = -vec.vyMetersPerSecond;
+          P = 0;
+          Q = 0;
+          // R = -mSwerve.getChassisSpeeds().vyMetersPerSecond;
+          // R = -vec.vxMetersPerSecond;
+          R = 0;
+          // Note Postion
           B = 0.4572;
-          C = mSwerve.getPose().getY();
+          if(!flipSup.getAsBoolean()){
+               A = X;
+          }else{
+               A = 16.541242-X;
+          } 
+
 
           //TODO change goal pose to be set based on color
-          rotationVal = 0;
           M = GoalPose.getX();
           N = GoalPose.getZ();
           O = GoalPose.getY();
-          if(!isShooting){
-               // S = (17.0/5500.0) * (mShooter.getRPM()-rpmDrop);
-               S = 12.2;
-          }
-          
-
-          SmartDashboard.putNumber("x velocity", P);
-          SmartDashboard.putNumber("y velocity", R);
+          S = 12.2;
 
           H = M - A;
           J = O - C;
@@ -178,9 +177,11 @@ public class Shooting extends Command {
           c2 = Q*Q - 2*K*L - S*S + P*P + R*R;
           c3 = 2*K*Q + 2*H*P + 2*J*R;
           c4 = K*K + H*H + J*J;
-          double[] ts = solveQuartic(c0, c1, c2, c3, c4);  
-          mShooter.AutoFire();
+          double[] ts = solveQuartic(c0, c1, c2, c3, c4);
           double t = 1000000000;
+          mShooter.AutoFire();
+          ChassisSpeeds moving = mSwerve.getVelocityFromChassisSpeeds();
+          rotationVal = 0;
           if(ts != null){
                for (int i=0; i<ts.length; i++){
                     if (ts[i] >= 0 & ts[i]<t){
@@ -191,103 +192,31 @@ public class Shooting extends Command {
                e = ((K+Q*t-L*t*t)/t);
                f = ((J+R*t)/t);
                ShooterAngle = Math.atan2(e, Math.sqrt(Math.pow(d,2) + Math.pow(f,2)));
-               RobotAngle = Math.atan2(f, d);   
+               RobotAngle = Math.atan2(f, d);
                rotController.setSetpoint(RobotAngle);
+               rotController.calculate(mSwerve.getPose().getRotation().getRadians());
+               mSwerve.setAutoAngle(Math.toDegrees(RobotAngle));
+               mPivot.toSetpoint(Math.toDegrees(ShooterAngle));
                rotationVal = MathUtil.clamp(rotController.calculate(mSwerve.getPose().getRotation().getRadians()), -Constants.Swerve.maxAngularVelocity, Constants.Swerve.maxAngularVelocity);
-               // if(shooterOverridden.getAsBoolean()){
-               if(true){
-                    forceShoot = true;
-                    mPivot.toSetpoint(Math.toDegrees(ShooterAngle));
-                    
-                    if (rotController.atSetpoint()&& mShooter.CanShoot() && mPivot.AtSetpoint()){
-                         SmartDashboard.putBoolean("Can Shoot", true);
-                         shootTimer.start();
-                    }
-                    if(shootTimer.hasElapsed(0.1)){
-                         if(rotController.atSetpoint() && mPivot.AtSetpoint() && mShooter.CanShoot()){
-                              maxRMP = mShooter.getRPM();
-                              mIndex.runIndex(1);
-                              isShooting = true;
-                         }else{
-                              shootTimer.reset();
-                              shootTimer.stop();
-                         }
-                    } 
-               }else{
-                    if(forceShoot){
-                         mIndex.runIndex(1);
-                    }
-               }
-          }else{
-               System.out.println(S);
-
-          }       
-          if(isShooting){
-               if(lowestRMP >= mShooter.getRPM()){
-                    lowestRMP = mShooter.getRPM();
-               }
           }
-          
           SmartDashboard.putBoolean("Shooter At Setpoint", mShooter.CanShoot());
           SmartDashboard.putBoolean("Rotation At Setpoint", rotController.atSetpoint());
           SmartDashboard.putBoolean("Pivot At Setpoint", mPivot.AtSetpoint());
-          SmartDashboard.putNumber("Rotation Target", Math.toDegrees(RobotAngle));
-          SmartDashboard.putNumber("Rotation Value", Math.toDegrees(mSwerve.getPose().getRotation().getRadians()));
-          
-  
-          SmartDashboard.putNumber("x velocity", P);
-          SmartDashboard.putNumber("y velocity", R);
- 
-          double translationVal =
-               translationLimiter.calculate(
-                    MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.Swerve.stickDeadband));
-          double strafeVal =
-               strafeLimiter.calculate(
-                    MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.Swerve.stickDeadband));
-          
-          if ((rotController.atSetpoint() && mShooter.CanShoot() && mPivot.AtSetpoint())){
-               SmartDashboard.putBoolean("Can Shoot", true);    
-          }
-          else{
-               SmartDashboard.putBoolean("Can Shoot", false);
-          }
-          if(shooterOverridden.getAsBoolean()){
-               mIndex.runIndex(1);
-          }
-          if(true){
-               /* Drive */
-               mSwerve.drive(
-                    new Translation2d(translationVal, strafeVal).times(2.0),
-                    rotationVal,
-                    true,
-                    true);
-          }else{
-               /* Drive */
-               mSwerve.drive(
-                    new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
-                    rotationVal,
-                    true,
-                    true);    
-          }
-          
 
-
-
+    }
+     @Override
+     public boolean isFinished() {
+          return indexTimer.hasElapsed(0.25);
      }
      @Override
      public void end(boolean interrupted) {
-         forceShoot = false;
-         if(isShooting){
-          rpmDrop = maxRMP-lowestRMP;
-         }
-         
-         mShooter.AutoStop();
-         //mPivot.stop();
-         mPivot.toSetpoint(Constants.Subsystems.pivotMin);
-         mIndex.stopIndex();
-         shootTimer.reset();
-         shootTimer.stop();
-         isShooting = false;
+          System.out.println("Auto Shooter Ended");
+          mSwerve.setAutoLock(false);
+          indexTimer.reset();
+          indexTimer.stop();
+     //  mPivot.stop();
+
+         // actuator down
      }
 
 
@@ -389,5 +318,9 @@ public class Shooting extends Command {
           else
                return -(sQ + Q / sQ) - an;
           }
+     }
+
+     public void setHasNote(boolean hasNote) {
+        this.hasNote = hasNote;
      }
 }

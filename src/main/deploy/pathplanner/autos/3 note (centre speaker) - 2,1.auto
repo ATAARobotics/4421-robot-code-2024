@@ -30,12 +30,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Four note (speaker notes) - intake 3 a"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Fire Shooter"

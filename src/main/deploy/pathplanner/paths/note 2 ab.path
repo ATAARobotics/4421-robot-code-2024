@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.239175719435603,
-        "y": 6.616622648366552
+        "x": 2.356284084893418,
+        "y": 4.8248646568619815
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3871798615977333,
-        "y": 6.725159019285448
+        "x": 2.0986456808862255,
+        "y": 4.947828440592688
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.1098454504601327,
-        "y": 7.193001309079541
+        "x": 2.356284084893418,
+        "y": 5.340141464876368
       },
       "prevControl": {
-        "x": 2.2514214259197765,
-        "y": 6.482581426701315
+        "x": 2.3855611762578723,
+        "y": 5.07957535173273
+      },
+      "nextControl": {
+        "x": 2.327006993528964,
+        "y": 5.600707578020005
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.211175152735468,
+        "y": 5.4806715034257465
+      },
+      "prevControl": {
+        "x": 2.742741690904208,
+        "y": 5.4689606668799655
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,12 +48,18 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "intake",
-      "waypointRelativePos": 0.0,
+      "name": "intake fire",
+      "waypointRelativePos": 0.15,
       "command": {
         "type": "parallel",
         "data": {
           "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Fire Shooter"
+              }
+            },
             {
               "type": "named",
               "data": {
@@ -57,14 +79,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -140.0,
-    "rotateFast": true
+    "rotation": 180.0,
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": "4 note (centre speaker) - 2,1,3",
-  "previewStartingState": {
-    "rotation": -160.0,
-    "velocity": 1.0
-  },
+  "folder": "5 note (center) - 1, 2 , 3, 4",
+  "previewStartingState": null,
   "useDefaultConstraints": false
 }

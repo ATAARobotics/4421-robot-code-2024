@@ -226,6 +226,7 @@ public class Shooter extends SubsystemBase{
         leftShooterPID.setFF(SmartDashboard.getNumber("shooter ff", 0));
     }
     public void AutoFire(){
+        isAmpScoring = 0;
         isFiring = true;
         isLob = false;
     }

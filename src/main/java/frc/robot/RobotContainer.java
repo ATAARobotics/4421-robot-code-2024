@@ -96,6 +96,8 @@ public class RobotContainer {
     intake = new IntakeCommand(m_Intake, m_Index);
     NamedCommands.registerCommand("Intake", intake);
     NamedCommands.registerCommand("Fire Shooter", autoShoot);
+    NamedCommands.registerCommand("4 note Shoot 1", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.26, 5.53, this::getSide));
+    NamedCommands.registerCommand("4 note Shoot 3", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 3.11, 7.19, this::getSide));
 
     NamedCommands.registerCommand("Abandon Path GOALPATH to ALTPATH", new AbandonPath().a_AbandonPath(
     () -> true, // whether we do abandon path, the boolean supplier will correlate to note/bot detection
@@ -112,17 +114,7 @@ public class RobotContainer {
             4.5, // Max module speed, in m/s
             0.4, // Drive base radius in meters. Distance from robot center to furthest module.
             new ReplanningConfig() // Default path replanning config. See the API for the options here
-        ), () -> {
-          // Boolean supplier that controls when the path will be mirrored for the red alliance
-          // This will flip the path being followed to the red side of the field.
-          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-          var alliance = DriverStation.getAlliance();
-          if (alliance.isPresent()) {
-            return alliance.get() == DriverStation.Alliance.Red;
-          }
-          return false;
-        },
+        ), this::getSide,
         s_Swerve // Reference to this subsystem to set requirements
     );
     s_Swerve.setDefaultCommand(
@@ -219,6 +211,14 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
+  }
+
+  public Boolean getSide(){
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent()) {
+      return alliance.get() == DriverStation.Alliance.Red;
+    }
+    return false;
   }
   // public Swerve getSwerve(){
   //   return s_Swerve;
