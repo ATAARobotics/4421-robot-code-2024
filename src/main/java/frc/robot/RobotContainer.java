@@ -87,7 +87,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Stop Index", new InstantCommand(m_Index::stopIndex));
 
     s_Swerve = new Swerve();
-    s_Lighting = new Lighting(s_Swerve, m_Intake);
+    s_Lighting = new Lighting(s_Swerve, m_Intake, joysticks::speed);
     shoot = new Shooting(m_Shooter, mPivot, m_Index, s_Swerve,joysticks::getXVelocity,
         joysticks::getYVelocity, () -> joysticks.OverrideShooter.getAsBoolean());
     lobShot = new LobShot(m_Shooter, mPivot, m_Index, s_Swerve,joysticks::getXVelocity,
@@ -224,4 +224,3 @@ public class RobotContainer {
   //   return s_Swerve;
   // }
 }
-  

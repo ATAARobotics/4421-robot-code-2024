@@ -156,6 +156,10 @@ class OI {
         return inversionConstant*xVelocity;
     }
 
+    public double speed() {
+        return Math.abs(xVelocity);
+    }
+
     public double getSpeed() {
         return speed;
     }
