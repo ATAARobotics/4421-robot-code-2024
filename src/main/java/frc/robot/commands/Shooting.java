@@ -140,19 +140,19 @@ public class Shooting extends Command {
           // # S = proj_speed;
           //velocity
           // P = -mSwerve.getChassisSpeeds().vxMetersPerSecond;
-          Pose2d vec = mSwerve.getVelocity();
-          P = -0;
+          ChassisSpeeds vec = mSwerve.getVelocityFromChassisSpeeds();
+          P = -vec.vxMetersPerSecond;
           // Q = 0;
           // R = -mSwerve.getChassisSpeeds().vyMetersPerSecond;
-          R = -0;
+          R = -vec.vyMetersPerSecond;
           // P = 0;
           // R = 0;
-          SmartDashboard.putNumber("Y velocity", P);
-          SmartDashboard.putNumber("X velocity", R);
+          SmartDashboard.putNumber("X velocity", -P);
+          SmartDashboard.putNumber("Y velocity", -R);
           // Note Postion
-          A = mSwerve.getPose().getX();
+          A = mSwerve.getPose().getX() + (-P*0.05);
           B = 0.4572;
-          C = mSwerve.getPose().getY();
+          C = mSwerve.getPose().getY()+ (-R*0.05);
 
           //TODO change goal pose to be set based on color
           rotationVal = 0;

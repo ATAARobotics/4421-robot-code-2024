@@ -8,39 +8,57 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9229831326995024,
-        "y": 4.2978770123018135
+        "x": 1.4662605074140238,
+        "y": 5.316719791784805
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.1806215367066955,
+        "x": 2.0047478556495593,
         "y": 4.11050362756931
       },
       "prevControl": {
-        "x": 1.6419230556007458,
-        "y": 4.66091294522104
+        "x": 1.8290853074628366,
+        "y": 4.309587848847596
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "5 note 1"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "fire",
+      "waypointRelativePos": 0.5,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "5 note Shoot 1"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 4.5,
-    "maxAcceleration": 4.0,
+    "maxAcceleration": 3.7,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
-    "rotateFast": false
+    "rotation": 160.0,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "5 note (center) - 1, 2 , 3, 4",

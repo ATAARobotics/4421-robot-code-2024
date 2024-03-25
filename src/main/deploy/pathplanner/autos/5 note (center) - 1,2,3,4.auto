@@ -6,12 +6,6 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "5 note 0"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Fire Shooter"
@@ -26,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "note 1 b"
+            "pathName": "5 note 1 b"
           }
         },
         {

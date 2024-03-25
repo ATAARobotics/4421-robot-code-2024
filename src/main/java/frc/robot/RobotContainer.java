@@ -99,6 +99,18 @@ public class RobotContainer {
     NamedCommands.registerCommand("4 note Shoot 1", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.26, 5.53, this::getSide));
     NamedCommands.registerCommand("4 note Shoot 3", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 3.11, 7.19, this::getSide));
 
+    NamedCommands.registerCommand("5 note Shoot 1", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.31, 4.53, this::getSide));
+    NamedCommands.registerCommand("5 note Shoot 2", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.16, 5.49 , this::getSide));
+    NamedCommands.registerCommand("5 note Shoot 3", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 3.36, 5.60, this::getSide));
+    NamedCommands.registerCommand("5 note Shoot 4", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 4.84, 6.07, this::getSide));
+    NamedCommands.registerCommand("5 note Shoot 5", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 4.77, 6.07, this::getSide));
+
+    NamedCommands.registerCommand("3 note 7,8 Shoot 1", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.25, 3.38, this::getSide));
+    NamedCommands.registerCommand("3 note 7,8 Shoot 2", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.24, 3.33, this::getSide));
+    NamedCommands.registerCommand("3 note 7,8 Shoot 3", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.22, 2.74, this::getSide));
+
+    NamedCommands.registerCommand("3 note 6,7 Shoot all", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.16, 2.29, this::getSide));
+
     NamedCommands.registerCommand("Abandon Path GOALPATH to ALTPATH", new AbandonPath().a_AbandonPath(
     () -> true, // whether we do abandon path, the boolean supplier will correlate to note/bot detection
     "Goal Path", "Alternate Path", s_Swerve));

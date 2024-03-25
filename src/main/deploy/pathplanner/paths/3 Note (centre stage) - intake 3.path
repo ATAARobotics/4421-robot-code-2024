@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.1626189406224983,
-        "y": 3.2856919559992974
+        "x": 2.2977299021645106,
+        "y": 3.454696781005545
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.1580238888317576,
-        "y": 3.381446794417638
+        "x": 3.29313485037377,
+        "y": 3.5504516194238853
       },
       "isLocked": false,
       "linkedName": "67 2 to 3"
@@ -20,12 +20,12 @@
         "y": 4.005978781188332
       },
       "prevControl": {
-        "x": 4.293878587757177,
-        "y": 2.6640745589183488
+        "x": 4.300282951493148,
+        "y": 2.7169140786213095
       },
       "nextControl": {
-        "x": 5.189783255893745,
-        "y": 4.482627318120934
+        "x": 5.195570309003258,
+        "y": 4.479732421747611
       },
       "isLocked": false,
       "linkedName": null
@@ -48,12 +48,12 @@
     },
     {
       "anchor": {
-        "x": 2.2514214259197765,
-        "y": 2.12139270432387
+        "x": 2.1626189406224983,
+        "y": 3.2856919559992974
       },
       "prevControl": {
-        "x": 4.234676930892325,
-        "y": 1.2531017369727058
+        "x": 3.585921922200477,
+        "y": 1.206216164215495
       },
       "nextControl": null,
       "isLocked": false,
@@ -85,11 +85,28 @@
           ]
         }
       }
+    },
+    {
+      "name": "fire",
+      "waypointRelativePos": 2.4000000000000004,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "3 note 6,7 Shoot all"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.5,
+    "maxAcceleration": 3.7,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

@@ -3,57 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.6002032004064024,
-        "y": 3.2856919559992974
+        "x": 6.128338213484723,
+        "y": 3.840130221760209
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.5834587053789506,
-        "y": 3.0686192141615063
-      },
-      "isLocked": false,
-      "linkedName": "67 1 to 2"
-    },
-    {
-      "anchor": {
-        "x": 5.02403235575702,
-        "y": 3.9665110099450973
-      },
-      "prevControl": {
-        "x": 4.374806935077498,
-        "y": 3.0527863438035516
-      },
-      "nextControl": {
-        "x": 5.290439811648857,
-        "y": 4.341454836755828
+        "x": 5.002933144240039,
+        "y": 4.075371117931965
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.270256540513081,
-        "y": 4.09478126648561
+        "x": 2.2977299021645106,
+        "y": 3.454696781005545
       },
       "prevControl": {
-        "x": 7.865711885269925,
-        "y": 4.065180438053184
-      },
-      "nextControl": {
-        "x": 8.360982710668448,
-        "y": 4.1014197667408805
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.1626189406224983,
-        "y": 3.2856919559992974
-      },
-      "prevControl": {
-        "x": 4.323479416189603,
-        "y": 3.453429983783045
+        "x": 4.499367172771434,
+        "y": 2.9277091364453764
       },
       "nextControl": null,
       "isLocked": false,
@@ -62,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.7999999999999998,
+      "waypointRelativePos": 0.0,
       "rotationDegrees": 180.0,
       "rotateFast": false
     }
@@ -70,8 +38,8 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 1.5,
+      "name": "fire",
+      "waypointRelativePos": 0.6,
       "command": {
         "type": "parallel",
         "data": {
@@ -79,7 +47,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Intake"
+                "name": "3 note 6,7 Shoot all"
               }
             }
           ]
@@ -88,8 +56,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.6,
+    "maxAcceleration": 3.7,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
