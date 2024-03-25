@@ -110,7 +110,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("3 note 7,8 Shoot 3", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.22, 2.74, this::getSide));
 
     NamedCommands.registerCommand("3 note 6,7 Shoot all", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.16, 2.29, this::getSide));
-
+    NamedCommands.registerCommand("", new InstantCommand(() -> mPivot.toSetpoint(Constants.Subsystems.pivotMin)));
     NamedCommands.registerCommand("Abandon Path GOALPATH to ALTPATH", new AbandonPath().a_AbandonPath(
     () -> true, // whether we do abandon path, the boolean supplier will correlate to note/bot detection
     "Goal Path", "Alternate Path", s_Swerve));

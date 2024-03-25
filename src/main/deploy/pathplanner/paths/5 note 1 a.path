@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0047478556495593,
-        "y": 4.11050362756931
+        "x": 1.3023087957730821,
+        "y": 5.351852301422149
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5474297102440375,
-        "y": 4.09478126648561
+        "x": 1.571658036326057,
+        "y": 3.981684425565713
       },
       "isLocked": false,
       "linkedName": "5 note 1"
     },
     {
       "anchor": {
-        "x": 2.813006710178897,
-        "y": 4.11050362756931
+        "x": 2.6607658350837373,
+        "y": 4.122214464115091
       },
       "prevControl": {
-        "x": 2.537562767433229,
-        "y": 4.124382094918037
+        "x": 2.250886555981385,
+        "y": 4.157346973752435
       },
       "nextControl": null,
       "isLocked": false,
@@ -35,7 +35,19 @@
       "rotateFast": false
     }
   ],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 0.65,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 3.7,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    }
+  ],
   "eventMarkers": [
     {
       "name": "intake",
@@ -68,6 +80,9 @@
   },
   "reversed": false,
   "folder": "5 note (center) - 1, 2 , 3, 4",
-  "previewStartingState": null,
+  "previewStartingState": {
+    "rotation": 180.0,
+    "velocity": 0
+  },
   "useDefaultConstraints": false
 }

@@ -239,7 +239,7 @@ public class AutoShooter extends Command {
                SmartDashboard.putBoolean("Can Shoot", false);
           }
           mSwerve.setAutoLock(true);
-          if(Math.abs(P) <= 0.1 && Math.abs(R) <= 0.1){
+          if(Math.abs(P) <= 0.5 && Math.abs(R) <= 0.5){
                /* Drive */
                mSwerve.drive(
                     new Translation2d(translationVal, strafeVal).times(2.0),
@@ -257,7 +257,6 @@ public class AutoShooter extends Command {
           System.out.println("Auto Shooter Ended");
           mSwerve.setAutoLock(false);
           indexTimer.reset();
-          mPivot.toSetpoint(Constants.Subsystems.pivotMin);
           indexTimer.stop();
      //  mPivot.stop();
 
