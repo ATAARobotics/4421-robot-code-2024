@@ -250,7 +250,7 @@ public class AutoShooter extends Command {
      }
      @Override
      public boolean isFinished() {
-          return indexTimer.hasElapsed(0.12);
+          return indexTimer.hasElapsed(0.15);
      }
      @Override
      public void end(boolean interrupted) {

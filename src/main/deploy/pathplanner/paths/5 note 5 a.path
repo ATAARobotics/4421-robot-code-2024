@@ -3,55 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3023087957730821,
-        "y": 5.351852301422149
+        "x": 4.897535615328005,
+        "y": 6.335562571267796
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4896821805055864,
-        "y": 4.496961233580098
+        "x": 6.232570981547098,
+        "y": 6.67517683109546
       },
       "isLocked": false,
-      "linkedName": "5 note 1"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.5553683061717036,
-        "y": 4.098792791023527
+        "x": 8.188280684692609,
+        "y": 5.7500207439787205
       },
       "prevControl": {
-        "x": 2.168910700160914,
-        "y": 4.391563704668065
+        "x": 7.169437905209617,
+        "y": 5.738309907432939
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 180.0,
-      "rotateFast": false
-    }
-  ],
-  "constraintZones": [
-    {
-      "name": "New Constraints Zone",
-      "minWaypointRelativePos": 0.75,
-      "maxWaypointRelativePos": 1.0,
-      "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 3.7,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0
-      }
-    }
-  ],
+  "rotationTargets": [],
+  "constraintZones": [],
   "eventMarkers": [
     {
       "name": "intake",
-      "waypointRelativePos": 0.4,
+      "waypointRelativePos": 0.45,
       "command": {
         "type": "parallel",
         "data": {
@@ -60,12 +42,6 @@
               "type": "named",
               "data": {
                 "name": "Intake"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "Shooter Down"
               }
             }
           ]
@@ -82,7 +58,7 @@
   "goalEndState": {
     "velocity": 0.0,
     "rotation": 180.0,
-    "rotateFast": false
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "5 note (center) - 1, 2 , 3, 4",
