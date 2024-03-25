@@ -12,28 +12,9 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Shooter Down"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "3 Note (7,8) - grab 2 a"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "3 Note (7,8) - grab 2 b"
+            "pathName": "4 note(amp side) 3 ab"
           }
         },
         {
@@ -45,13 +26,43 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Note (7,8) - grab 3 a"
+            "pathName": "5 note 4 a"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3 Note (7,8) - grab 3 b"
+            "pathName": " 5 note (amp side) 4 b"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Fire Shooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5 note 5(amp) a"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5 note(amp side) 5 b"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Fire Shooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5 note(amp side) 2 ab"
           }
         },
         {

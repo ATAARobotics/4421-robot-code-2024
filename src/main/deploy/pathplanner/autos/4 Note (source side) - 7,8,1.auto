@@ -59,6 +59,18 @@
           "data": {
             "name": "Fire Shooter"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4 Note (7,8) - grab 1 ab"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Fire Shooter"
+          }
         }
       ]
     }
