@@ -300,7 +300,7 @@ public class Swerve extends SubsystemBase {
  }
   public Optional<Rotation2d> getRotationTargetOverride(){
     if(autoLock) {
-      System.out.println("hey we locking n shit");
+      System.out.println("hey we locking");
       // Return an optional containing the rotation override (this should be a field relative rotation)
       return Optional.of(Rotation2dOut);
     } else {
