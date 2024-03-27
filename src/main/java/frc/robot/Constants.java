@@ -50,18 +50,18 @@ public final class Constants {
 
     /* Swerve Current Limiting */
     public static final int angleContinuousCurrentLimit = 20;
-    public static final int driveContinuousCurrentLimit = 30;
+    public static final int driveContinuousCurrentLimit = 40;
 
     /* Angle Motor PID Values */
     public static final double angleKP = 0.039;
-    public static final double angleKI = 0.001;
+    public static final double angleKI = 0.005;
     public static final double angleKD = 0.0;
     public static final double angleKFF = 0.0;
     public static final double angleIZone = 0.5;
 
     /* Drive Motor PID Values */
-    public static final double driveKP = 0.5;
-    public static final double driveKI = 0.0;
+    public static final double driveKP = 0.015;
+    public static final double driveKI = 0.0001;
     public static final double driveKD = 0.0;
     public static final double driveKFF = 0.0;
 
@@ -111,7 +111,7 @@ public final class Constants {
       public static final int driveMotorID = 1;
       public static final int angleMotorID = 5;
       public static final int canCoderID = 9;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(57.65625 + 180); //326.42
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(239.15); //326.42
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
           canCoderID, angleOffset);
     }
@@ -121,7 +121,8 @@ public final class Constants {
       public static final int driveMotorID = 2;
       public static final int angleMotorID = 6;
       public static final int canCoderID = 10;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(99.228515625); //310.69
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(249.43); //310.69
+      //82.529296875 + 17.79644966 + 5.0 + 20.0 - 10.0 - 3.5
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
           canCoderID, angleOffset);
     }
@@ -131,7 +132,7 @@ public final class Constants {
       public static final int driveMotorID = 3;
       public static final int angleMotorID = 7;
       public static final int canCoderID = 11;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(228.1640625 - 180); //242.66
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(46.66); //242.66
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
           canCoderID, angleOffset);
     }
@@ -141,20 +142,20 @@ public final class Constants {
       public static final int driveMotorID = 4;
       public static final int angleMotorID = 8;
       public static final int canCoderID = 12;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(352.6171875); //169.79
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(353.75); //169.79
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
           canCoderID, angleOffset);
     }
   }
 
   public static final class Subsystems {
-    public static final double rotTolerance = 3;
-    public static final double pivotTolerance = 1.5; // in degrees
+    public static final double rotTolerance = 5;
+    public static final double pivotTolerance = 2; // in degrees
     public static final double pivotMin = 28.0;
 
-    public static final double shooterTolerance = 350; // rpm
-    public static final double shooterSetPoint = 5500; // rpm
-    public static final double shooterSetPointAlt = 4500; 
+    public static final double shooterTolerance = 250; // rpm
+    public static final double shooterSetPoint = 5500; // rpm 5500
+    public static final double shooterSetPointAlt = 4500; //rpm 4500
 
     public static final int intakeFront = 13;
     public static final int intakeBack = 14;
@@ -164,17 +165,22 @@ public final class Constants {
     public static final int leftShooter = 18;
     public static final int rightShooter = 19;
     public static final int shooterPivot = 21;
-
     
 
-    public static final double shooterP = 0.0002;
-    public static final double shooterI = 0.000003;
-    public static final double shooterD = 0.002;
+    public static final double shooterP = 0.00055;
+    public static final double shooterI = 0.00000056;
+    public static final double shooterD = 0.015;
     public static final double shooterFF = 0.00005;
+
+    public static final double pivotP = 0.5;
+    public static final double pivotI = 0;
+    public static final double pivotD = 0.015;
+    public static final double pivotFF = 0.1;
 
     public static final double ampTime = 0.2;
 
     public static final PIDConstants rotationPID = new PIDConstants(10, 20,1, 5);
+    public static final int CandleID = 35; 
   }
 
   public static final class AutoConstants {

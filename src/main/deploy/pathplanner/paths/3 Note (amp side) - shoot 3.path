@@ -45,19 +45,7 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [
-    {
-      "name": "v",
-      "minWaypointRelativePos": 0.75,
-      "maxWaypointRelativePos": 1.3,
-      "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0
-      }
-    }
-  ],
+  "constraintZones": [],
   "eventMarkers": [
     {
       "name": "intake",
@@ -89,7 +77,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "3 Note (amp side)",
+  "folder": "3 Note (amp side) - 1,4",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0

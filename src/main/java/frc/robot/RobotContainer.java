@@ -62,9 +62,11 @@ public class RobotContainer {
   public final Intake m_Intake;
   public final IntakeCommand intake;
   public final Pivot mPivot;
+  public final Lighting s_Lighting;
   public SendableChooser<Command> autoChooser;
   public Command AutoCommand;
   private Shooting shoot;
+  private LobShot lobShot;
   private AutoShooter autoShoot;
 
 
@@ -85,13 +87,30 @@ public class RobotContainer {
     NamedCommands.registerCommand("Stop Index", new InstantCommand(m_Index::stopIndex));
 
     s_Swerve = new Swerve();
+    s_Lighting = new Lighting(s_Swerve, m_Intake);
     shoot = new Shooting(m_Shooter, mPivot, m_Index, s_Swerve,joysticks::getXVelocity,
+        joysticks::getYVelocity, () -> joysticks.OverrideShooter.getAsBoolean());
+    lobShot = new LobShot(m_Shooter, mPivot, m_Index, s_Swerve,joysticks::getXVelocity,
         joysticks::getYVelocity, () -> joysticks.OverrideShooter.getAsBoolean());
     autoShoot = new AutoShooter(m_Shooter, mPivot, m_Index, s_Swerve);
     intake = new IntakeCommand(m_Intake, m_Index);
     NamedCommands.registerCommand("Intake", intake);
     NamedCommands.registerCommand("Fire Shooter", autoShoot);
+    NamedCommands.registerCommand("4 note Shoot 1", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.26, 5.53, this::getSide));
+    NamedCommands.registerCommand("4 note Shoot 3", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 3.11, 7.19, this::getSide));
 
+    NamedCommands.registerCommand("5 note Shoot 1", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.31, 4.53, this::getSide));
+    NamedCommands.registerCommand("5 note Shoot 2", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.16, 5.49 , this::getSide));
+    NamedCommands.registerCommand("5 note Shoot 3", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 3.36, 5.60, this::getSide));
+    NamedCommands.registerCommand("5 note Shoot 4", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 4.84, 6.07, this::getSide));
+    NamedCommands.registerCommand("5 note Shoot 5", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 4.77, 6.07, this::getSide));
+
+    NamedCommands.registerCommand("3 note 7,8 Shoot 1", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.25, 3.38, this::getSide));
+    NamedCommands.registerCommand("3 note 7,8 Shoot 2", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.24, 3.33, this::getSide));
+    NamedCommands.registerCommand("3 note 7,8 Shoot 3", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.22, 2.74, this::getSide));
+
+    NamedCommands.registerCommand("3 note 6,7 Shoot all", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.16, 2.29, this::getSide));
+    NamedCommands.registerCommand("Shooter Down", new InstantCommand(() -> mPivot.toSetpoint(Constants.Subsystems.pivotMin)));
     NamedCommands.registerCommand("Abandon Path GOALPATH to ALTPATH", new AbandonPath().a_AbandonPath(
     () -> true, // whether we do abandon path, the boolean supplier will correlate to note/bot detection
     "Goal Path", "Alternate Path", s_Swerve));
@@ -102,22 +121,12 @@ public class RobotContainer {
         s_Swerve::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         s_Swerve::autoDrive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-            new PIDConstants(6.0, 0.5, 0.01), // Translation PID constants
+            new PIDConstants(7.0, 0.0, 0.0), // Translation PID constants
             new PIDConstants(5.0, 0.5, 0), // Rotation PID constants
             4.5, // Max module speed, in m/s
             0.4, // Drive base radius in meters. Distance from robot center to furthest module.
             new ReplanningConfig() // Default path replanning config. See the API for the options here
-        ), () -> {
-          // Boolean supplier that controls when the path will be mirrored for the red alliance
-          // This will flip the path being followed to the red side of the field.
-          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-          var alliance = DriverStation.getAlliance();
-          if (alliance.isPresent()) {
-            return alliance.get() == DriverStation.Alliance.Red;
-          }
-          return false;
-        },
+        ), this::getSide,
         s_Swerve // Reference to this subsystem to set requirements
     );
     s_Swerve.setDefaultCommand(
@@ -125,10 +134,11 @@ public class RobotContainer {
             s_Swerve,
             joysticks::getXVelocity, // translation
             joysticks::getYVelocity, // strafe
-            joysticks::getRotationVelocity // rotation
+            joysticks::getRotationVelocity,
+            joysticks::getRotationUp // rotation
             ));
 
-    // PPHolonomicDriveController.setRotationTargetOverride(() -> s_Swerve.getRotationTargetOverride());
+    PPHolonomicDriveController.setRotationTargetOverride(() -> s_Swerve.getRotationTargetOverride());
     // Configure the button bindings
     autoChooser = AutoBuilder.buildAutoChooser();
   
@@ -157,7 +167,7 @@ public class RobotContainer {
     joysticks.zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
     joysticks.reverseIntake.onTrue(new InstantCommand(() -> m_Shooter.scoreAmp(m_Index, mPivot)));
-    joysticks.runShooter.onTrue(new InstantCommand(m_Shooter::Fire));
+    joysticks.runShooter.onTrue(new InstantCommand(m_Shooter::AutoFire));
 
     
 
@@ -166,12 +176,21 @@ public class RobotContainer {
             s_Swerve,
             joysticks::getXVelocity,
             joysticks::getYVelocity,
-            joysticks::getRotationVelocity
+            joysticks::getRotationVelocity,
+            joysticks::getRotationUp
+            ));
+    joysticks.lobShot.whileTrue(lobShot)
+    .onFalse(new TeleopSwerve(
+            s_Swerve,
+            joysticks::getXVelocity,
+            joysticks::getYVelocity,
+            joysticks::getRotationVelocity,
+            joysticks::getRotationUp
             ));
     // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     joysticks.toWaypoint.whileTrue(new SequentialCommandGroup(
-      s_Swerve.driveToWaypoint(new Pose2d(((DriverStation.getAlliance().get()==DriverStation.Alliance.Blue)?(72.5/39.37):(578.77/39.37)), (323.00/39.37) - 1.5, Rotation2d.fromDegrees(90))),
-      new WaitCommand(0.2),
+      // s_Swerve.driveToWaypoint(new Pose2d(((DriverStation.getAlliance().get()==DriverStation.Alliance.Blue)?(72.5/39.37):(578.77/39.37)), (323.00/39.37) - 2, Rotation2d.fromDegrees(90))),
+      // new WaitCommand(0.2),
       new GetToAmp(s_Swerve, false)
     ));
 
@@ -182,6 +201,13 @@ public class RobotContainer {
 
     joysticks.ReallyOverrideShooter.onTrue(new InstantCommand(() -> m_Index.runIndex(1), m_Index)).onFalse(new InstantCommand(m_Index::stopIndex, m_Index));
     // joysticks.pivotGoSetpoint.onTrue(new InstantCommand(() -> mPivot.toSetpoint(45))).onFalse(new InstantCommand(mPivot::stop));
+    joysticks.DriveStraight.whileTrue(new TeleopSwerve(
+            s_Swerve,
+            () -> 0.25, // translation
+            () -> 0, // strafe
+            () -> 0,
+            () -> 0 // rotation
+            ));
 
   }
   public OI getOI() {
@@ -197,6 +223,14 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
+  }
+
+  public Boolean getSide(){
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent()) {
+      return alliance.get() == DriverStation.Alliance.Red;
+    }
+    return false;
   }
   // public Swerve getSwerve(){
   //   return s_Swerve;

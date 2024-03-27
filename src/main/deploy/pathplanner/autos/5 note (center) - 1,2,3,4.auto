@@ -1,0 +1,79 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Fire Shooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5 note 1 a"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5 note 1 b"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Fire Shooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5 note 2 ab"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Fire Shooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5 note 3 ab"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Fire Shooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5 note 4 a"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5 note 4 b"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Fire Shooter"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

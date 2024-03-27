@@ -3,61 +3,55 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.882905765811533,
-        "y": 5.535354916863679
+        "x": 2.6490549985426632,
+        "y": 5.527514849604002
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.5543072624606802,
-        "y": 4.09478126648561
-      },
-      "isLocked": false,
-      "linkedName": "four note speaker l2"
-    },
-    {
-      "anchor": {
-        "x": 2.882905765811533,
-        "y": 4.114515152107228
-      },
-      "prevControl": {
-        "x": 2.399123613104373,
-        "y": 4.114515152107228
-      },
-      "nextControl": {
-        "x": 3.0309099079736637,
-        "y": 4.114515152107228
+        "x": 2.110722481083475,
+        "y": 5.199611426322119
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.30075613997382,
-        "y": 4.578261464215237
+        "x": 2.774369394892637,
+        "y": 4.075047380863993
       },
       "prevControl": {
-        "x": 2.4783611105683763,
-        "y": 4.410523436431489
+        "x": 2.0047478556495593,
+        "y": 4.17371680897208
+      },
+      "nextControl": {
+        "x": 2.9211719898008117,
+        "y": 4.056226535362946
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.1103565174320065,
+        "y": 4.262744502664469
+      },
+      "prevControl": {
+        "x": 2.287961488026562,
+        "y": 4.09500647488072
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "4 note 3 to 4 final"
     }
   ],
-  "rotationTargets": [],
-  "constraintZones": [
+  "rotationTargets": [
     {
-      "name": "v",
-      "minWaypointRelativePos": 0.35,
-      "maxWaypointRelativePos": 1.2,
-      "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0
-      }
+      "waypointRelativePos": 0.9,
+      "rotationDegrees": 175.0,
+      "rotateFast": false
     }
   ],
+  "constraintZones": [],
   "eventMarkers": [
     {
       "name": "intake",
@@ -78,18 +72,18 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.5,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
+    "rotation": 140.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Four note (speaker notes)",
+  "folder": "4 note (centre speaker) - 2,1,3",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0

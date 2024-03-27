@@ -24,7 +24,7 @@ public class IntakeCommand extends Command{
         this.s_Intake = s_Intake;
         this.s_Index = s_Index;
         this.intakePoint = IntakeTypes.beforeAnything;
-        addRequirements(s_Intake, s_Index);
+        addRequirements(s_Intake);
     }
     @Override
     public void initialize(){

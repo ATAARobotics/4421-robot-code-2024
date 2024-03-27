@@ -23,6 +23,7 @@ class OI {
     private double xVelocity;
     private double yVelocity;
     private double rotationVelocity;
+    private double rotationAbs;
     private boolean toggleFieldOriented;
     private double speed;
     private boolean override = false;
@@ -41,10 +42,12 @@ class OI {
     public JoystickButton ShooterIntake;
     public JoystickButton OverrideShooter;
     public JoystickButton ReallyOverrideShooter;
+    public JoystickButton DriveStraight;
 
     public JoystickButton pivotUp;
     public JoystickButton pivotDown;
     public JoystickButton pivotGoSetpoint;
+    public JoystickButton lobShot;
 
     public OI() {
         // Configure the button bindings
@@ -71,6 +74,7 @@ class OI {
         reverseIntake = gunnerStick.getWPIJoystickButton("pivotGoSetpoint");
 
         toWaypoint = driveStick.getWPIJoystickButton("ScoreAmp");
+        DriveStraight = driveStick.getWPIJoystickButton("DriveStraight");
 
         runShooter = gunnerStick.getWPIJoystickButton("Shoot");
         pivotUp = gunnerStick.getWPIJoystickButton("PivotUp");
@@ -78,6 +82,8 @@ class OI {
         ShooterIntake = gunnerStick.getWPIJoystickButton("ShooterIntake");
         OverrideShooter = gunnerStick.getWPIJoystickButton("OverrideShooter");
         ReallyOverrideShooter = gunnerStick.getWPIJoystickButton("ReallyOverrideShooter");
+        lobShot = gunnerStick.getWPIJoystickButton("lobShot");
+        
         // pivotGoSetpoint = gunnerStick.getWPIJoystickButton("pivotGoSetpoint");
 
         // Set up command-based stuff
@@ -119,6 +125,7 @@ class OI {
         xVelocity = -driveStick.getAnalog("XVelocity");
         yVelocity = -driveStick.getAnalog("YVelocity");
         rotationVelocity = rotationStick.getAnalog("XVelocity");
+        rotationAbs = rotationStick.getAnalog("YVelocity");
         //rotationVelocity = driveStick.getAnalog("RotationVelocity");
 
         speed = (-driveStick.getAnalog("Speed") + 1) / 4 + 0.5;
@@ -154,6 +161,9 @@ class OI {
     }
 
     public double getRotationVelocity() {
+        return -rotationVelocity;
+    }
+    public double getRotationUp() {
         return -rotationVelocity;
     }
 

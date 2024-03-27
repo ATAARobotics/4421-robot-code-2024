@@ -32,15 +32,15 @@
     },
     {
       "anchor": {
-        "x": 8.240655712080656,
+        "x": 6.888884546999863,
         "y": 4.075047380863993
       },
       "prevControl": {
-        "x": 8.534224922831674,
-        "y": 4.129780623546387
+        "x": 7.1824537577508805,
+        "y": 4.129780623546388
       },
       "nextControl": {
-        "x": 7.6585060862429435,
+        "x": 6.306734921162151,
         "y": 3.9665110099450973
       },
       "isLocked": false,
@@ -61,19 +61,7 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [
-    {
-      "name": "velocity cull",
-      "minWaypointRelativePos": 0.95,
-      "maxWaypointRelativePos": 2.25,
-      "constraints": {
-        "maxVelocity": 1.5,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0
-      }
-    }
-  ],
+  "constraintZones": [],
   "eventMarkers": [
     {
       "name": "intake",
@@ -105,7 +93,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "3 Note (stage)",
+  "folder": "3 Note (centre speaker) - 2,6",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0

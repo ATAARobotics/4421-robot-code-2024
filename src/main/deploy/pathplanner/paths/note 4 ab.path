@@ -1,0 +1,100 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.155741388405855,
+        "y": 6.956194681620133
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.34321330181122,
+        "y": 6.1471053711338195
+      },
+      "isLocked": false,
+      "linkedName": "5 note 4"
+    },
+    {
+      "anchor": {
+        "x": 8.319591254567126,
+        "y": 5.673492116215002
+      },
+      "prevControl": {
+        "x": 7.589437486567281,
+        "y": 5.683359059025811
+      },
+      "nextControl": {
+        "x": 8.689403359279027,
+        "y": 5.668494655340516
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.77,
+        "y": 6.07
+      },
+      "prevControl": {
+        "x": 6.620312174233478,
+        "y": 6.421325096373445
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "5 note 5"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "intake",
+      "waypointRelativePos": 0.75,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "fire",
+      "waypointRelativePos": 0.5,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "5 note Shoot 5"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.5,
+    "maxAcceleration": 3.7,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0,
+    "rotateFast": true
+  },
+  "reversed": false,
+  "folder": "5 note (center) - 1, 2 , 3, 4",
+  "previewStartingState": null,
+  "useDefaultConstraints": false
+}

@@ -56,13 +56,14 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    m_robotContainer.getSwerve().SetAbsMod();
     m_robotContainer.getOI().setInvetered((DriverStation.getAlliance().get() == Alliance.Red));
+    m_robotContainer.getSwerve().SetAbsMod();
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    m_robotContainer.m_Shooter.AutoFire();
     m_robotContainer.getAutonomousCommand().schedule();
   }  
 
