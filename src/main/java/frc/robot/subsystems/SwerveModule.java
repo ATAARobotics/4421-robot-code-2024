@@ -2,8 +2,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.ControlType;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkBase.*;
+import com.revrobotics.CANSparkLowLevel.*;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -71,8 +71,15 @@ public class SwerveModule {
     setAngle(desiredState);
     setSpeed(desiredState, isOpenLoop);
   }
+  public void setBrakeMode(boolean brake){
+    if(brake){
+      this.driveMotor.setIdleMode(IdleMode.kBrake);
+    }else{
+        this.driveMotor.setIdleMode(IdleMode.kCoast);
+    }
+  }
 
-  private void resetToAbsolute() {
+  public void resetToAbsolute() {
     double absolutePosition = getCanCoder().getDegrees() - angleOffset.getDegrees();
     integratedAngleEncoder.setPosition(absolutePosition);
   }

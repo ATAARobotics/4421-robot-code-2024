@@ -1,0 +1,108 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.531946633080141,
+        "y": 3.2556125597272594
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.51520213805269,
+        "y": 3.0385398178894683
+      },
+      "isLocked": false,
+      "linkedName": "67 1 to 2"
+    },
+    {
+      "anchor": {
+        "x": 5.02403235575702,
+        "y": 3.9665110099450973
+      },
+      "prevControl": {
+        "x": 4.374806935077498,
+        "y": 3.0527863438035516
+      },
+      "nextControl": {
+        "x": 5.290439811648857,
+        "y": 4.341454836755828
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.270256540513081,
+        "y": 4.09478126648561
+      },
+      "prevControl": {
+        "x": 7.865711885269925,
+        "y": 4.065180438053184
+      },
+      "nextControl": {
+        "x": 8.360982710668448,
+        "y": 4.1014197667408805
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.128338213484723,
+        "y": 3.840130221760209
+      },
+      "prevControl": {
+        "x": 7.2446604620765855,
+        "y": 3.9707749942505446
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.7999999999999998,
+      "rotationDegrees": 180.0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 1.5,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.6,
+    "maxAcceleration": 3.7,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 3.0,
+    "rotation": 180.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "3 Note (source side) - 6,7",
+  "previewStartingState": {
+    "rotation": 120.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

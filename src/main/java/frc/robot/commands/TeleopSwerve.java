@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,25 +15,30 @@ public class TeleopSwerve extends Command {
   private DoubleSupplier translationSup;
   private DoubleSupplier strafeSup;
   private DoubleSupplier rotationSup;
+  private DoubleSupplier rotationAbs;
   private BooleanSupplier robotCentricSup;
 
   private SlewRateLimiter translationLimiter = new SlewRateLimiter(3.0);
   private SlewRateLimiter strafeLimiter = new SlewRateLimiter(3.0);
   private SlewRateLimiter rotationLimiter = new SlewRateLimiter(3.0);
+  private final PIDController rotController = new PIDController(10, 20, 1);
+  private boolean absHeading = false;
 
   public TeleopSwerve(
       Swerve s_Swerve,
       DoubleSupplier translationSup,
       DoubleSupplier strafeSup,
       DoubleSupplier rotationSup,
-      BooleanSupplier robotCentricSup) {
+      DoubleSupplier rotationAbs) {
     this.s_Swerve = s_Swerve;
     addRequirements(s_Swerve);
 
     this.translationSup = translationSup;
     this.strafeSup = strafeSup;
     this.rotationSup = rotationSup;
-    this.robotCentricSup = robotCentricSup;
+    this.rotationAbs = rotationAbs;
+    rotController.enableContinuousInput(-Math.PI, Math.PI);
+    rotController.setIZone(Math.toRadians(10));
   }
 
   @Override
@@ -44,15 +50,24 @@ public class TeleopSwerve extends Command {
     double strafeVal =
         strafeLimiter.calculate(
             MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.Swerve.stickDeadband));
-    double rotationVal =
+    double rotationVal = 0;
+    if(absHeading){
+        double Heading = Math.atan2(rotationAbs.getAsDouble(), rotationSup.getAsDouble());
+        rotController.setSetpoint(Heading);
+        rotationVal = MathUtil.clamp(rotController.calculate(s_Swerve.getPose().getRotation().getRadians()), -Constants.Swerve.maxAngularVelocity, Constants.Swerve.maxAngularVelocity);
+
+
+    }else{
+      rotationVal =
         rotationLimiter.calculate(
             MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.Swerve.stickDeadband));
+    }
 
     /* Drive */
     s_Swerve.drive(
         new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
         rotationVal * Constants.Swerve.maxAngularVelocity,
-        !robotCentricSup.getAsBoolean(),
+        true,
         true);
   }
 }
