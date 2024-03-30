@@ -90,22 +90,18 @@ public class AutoShooterPreset extends Command {
      private boolean hasNote = true;
 
     public AutoShooterPreset(
-          Shooter m_shooter, 
           Pivot m_Pivot,
-          Swerve m_swerve,
           Double X,
           Double Y,
           BooleanSupplier flip
      ){
-        this.mShooter = m_shooter;
-        this.mSwerve = m_swerve;
         this.mPivot = m_Pivot; 
   
         this.X = X;
         this.C = Y;
         this.flipSup = flip;
 
-        addRequirements(mShooter);
+        addRequirements(mPivot);
           SmartDashboard.putNumber("Rot P", 0);
           SmartDashboard.putNumber("Rot I", 0);
           SmartDashboard.putNumber("Rot D", 0);
@@ -116,8 +112,6 @@ public class AutoShooterPreset extends Command {
 
     @Override
     public void initialize(){
-        rotController.setTolerance(Math.toRadians(Constants.Subsystems.rotTolerance));
-        rotController.setIZone(Math.toRadians(10));
         GoalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
      //    mSwerve.setAutoLock(true);
         shootTimer.reset();
@@ -131,7 +125,7 @@ public class AutoShooterPreset extends Command {
 
     @Override
     public void execute(){
-          mSwerve.setAutoLock(true);
+          // mSwerve.setAutoLock(true);
           // # g = 9.81
           // # A = proj_pos.x
           // # B = proj_pos.y
@@ -146,21 +140,15 @@ public class AutoShooterPreset extends Command {
           // Note Postion
           //velocity
           ChassisSpeeds vec = mSwerve.getVelocityFromChassisSpeeds();
-          // P = -vec.vyMetersPerSecond;
           P = 0;
           Q = 0;
-          // R = -mSwerve.getChassisSpeeds().vyMetersPerSecond;
-          // R = -vec.vxMetersPerSecond;
           R = 0;
-          // Note Postion
           B = 0.4572;
           if(!flipSup.getAsBoolean()){
                A = X;
           }else{
                A = 16.541242-X;
           } 
-
-
           //TODO change goal pose to be set based on color
           M = GoalPose.getX();
           N = GoalPose.getZ();
@@ -179,8 +167,6 @@ public class AutoShooterPreset extends Command {
           c4 = K*K + H*H + J*J;
           double[] ts = solveQuartic(c0, c1, c2, c3, c4);
           double t = 1000000000;
-          mShooter.AutoFire();
-          ChassisSpeeds moving = mSwerve.getVelocityFromChassisSpeeds();
           rotationVal = 0;
           if(ts != null){
                for (int i=0; i<ts.length; i++){
@@ -192,17 +178,8 @@ public class AutoShooterPreset extends Command {
                e = ((K+Q*t-L*t*t)/t);
                f = ((J+R*t)/t);
                ShooterAngle = Math.atan2(e, Math.sqrt(Math.pow(d,2) + Math.pow(f,2)));
-               RobotAngle = Math.atan2(f, d);
-               rotController.setSetpoint(RobotAngle);
-               rotController.calculate(mSwerve.getPose().getRotation().getRadians());
-               mSwerve.setAutoAngle(Math.toDegrees(RobotAngle));
                mPivot.toSetpoint(Math.toDegrees(ShooterAngle));
-               rotationVal = MathUtil.clamp(rotController.calculate(mSwerve.getPose().getRotation().getRadians()), -Constants.Swerve.maxAngularVelocity, Constants.Swerve.maxAngularVelocity);
           }
-          SmartDashboard.putBoolean("Shooter At Setpoint", mShooter.CanShoot());
-          SmartDashboard.putBoolean("Rotation At Setpoint", rotController.atSetpoint());
-          SmartDashboard.putBoolean("Pivot At Setpoint", mPivot.AtSetpoint());
-
     }
      @Override
      public boolean isFinished() {

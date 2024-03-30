@@ -1,0 +1,105 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.473919655399938,
+        "y": 2.389010655339427
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.790112242136038,
+        "y": 2.517829857343023
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.410786579062458,
+        "y": 2.2367697802442676
+      },
+      "prevControl": {
+        "x": 8.43024008679439,
+        "y": 2.4766963756047518
+      },
+      "nextControl": {
+        "x": 8.375654069425114,
+        "y": 1.8034688280503506
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.6160489244055425,
+        "y": 1.5096422500537308
+      },
+      "prevControl": {
+        "x": 6.257400207108107,
+        "y": 1.5096422500537308
+      },
+      "nextControl": {
+        "x": 4.583330599583708,
+        "y": 1.5096422500537308
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.63,
+        "y": 2.87
+      },
+      "prevControl": {
+        "x": 3.869600046892403,
+        "y": 1.9832555049725498
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.9,
+      "rotationDegrees": 180.0,
+      "rotateFast": true
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "intke",
+      "waypointRelativePos": 0.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.5,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 140.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "3 note (through stage) - 2, 6",
+  "previewStartingState": null,
+  "useDefaultConstraints": false
+}

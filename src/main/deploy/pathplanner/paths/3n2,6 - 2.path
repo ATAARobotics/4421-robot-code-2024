@@ -3,41 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.216281251392744,
-        "y": 5.7500207439787205
+        "x": 0.5645260933888472,
+        "y": 3.946551915928368
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.930642280685416,
-        "y": 5.7500207439787205
+        "x": 2.5202357965343594,
+        "y": 2.4124323284309916
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.281967377058862,
-        "y": 5.773442417070284
+        "x": 5.6118966446206775,
+        "y": 1.592673770226285
       },
       "prevControl": {
-        "x": 8.486175089325926,
-        "y": 5.785885180900177
+        "x": 4.7394393219599555,
+        "y": 1.5860864246692832
       },
       "nextControl": {
-        "x": 8.077759664791797,
-        "y": 5.7609996532403915
+        "x": 6.4843539672813995,
+        "y": 1.5992611157832868
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.089487893669082,
-        "y": 6.136478349989511
+        "x": 7.473919655399938,
+        "y": 2.389010655339427
       },
       "prevControl": {
-        "x": 6.572185241374761,
-        "y": 6.640044321458116
+        "x": 6.94693201083977,
+        "y": 2.025974722420201
       },
       "nextControl": null,
       "isLocked": false,
@@ -49,7 +49,7 @@
   "eventMarkers": [
     {
       "name": "intake",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 1.8,
       "command": {
         "type": "parallel",
         "data": {
@@ -67,20 +67,17 @@
   ],
   "globalConstraints": {
     "maxVelocity": 4.5,
-    "maxAcceleration": 3.7,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0.0,
+    "velocity": 0,
     "rotation": 180.0,
     "rotateFast": true
   },
   "reversed": false,
-  "folder": "4 note (amp side) 3,4,5",
-  "previewStartingState": {
-    "rotation": 180.0,
-    "velocity": 0
-  },
+  "folder": "3 note (through stage) - 2, 6",
+  "previewStartingState": null,
   "useDefaultConstraints": false
 }

@@ -96,20 +96,20 @@ public class RobotContainer {
     intake = new IntakeCommand(m_Intake, m_Index);
     NamedCommands.registerCommand("Intake", intake);
     NamedCommands.registerCommand("Fire Shooter", autoShoot);
-    NamedCommands.registerCommand("4 note Shoot 1", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.26, 5.53, this::getSide));
-    NamedCommands.registerCommand("4 note Shoot 3", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 3.11, 7.19, this::getSide));
+    NamedCommands.registerCommand("4 note Shoot 1", new AutoShooterPreset(mPivot, 2.26, 5.53, this::getSide));
+    NamedCommands.registerCommand("4 note Shoot 3", new AutoShooterPreset(mPivot, 3.11, 7.19, this::getSide));
 
-    NamedCommands.registerCommand("5 note Shoot 1", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.31, 4.53, this::getSide));
-    NamedCommands.registerCommand("5 note Shoot 2", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.16, 5.49 , this::getSide));
-    NamedCommands.registerCommand("5 note Shoot 3", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 3.36, 5.60, this::getSide));
-    NamedCommands.registerCommand("5 note Shoot 4", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 4.84, 6.07, this::getSide));
-    NamedCommands.registerCommand("5 note Shoot 5", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 4.77, 6.07, this::getSide));
+    NamedCommands.registerCommand("5 note Shoot 1", new AutoShooterPreset(mPivot, 2.31, 4.53, this::getSide));
+    NamedCommands.registerCommand("5 note Shoot 2", new AutoShooterPreset(mPivot, 2.16, 5.49 , this::getSide));
+    NamedCommands.registerCommand("5 note Shoot 3", new AutoShooterPreset(mPivot, 3.36, 5.60, this::getSide));
+    NamedCommands.registerCommand("5 note Shoot 4", new AutoShooterPreset(mPivot, 4.84, 6.07, this::getSide));
+    NamedCommands.registerCommand("5 note Shoot 5", new AutoShooterPreset(mPivot, 4.77, 6.07, this::getSide));
 
-    NamedCommands.registerCommand("3 note 7,8 Shoot 1", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.25, 3.38, this::getSide));
-    NamedCommands.registerCommand("3 note 7,8 Shoot 2", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.24, 3.33, this::getSide));
-    NamedCommands.registerCommand("3 note 7,8 Shoot 3", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.22, 2.74, this::getSide));
+    NamedCommands.registerCommand("3 note 7,8 Shoot 1", new AutoShooterPreset(mPivot, 2.25, 3.38, this::getSide));
+    NamedCommands.registerCommand("3 note 7,8 Shoot 2", new AutoShooterPreset(mPivot, 2.24, 3.33, this::getSide));
+    NamedCommands.registerCommand("3 note 7,8 Shoot 3", new AutoShooterPreset(mPivot, 2.22, 2.74, this::getSide));
 
-    NamedCommands.registerCommand("3 note 6,7 Shoot all", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.16, 2.29, this::getSide));
+    NamedCommands.registerCommand("3 note 6,7 Shoot all", new AutoShooterPreset(mPivot, 2.16, 2.29, this::getSide));
     NamedCommands.registerCommand("Shooter Down", new InstantCommand(() -> mPivot.toSetpoint(Constants.Subsystems.pivotMin)));
     NamedCommands.registerCommand("Abandon Path GOALPATH to ALTPATH", new AbandonPath().a_AbandonPath(
     () -> true, // whether we do abandon path, the boolean supplier will correlate to note/bot detection
@@ -135,7 +135,8 @@ public class RobotContainer {
             joysticks::getXVelocity, // translation
             joysticks::getYVelocity, // strafe
             joysticks::getRotationVelocity,
-            joysticks::getRotationUp // rotation
+            joysticks::getRotationUp, // rotation
+            joysticks::getSlow
             ));
 
     PPHolonomicDriveController.setRotationTargetOverride(() -> s_Swerve.getRotationTargetOverride());
@@ -177,7 +178,8 @@ public class RobotContainer {
             joysticks::getXVelocity,
             joysticks::getYVelocity,
             joysticks::getRotationVelocity,
-            joysticks::getRotationUp
+            joysticks::getRotationUp, // rotation
+            joysticks::getSlow
             ));
     joysticks.lobShot.whileTrue(lobShot)
     .onFalse(new TeleopSwerve(
@@ -185,7 +187,8 @@ public class RobotContainer {
             joysticks::getXVelocity,
             joysticks::getYVelocity,
             joysticks::getRotationVelocity,
-            joysticks::getRotationUp
+            joysticks::getRotationUp, // rotation
+            joysticks::getSlow
             ));
     // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     joysticks.toWaypoint.whileTrue(new SequentialCommandGroup(
@@ -206,8 +209,8 @@ public class RobotContainer {
             () -> 0.25, // translation
             () -> 0, // strafe
             () -> 0,
-            () -> 0 // rotation
-            ));
+            () -> 0, // rotation
+            () -> false));
 
   }
   public OI getOI() {

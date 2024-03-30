@@ -3,48 +3,54 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.216281251392744,
-        "y": 5.7500207439787205
+        "x": 7.532473838128846,
+        "y": 4.122214464115091
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.930642280685416,
-        "y": 5.7500207439787205
+        "x": 8.000907299960106,
+        "y": 4.157346973752435
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.281967377058862,
-        "y": 5.773442417070284
+        "x": 8.317099886696207,
+        "y": 4.063660281386183
       },
       "prevControl": {
-        "x": 8.486175089325926,
-        "y": 5.785885180900177
+        "x": 8.911607823215647,
+        "y": 4.203317637404505
       },
       "nextControl": {
-        "x": 8.077759664791797,
-        "y": 5.7609996532403915
+        "x": 7.529972393361348,
+        "y": 3.87875418036413
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.089487893669082,
-        "y": 6.136478349989511
+        "x": 2.8481392198162414,
+        "y": 2.634938222800839
       },
       "prevControl": {
-        "x": 6.572185241374761,
-        "y": 6.640044321458116
+        "x": 6.724426116469921,
+        "y": 4.555515416309007
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.7,
+      "rotationDegrees": 180.0,
+      "rotateFast": true
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [
     {
@@ -67,20 +73,17 @@
   ],
   "globalConstraints": {
     "maxVelocity": 4.5,
-    "maxAcceleration": 3.7,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0.0,
-    "rotation": 180.0,
-    "rotateFast": true
+    "velocity": 0,
+    "rotation": 140.0,
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": "4 note (amp side) 3,4,5",
-  "previewStartingState": {
-    "rotation": 180.0,
-    "velocity": 0
-  },
+  "folder": "3 note (through stage) - 2, 6",
+  "previewStartingState": null,
   "useDefaultConstraints": false
 }

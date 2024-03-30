@@ -198,10 +198,11 @@ public class Shooting extends Command {
                if(true){
                     forceShoot = true;
                     mPivot.toSetpoint(Math.toDegrees(ShooterAngle));
-                    
-                    if (rotController.atSetpoint()&& mShooter.CanShoot() && mPivot.AtSetpoint()){
-                         SmartDashboard.putBoolean("Can Shoot", true);
-                         shootTimer.start();
+                    if(Math.abs(P) <= 0.1 && Math.abs(R) <= 0.1){
+                         if (rotController.atSetpoint()&& mShooter.CanShoot() && mPivot.AtSetpoint()){
+                              SmartDashboard.putBoolean("Can Shoot", true);
+                              shootTimer.start();
+                         } 
                     }
                     if(shootTimer.hasElapsed(0.1)){
                          if(rotController.atSetpoint() && mPivot.AtSetpoint() && mShooter.CanShoot()){
@@ -212,7 +213,7 @@ public class Shooting extends Command {
                               shootTimer.reset();
                               shootTimer.stop();
                          }
-                    } 
+                    }
                }else{
                     if(forceShoot){
                          mIndex.runIndex(1);
@@ -254,25 +255,12 @@ public class Shooting extends Command {
           if(shooterOverridden.getAsBoolean()){
                mIndex.runIndex(1);
           }
-          if(true){
-               /* Drive */
-               mSwerve.drive(
-                    new Translation2d(translationVal, strafeVal).times(2.0),
-                    rotationVal,
-                    true,
-                    true);
-          }else{
-               /* Drive */
-               mSwerve.drive(
-                    new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
-                    rotationVal,
-                    true,
-                    true);    
-          }
-          
-
-
-
+          /* Drive */
+          mSwerve.drive(
+               new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
+               rotationVal,
+               true,
+               true);
      }
      @Override
      public void end(boolean interrupted) {

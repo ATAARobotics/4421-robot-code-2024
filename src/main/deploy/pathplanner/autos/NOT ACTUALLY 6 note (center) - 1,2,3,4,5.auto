@@ -14,7 +14,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "4 note(amp side) 3 ab"
+            "pathName": "5 note 1 a"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5 note 1 b"
           }
         },
         {
@@ -26,13 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "5 note 4 a"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": " 5 note (amp side) 4 b"
+            "pathName": "5 note 2 ab"
           }
         },
         {
@@ -44,13 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "5 note 5(amp) a"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "5 note(amp side) 5 b"
+            "pathName": "5 note 3 ab"
           }
         },
         {
