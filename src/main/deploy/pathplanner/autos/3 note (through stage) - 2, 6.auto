@@ -12,6 +12,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Shooter Down"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "3n2,6 - 2"
@@ -27,6 +33,12 @@
           "type": "named",
           "data": {
             "name": "Fire Shooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooter Down"
           }
         },
         {
