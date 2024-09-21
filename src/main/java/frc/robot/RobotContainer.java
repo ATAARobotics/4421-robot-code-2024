@@ -92,6 +92,7 @@ public class RobotContainer {
   public RobotContainer() { 
     m_Index = new Index();
     m_Intake = new Intake();
+    
     m_Shooter = new Shooter();
     mPivot = new Pivot();
     // Register pathplanner commands
@@ -110,6 +111,7 @@ public class RobotContainer {
                         () -> false);
     autoShoot = new AutoShooter(m_Shooter, mPivot, m_Index, s_Swerve);
     intake = new IntakeCommand(m_Intake, m_Index);
+
     NamedCommands.registerCommand("Intake", intake);
     NamedCommands.registerCommand("Fire Shooter", autoShoot);
     NamedCommands.registerCommand("4 note Shoot 1", new AutoShooterPreset(mPivot, 2.26, 5.53, this::getSide));
@@ -183,22 +185,27 @@ public class RobotContainer {
     intakeButton.whileTrue(intake);
     //joysticks.intake.whileTrue(intake);
     //joysticks.zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-    shooterButton.onTrue(new InstantCommand(m_Shooter::AutoFire));
-    ampButton.onTrue(new InstantCommand(() -> m_Shooter.scoreAmp(m_Index, mPivot)));
+    // shooterButton.onTrue(new InstantCommand(m_Shooter::AutoFire));
+    shooterButton.onTrue(new InstantCommand(m_Shooter::Fire))
+    .onFalse(new InstantCommand(m_Shooter::stop));
+
+    // ampButton.onTrue(new InstantCommand(() -> m_Shooter.scoreAmp(m_Index, mPivot)));
+
+
     //joysticks.reverseIntake.onTrue(new InstantCommand(() -> m_Shooter.scoreAmp(m_Index, mPivot)));
     //joysticks.runShooter.onTrue(new InstantCommand(m_Shooter::AutoFire));
 
     
 
-    shooterButton.whileTrue(shoot);
-    shooterButton.onFalse(new TeleopSwerve(
-            s_Swerve,
-            ()->joystick.getRawAxis(translationAxis),
-            ()->joystick.getRawAxis(strafeAxis),
-            () ->-joystick.getRawAxis(rotationAxis),
-            () -> 0, // rotation
-            () ->false
-            ));
+    // shooterButton.whileTrue(shoot);
+    // shooterButton.onFalse(new TeleopSwerve(s
+    //         s_Swerve,
+    //         ()->joystick.getRawAxis(translationAxis),
+    //         ()->joystick.getRawAxis(strafeAxis),
+    //         () ->-joystick.getRawAxis(rotationAxis),
+    //         () -> 0, // rotation
+    //         () ->false
+    //         ));
     lobButton.whileTrue(lobShot);
     lobButton.onFalse(new TeleopSwerve(
             s_Swerve,
