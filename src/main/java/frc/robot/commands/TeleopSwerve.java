@@ -54,17 +54,20 @@ public class TeleopSwerve extends Command {
         strafeLimiter.calculate(
             MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.Swerve.stickDeadband));
     double rotationVal = 0;
-    if(absHeading){
-        double Heading = Math.atan2(rotationAbs.getAsDouble(), rotationSup.getAsDouble());
-        rotController.setSetpoint(Heading);
-        rotationVal = MathUtil.clamp(rotController.calculate(s_Swerve.getPose().getRotation().getRadians()), -Constants.Swerve.maxAngularVelocity, Constants.Swerve.maxAngularVelocity);
+    // if(absHeading){
+    //     double Heading = Math.atan2(rotationAbs.getAsDouble(), rotationSup.getAsDouble());
+    //     rotController.setSetpoint(Heading);
+    //     rotationVal = MathUtil.clamp(rotController.calculate(s_Swerve.getPose().getRotation().getRadians()), -Constants.Swerve.maxAngularVelocity, Constants.Swerve.maxAngularVelocity);
 
 
-    }else{
-      rotationVal =
+    // }else{
+    //   rotationVal =
+    //     rotationLimiter.calculate(
+    //         MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.Swerve.stickDeadband));
+    // }
+    rotationVal =
         rotationLimiter.calculate(
             MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.Swerve.stickDeadband));
-    }
 
     /* Drive */
     if(!slowButton.getAsBoolean()){

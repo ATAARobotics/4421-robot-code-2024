@@ -22,7 +22,7 @@ public class Intake extends SubsystemBase {
         backIntake = new CANSparkFlex(Constants.Subsystems.intakeBack, CANSparkLowLevel.MotorType.kBrushless);
         intakeStop = new DigitalInput(8);
         frontIntake.setInverted(true);
-
+        backIntake.setInverted(true);
         frontIntake.setIdleMode(IdleMode.kCoast);
         backIntake.setIdleMode(IdleMode.kCoast);
     }

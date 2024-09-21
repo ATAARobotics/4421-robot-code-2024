@@ -41,8 +41,8 @@ public class Pivot extends SubsystemBase{
     private double speed = 0.0;
     public Pivot(){
 
-        PivotMotor = new CANSparkFlex(Constants.Subsystems.shooterPivot, CANSparkLowLevel.MotorType.kBrushless);
-        PivotMotorSecondary = new CANSparkFlex(23, CANSparkLowLevel.MotorType.kBrushless);
+        PivotMotor = new CANSparkFlex(Constants.Subsystems.leftShooterPivot, CANSparkLowLevel.MotorType.kBrushless);
+        PivotMotorSecondary = new CANSparkFlex(Constants.Subsystems.rightShooterPivot, CANSparkLowLevel.MotorType.kBrushless);
         PivotMotor.setInverted(true);
         PivotMotorSecondary.setInverted(false);
         PivotMotor.setIdleMode(IdleMode.kBrake);

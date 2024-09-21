@@ -76,8 +76,8 @@ public final class Constants {
     public static final double angleConversionFactor = 360.0 / angleGearRatio;
 
     /* Swerve Profiling Values */
-    public static final double maxSpeed = 4.5; // meters per second
-    public static final double maxAngularVelocity = Math.PI*3;
+    public static final double maxSpeed = 5; // meters per second
+    public static final double maxAngularVelocity = Math.PI*2;
 
     /* Neutral Modes */
     public static final IdleMode angleNeutralMode = IdleMode.kBrake;
@@ -162,10 +162,10 @@ public final class Constants {
     public static final int index = 15;
     public static final int leftClimb = 16;
     public static final int rightClimb = 17;
+    public static final int leftShooterPivot = 16;
+    public static final int rightShooterPivot = 17;
     public static final int leftShooter = 18;
     public static final int rightShooter = 19;
-    public static final int shooterPivot = 21;
-    
 
     public static final double shooterP = 0.00055;
     public static final double shooterI = 0.00000056;
