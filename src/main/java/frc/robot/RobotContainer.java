@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -96,12 +95,6 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() { 
-    // comp alliance selection
-    // Constants.Swerve.setAlliance(DriverStation.getAlliance().get());
-
-    // testing alliance selection
-    Constants.Swerve.setAlliance(Alliance.Red);
-
     m_Index = new Index();
     m_Intake = new Intake();
 
@@ -165,7 +158,7 @@ public class RobotContainer {
             () -> joystick.getRawAxis(translationAxis), // translation
             () -> joystick.getRawAxis(strafeAxis), // strafe
             () -> -joystick.getRawAxis(rotationAxis),
-            ()->0, // rotation
+            () -> -joystick.getRawAxis(rotationAxis), // rotation
             ()->false
             ));
 
@@ -213,7 +206,7 @@ public class RobotContainer {
             ()->joystick.getRawAxis(translationAxis),
             ()->joystick.getRawAxis(strafeAxis),
             () ->-joystick.getRawAxis(rotationAxis),
-            () -> 0, // rotation
+            () -> -joystick.getRawAxis(rotationAxis), // rotation
             () ->false
             ));
 
@@ -223,7 +216,7 @@ public class RobotContainer {
             ()->joystick.getRawAxis(translationAxis),
             ()->joystick.getRawAxis(strafeAxis),
             () ->-joystick.getRawAxis(rotationAxis),
-            () -> 0, // rotation
+            () -> -joystick.getRawAxis(rotationAxis), // rotation
             () ->false
             ));
     // joysticks.lobShot.whileTrue(lobShot)
@@ -242,7 +235,6 @@ public class RobotContainer {
     //   new GetToAmp(s_Swerve, false)
     // ));
 
-    
     // if (manualShootAxis > 0.25) {
       
     //   m_Shooter.ReverseIndex();

@@ -28,10 +28,8 @@ import frc.robot.subsystems.*;
 
 public class Shooting extends Command {
      // TODO: pos
-     // private Translation3d BluegoalPose = new Translation3d((8.84/39.37), 5.5408, (80.91/39.37));
-     private Translation3d BluegoalPose = new Translation3d((642.38/39.37), 5.5408, (80.91/39.37));
-
-     // private Translation3d RedgoalPose = new Translation3d(16.706342, 5.5408, 2.2);
+     private Translation3d BluegoalPose = new Translation3d((8.84/39.37), 5.5408, (80.91/39.37));
+   // private Translation3d RedgoalPose = new Translation3d(16.706342, 5.5408, 2.2);
      private Translation3d RedgoalPose = new Translation3d((642.38/39.37), 5.5408, (80.91/39.37)); //the 20 was 23.25
 
      // SIDE FLIP
