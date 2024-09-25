@@ -56,7 +56,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    m_robotContainer.getOI().setInvetered((DriverStation.getAlliance().get() == Alliance.Red));
+    //m_robotContainer.getOI().setInvetered((DriverStation.getAlliance().get() == Alliance.Red));
     m_robotContainer.getSwerve().SetAbsMod();
   }
 
@@ -86,7 +86,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    m_robotContainer.getOI().checkInputs();
+    //m_robotContainer.getOI().checkInputs();
 
   }
 

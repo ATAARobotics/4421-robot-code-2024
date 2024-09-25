@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 import java.util.function.BooleanSupplier;
 
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
@@ -97,10 +98,10 @@ public class Shooter extends SubsystemBase{
         // SmartDashboard.putNumber("right power", rightShooter.getAppliedOutput());
 
         
-        SmartDashboard.setDefaultNumber("shooter p", 0);
-        SmartDashboard.setDefaultNumber("shooter i", 0);
-        SmartDashboard.setDefaultNumber("shooter d", 0);
-        SmartDashboard.setDefaultNumber("shooter ff", 0);
+        SmartDashboard.setDefaultNumber("shooter p", Constants.Subsystems.shooterP);
+        SmartDashboard.setDefaultNumber("shooter i", Constants.Subsystems.shooterI);
+        SmartDashboard.setDefaultNumber("shooter d", Constants.Subsystems.shooterD);
+        SmartDashboard.setDefaultNumber("shooter ff", Constants.Subsystems.shooterFF);
         
         // rightShooterPID.setIZone(2000);
         
@@ -225,11 +226,13 @@ public class Shooter extends SubsystemBase{
         rightShooterPID.setFF(SmartDashboard.getNumber("shooter ff", 0));
         leftShooterPID.setFF(SmartDashboard.getNumber("shooter ff", 0));
     }
+
     public void AutoFire(){
         isAmpScoring = 0;
         isFiring = true;
         isLob = false;
     }
+
     public void LobFire(){
         isFiring = true;
         isLob = true;

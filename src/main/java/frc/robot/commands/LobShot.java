@@ -27,7 +27,7 @@ import frc.robot.subsystems.*;
 public class LobShot extends Command {
      // TODO: pos
      private Translation3d[] BluegoalPose = new Translation3d[]{
-          new Translation3d(-0.1651+0.05, 5.5408, 2.15 - 0.05)
+          new Translation3d(-0.1651+2, 5.5408, (5/39.37))
      };
      // private Translation3d RedgoalPose = new Translation3d(16.706342, 5.5408, 2.2);
      private Translation3d[] RedgoalPose = new Translation3d[]{

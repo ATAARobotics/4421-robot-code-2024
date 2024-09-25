@@ -17,6 +17,7 @@ public class TeleopSwerve extends Command {
   private DoubleSupplier rotationSup;
   private DoubleSupplier rotationAbs;
   private BooleanSupplier robotCentricSup;
+  private BooleanSupplier slowButton;
 
   private SlewRateLimiter translationLimiter = new SlewRateLimiter(3.0);
   private SlewRateLimiter strafeLimiter = new SlewRateLimiter(3.0);
@@ -29,7 +30,8 @@ public class TeleopSwerve extends Command {
       DoubleSupplier translationSup,
       DoubleSupplier strafeSup,
       DoubleSupplier rotationSup,
-      DoubleSupplier rotationAbs) {
+      DoubleSupplier rotationAbs,
+      BooleanSupplier slowButton) {
     this.s_Swerve = s_Swerve;
     addRequirements(s_Swerve);
 
@@ -37,6 +39,7 @@ public class TeleopSwerve extends Command {
     this.strafeSup = strafeSup;
     this.rotationSup = rotationSup;
     this.rotationAbs = rotationAbs;
+    this.slowButton = slowButton;
     rotController.enableContinuousInput(-Math.PI, Math.PI);
     rotController.setIZone(Math.toRadians(10));
   }
@@ -51,23 +54,34 @@ public class TeleopSwerve extends Command {
         strafeLimiter.calculate(
             MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.Swerve.stickDeadband));
     double rotationVal = 0;
-    if(absHeading){
-        double Heading = Math.atan2(rotationAbs.getAsDouble(), rotationSup.getAsDouble());
-        rotController.setSetpoint(Heading);
-        rotationVal = MathUtil.clamp(rotController.calculate(s_Swerve.getPose().getRotation().getRadians()), -Constants.Swerve.maxAngularVelocity, Constants.Swerve.maxAngularVelocity);
+    // if(absHeading){
+    //     double Heading = Math.atan2(rotationAbs.getAsDouble(), rotationSup.getAsDouble());
+    //     rotController.setSetpoint(Heading);
+    //     rotationVal = MathUtil.clamp(rotController.calculate(s_Swerve.getPose().getRotation().getRadians()), -Constants.Swerve.maxAngularVelocity, Constants.Swerve.maxAngularVelocity);
 
 
-    }else{
-      rotationVal =
+    // }else{
+    //   rotationVal =
+    //     rotationLimiter.calculate(
+    //         MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.Swerve.stickDeadband));
+    // }
+    rotationVal =
         rotationLimiter.calculate(
             MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.Swerve.stickDeadband));
-    }
 
     /* Drive */
-    s_Swerve.drive(
-        new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
-        rotationVal * Constants.Swerve.maxAngularVelocity,
-        true,
-        true);
+    if(!slowButton.getAsBoolean()){
+      s_Swerve.drive(
+          new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
+          rotationVal * Constants.Swerve.maxAngularVelocity,
+          true,
+          true);
+    }else{
+      s_Swerve.drive(
+          new Translation2d(translationVal, strafeVal).times(1.5),
+          rotationVal * Math.PI,
+          true,
+          true);
+    }
   }
 }

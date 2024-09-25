@@ -48,6 +48,7 @@ class OI {
     public JoystickButton pivotDown;
     public JoystickButton pivotGoSetpoint;
     public JoystickButton lobShot;
+    public JoystickButton SlowButton;
 
     public OI() {
         // Configure the button bindings
@@ -69,9 +70,11 @@ class OI {
         shooterLock = rotationStick.getWPIJoystickButton("AutoShooter");
         intake = driveStick.getWPIJoystickButton("Intake");
         zeroGyro = driveStick.getWPIJoystickButton("Zero");
+        SlowButton = driveStick.getWPIJoystickButton("SlowButton");
 
         // reverseIntake = driveStick.getWPIJoystickButton("ReverseIntake");
         reverseIntake = gunnerStick.getWPIJoystickButton("pivotGoSetpoint");
+
 
         toWaypoint = driveStick.getWPIJoystickButton("ScoreAmp");
         DriveStraight = driveStick.getWPIJoystickButton("DriveStraight");
@@ -158,6 +161,9 @@ class OI {
 
     public double getSpeed() {
         return speed;
+    }
+    public boolean getSlow(){
+        return SlowButton.getAsBoolean();
     }
 
     public double getRotationVelocity() {

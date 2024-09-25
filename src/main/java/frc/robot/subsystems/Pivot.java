@@ -26,12 +26,11 @@ import frc.robot.subsystems.*;
 
 
 public class Pivot extends SubsystemBase{
-
-
     private boolean GoingToSetpoint = false;
     private boolean ClimbingDown = false;
     private CANSparkFlex PivotMotor;
     private CANSparkFlex PivotMotorSecondary;
+    private double angle;
 
     private CANCoder pivotEncoder;
 
@@ -41,10 +40,12 @@ public class Pivot extends SubsystemBase{
     private double speed = 0.0;
     public Pivot(){
 
-        PivotMotor = new CANSparkFlex(Constants.Subsystems.shooterPivot, CANSparkLowLevel.MotorType.kBrushless);
-        PivotMotorSecondary = new CANSparkFlex(23, CANSparkLowLevel.MotorType.kBrushless);
-        PivotMotor.setInverted(true);
-        PivotMotorSecondary.setInverted(false);
+        PivotMotor = new CANSparkFlex(Constants.Subsystems.leftShooterPivot, CANSparkLowLevel.MotorType.kBrushless);
+        PivotMotorSecondary = new CANSparkFlex(Constants.Subsystems.rightShooterPivot, CANSparkLowLevel.MotorType.kBrushless);
+
+        PivotMotor.setInverted(false);
+        PivotMotorSecondary.setInverted(true);
+
         PivotMotor.setIdleMode(IdleMode.kBrake);
         PivotMotorSecondary.setIdleMode(IdleMode.kBrake);
         PivotMotor.burnFlash();
@@ -56,20 +57,23 @@ public class Pivot extends SubsystemBase{
     @Override
     public void periodic(){
 
-        double angle = pivotEncoder.getAbsolutePosition();
+        SmartDashboard.putNumber("Arm Speed", speed);
+        SmartDashboard.putBoolean("GoingToSetpoint", GoingToSetpoint);
+
+        angle = 360 - pivotEncoder.getAbsolutePosition();
         SmartDashboard.putNumber("Pivot Angle", angle);
         SmartDashboard.putNumber("Pivot Setpoint", pivotPID.getSetpoint());
-        SmartDashboard.putNumber("Pivot Error", (Math.abs(pivotPID.getSetpoint()-pivotEncoder.getAbsolutePosition())));
+        SmartDashboard.putNumber("Pivot Error", (Math.abs(pivotPID.getSetpoint()-angle)));
         double pidVal = pivotPID.calculate(angle);
 
-        if(pivotEncoder.getAbsolutePosition() <= 75){
+        if(angle <= 75){
             if (GoingToSetpoint){
                 double ffVal = ffConstant*Math.cos(Math.toRadians(angle));
                 speed = MathUtil.clamp(pidVal+ffVal, -1, 1);
             }
         }
         else{
-            if (GoingToSetpoint && (Math.abs(pivotPID.getSetpoint()-pivotEncoder.getAbsolutePosition()) >= 5)){
+            if (GoingToSetpoint && (Math.abs(pivotPID.getSetpoint()-angle) >= 5)){
                 speed = MathUtil.clamp(pidVal, -1, 1);
             }else{
                 if(GoingToSetpoint){
@@ -79,11 +83,11 @@ public class Pivot extends SubsystemBase{
         }
 
         if (speed < 0){
-            if(pivotEncoder.getAbsolutePosition() >= 35){
+            if(angle >= 35){
                 PivotMotor.set(speed);
                 PivotMotorSecondary.set(speed);
             }
-            else if(pivotEncoder.getAbsolutePosition() >=26){
+            else if(angle >=26){
                 PivotMotor.set(speed * 0.4);
                 PivotMotorSecondary.set(speed * 0.4);
             }
@@ -92,10 +96,10 @@ public class Pivot extends SubsystemBase{
                 PivotMotorSecondary.stopMotor();
             }
         }else{
-            if(pivotEncoder.getAbsolutePosition() <= 95){
+            if(angle <= 95){
                 PivotMotor.set(speed);
                 PivotMotorSecondary.set(speed);
-            }else if(pivotEncoder.getAbsolutePosition()<=114){
+            }else if(angle <= 114){
                 PivotMotor.set(speed * 0.4);
                 PivotMotorSecondary.set(speed * 0.4);
             }else{
@@ -130,7 +134,7 @@ public class Pivot extends SubsystemBase{
         PivotMotorSecondary.set(0);
     }
     public boolean AtSetpoint(){
-        return (Math.abs(pivotPID.getSetpoint()-pivotEncoder.getAbsolutePosition()) <= Constants.Subsystems.pivotTolerance);
+        return (Math.abs(pivotPID.getSetpoint()-angle) <= Constants.Subsystems.pivotTolerance);
     }
 
 

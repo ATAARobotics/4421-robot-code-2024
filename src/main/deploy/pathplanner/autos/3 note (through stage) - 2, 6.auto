@@ -14,7 +14,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "4 note(amp side) 3 ab"
+            "pathName": "3n2,6 - 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3n2,6 - 2.5"
           }
         },
         {
@@ -26,31 +32,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "5 note 4 a"
+            "pathName": "3n2,6 - 3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": " 5 note (amp side) 4 b"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Fire Shooter"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "5 note 5(amp) a"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "5 note(amp side) 5 b"
+            "pathName": "3n2,6 - 3.5"
           }
         },
         {

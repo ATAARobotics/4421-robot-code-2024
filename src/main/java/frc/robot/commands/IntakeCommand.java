@@ -43,9 +43,11 @@ public class IntakeCommand extends Command{
     }
     private IntakeTypes intakePoint = IntakeTypes.nothing;
 
-    public IntakeCommand(Intake s_Intake, Index s_Index){
+    public IntakeCommand(Intake s_Intake, Index s_Index, Swerve s_Swerve){
         this.s_Intake = s_Intake;
         this.s_Index = s_Index;
+        this.s_Swerve = s_Swerve;
+
         this.intakePoint = IntakeTypes.beforeAnything;
         addRequirements(s_Intake);
     }
@@ -102,11 +104,16 @@ public class IntakeCommand extends Command{
         // Very large adjustment: 7
 
         if (Math.abs(ty) > 0.0) {
-        double translationX = (cameraXdistanceFromNote+Constants.Subsystems.X_CAMERA_DISTANCE_FROM_CENTER); //robot angle changing
-        double translationY = (cameraYdistanceFromNote+Constants.Subsystems.Y_CAMERA_DISTANCE_FROM_CENTER); //the robot is not going forward for now
-        double rotation = Math.toRadians(Math.atan(translationY/translationX)); //robot is rotating
-        s_Swerve.drive(new Translation2d(translationX, translationY).times(Constants.Swerve.maxSpeed), rotation * Constants.Swerve.maxAngularVelocity, true, true);
-      } else {
+            System.out.println("this is before TranslationX");
+            double translationY = -(cameraXdistanceFromNote+Constants.Subsystems.X_CAMERA_DISTANCE_FROM_CENTER); //robot angle changing
+            System.out.println("this is before TranslationY");
+            double translationX = -(cameraYdistanceFromNote+Constants.Subsystems.Y_CAMERA_DISTANCE_FROM_CENTER); //the robot is not going forward for now
+            System.out.println("this is before rotation");
+            double rotation = Math.toRadians(Math.atan(translationY/translationX)); //robot is rotating
+            System.out.println("this is before s_swerve.drive");
+            Translation2d mytranslation = new Translation2d(translationX, -translationY);
+            s_Swerve.drive(mytranslation, Math.signum(rotation)*(Constants.Swerve.maxAngularVelocity), false, true);
+        } else {
             System.out.println("there appears to be no note detected. is the vision bad or is the note not there?");
         }
 

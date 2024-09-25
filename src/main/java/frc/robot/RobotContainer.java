@@ -45,12 +45,24 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {
   /* Controllers */
+  private final Joystick joystick = new Joystick(0);
   /* Drive Controls */
-  //private final int translationAxis = XboxController.Axis.kLeftY.value;
-  //private final int strafeAxis = XboxController.Axis.kLeftX.value;
-  //private final int rotationAxis = XboxController.Axis.kRightX.value;
 
-  private final OI joysticks = new OI();
+  private final int translationAxis = XboxController.Axis.kLeftY.value;
+  private final int strafeAxis = XboxController.Axis.kLeftX.value;
+  private final int rotationAxis = XboxController.Axis.kRightX.value;
+
+  private final JoystickButton intakeButton = new JoystickButton(joystick, 5);
+  private final JoystickButton shooterButton = new JoystickButton(joystick, 3);
+  private final JoystickButton robotCentric = new JoystickButton(joystick, 6);
+  private final JoystickButton armUpButton = new JoystickButton(joystick, 4);
+  private final JoystickButton armDownButton = new JoystickButton(joystick, 1);
+  private final JoystickButton ampButton = new JoystickButton(joystick, 10);
+  private final JoystickButton lobButton = new JoystickButton(joystick, 8);
+  private final JoystickButton shooterIntakeButton = new JoystickButton(joystick, 2);
+  private final JoystickButton driveStraightButton = new JoystickButton(joystick, 9);
+
+  //private final OI joysticks = new OI();
 
   
 
@@ -80,6 +92,7 @@ public class RobotContainer {
   public RobotContainer() { 
     m_Index = new Index();
     m_Intake = new Intake();
+    
     m_Shooter = new Shooter();
     mPivot = new Pivot();
     // Register pathplanner commands
@@ -88,28 +101,33 @@ public class RobotContainer {
 
     s_Swerve = new Swerve();
     s_Lighting = new Lighting(s_Swerve, m_Intake);
-    shoot = new Shooting(m_Shooter, mPivot, m_Index, s_Swerve,joysticks::getXVelocity,
-        joysticks::getYVelocity, () -> joysticks.OverrideShooter.getAsBoolean());
-    lobShot = new LobShot(m_Shooter, mPivot, m_Index, s_Swerve,joysticks::getXVelocity,
-        joysticks::getYVelocity, () -> joysticks.OverrideShooter.getAsBoolean());
+    shoot = new Shooting(m_Shooter, mPivot, m_Index, s_Swerve, 
+                        () -> joystick.getRawAxis(translationAxis),
+                        () -> joystick.getRawAxis(strafeAxis), 
+                        ()-> false);
+    lobShot = new LobShot(m_Shooter, mPivot, m_Index, s_Swerve,
+                        () -> joystick.getRawAxis(translationAxis),
+                        () -> joystick.getRawAxis(strafeAxis),
+                        () -> false);
     autoShoot = new AutoShooter(m_Shooter, mPivot, m_Index, s_Swerve);
-    intake = new IntakeCommand(m_Intake, m_Index);
+    intake = new IntakeCommand(m_Intake, m_Index, s_Swerve);
+
     NamedCommands.registerCommand("Intake", intake);
     NamedCommands.registerCommand("Fire Shooter", autoShoot);
-    NamedCommands.registerCommand("4 note Shoot 1", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.26, 5.53, this::getSide));
-    NamedCommands.registerCommand("4 note Shoot 3", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 3.11, 7.19, this::getSide));
+    NamedCommands.registerCommand("4 note Shoot 1", new AutoShooterPreset(mPivot, 2.26, 5.53, this::getSide));
+    NamedCommands.registerCommand("4 note Shoot 3", new AutoShooterPreset(mPivot, 3.11, 7.19, this::getSide));
 
-    NamedCommands.registerCommand("5 note Shoot 1", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.31, 4.53, this::getSide));
-    NamedCommands.registerCommand("5 note Shoot 2", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.16, 5.49 , this::getSide));
-    NamedCommands.registerCommand("5 note Shoot 3", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 3.36, 5.60, this::getSide));
-    NamedCommands.registerCommand("5 note Shoot 4", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 4.84, 6.07, this::getSide));
-    NamedCommands.registerCommand("5 note Shoot 5", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 4.77, 6.07, this::getSide));
+    NamedCommands.registerCommand("5 note Shoot 1", new AutoShooterPreset(mPivot, 2.31, 4.53, this::getSide));
+    NamedCommands.registerCommand("5 note Shoot 2", new AutoShooterPreset(mPivot, 2.16, 5.49 , this::getSide));
+    NamedCommands.registerCommand("5 note Shoot 3", new AutoShooterPreset(mPivot, 3.36, 5.60, this::getSide));
+    NamedCommands.registerCommand("5 note Shoot 4", new AutoShooterPreset(mPivot, 4.84, 6.07, this::getSide));
+    NamedCommands.registerCommand("5 note Shoot 5", new AutoShooterPreset(mPivot, 4.77, 6.07, this::getSide));
 
-    NamedCommands.registerCommand("3 note 7,8 Shoot 1", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.25, 3.38, this::getSide));
-    NamedCommands.registerCommand("3 note 7,8 Shoot 2", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.24, 3.33, this::getSide));
-    NamedCommands.registerCommand("3 note 7,8 Shoot 3", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.22, 2.74, this::getSide));
+    NamedCommands.registerCommand("3 note 7,8 Shoot 1", new AutoShooterPreset(mPivot, 2.25, 3.38, this::getSide));
+    NamedCommands.registerCommand("3 note 7,8 Shoot 2", new AutoShooterPreset(mPivot, 2.24, 3.33, this::getSide));
+    NamedCommands.registerCommand("3 note 7,8 Shoot 3", new AutoShooterPreset(mPivot, 2.22, 2.74, this::getSide));
 
-    NamedCommands.registerCommand("3 note 6,7 Shoot all", new AutoShooterPreset(m_Shooter, mPivot, s_Swerve, 2.16, 2.29, this::getSide));
+    NamedCommands.registerCommand("3 note 6,7 Shoot all", new AutoShooterPreset(mPivot, 2.16, 2.29, this::getSide));
     NamedCommands.registerCommand("Shooter Down", new InstantCommand(() -> mPivot.toSetpoint(Constants.Subsystems.pivotMin)));
     NamedCommands.registerCommand("Abandon Path GOALPATH to ALTPATH", new AbandonPath().a_AbandonPath(
     () -> true, // whether we do abandon path, the boolean supplier will correlate to note/bot detection
@@ -132,10 +150,11 @@ public class RobotContainer {
     s_Swerve.setDefaultCommand(
         new TeleopSwerve(
             s_Swerve,
-            joysticks::getXVelocity, // translation
-            joysticks::getYVelocity, // strafe
-            joysticks::getRotationVelocity,
-            joysticks::getRotationUp // rotation
+            () -> joystick.getRawAxis(translationAxis), // translation
+            () -> joystick.getRawAxis(strafeAxis), // strafe
+            () -> -joystick.getRawAxis(rotationAxis),
+            ()->0, // rotation
+            ()->false
             ));
 
     PPHolonomicDriveController.setRotationTargetOverride(() -> s_Swerve.getRotationTargetOverride());
@@ -163,56 +182,74 @@ public class RobotContainer {
     // /* Driver Buttons */
     // joysticks.intake.onTrue(new InstantCommand(() -> {m_Intake.runIntake(0.3); m_Index.runIndex(1);}));
     // joysticks.intake.onFalse(new InstantCommand(() -> {m_Intake.stopIntake(); m_Index.stopIndex();}));
-    joysticks.intake.whileTrue(intake);
-    joysticks.zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+    intakeButton.whileTrue(intake);
+    //joysticks.intake.whileTrue(intake);
+    //joysticks.zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+    // shooterButton.onTrue(new InstantCommand(m_Shooter::AutoFire));
+    shooterButton.onTrue(new InstantCommand(m_Shooter::Fire))
+    .onFalse(new InstantCommand(m_Shooter::stop));
 
-    joysticks.reverseIntake.onTrue(new InstantCommand(() -> m_Shooter.scoreAmp(m_Index, mPivot)));
-    joysticks.runShooter.onTrue(new InstantCommand(m_Shooter::AutoFire));
+    // ampButton.onTrue(new InstantCommand(() -> m_Shooter.scoreAmp(m_Index, mPivot)));
+
+
+    //joysticks.reverseIntake.onTrue(new InstantCommand(() -> m_Shooter.scoreAmp(m_Index, mPivot)));
+    //joysticks.runShooter.onTrue(new InstantCommand(m_Shooter::AutoFire));
 
     
 
-    joysticks.shooterLock.whileTrue(shoot)
-    .onFalse(new TeleopSwerve(
+    // shooterButton.whileTrue(shoot);
+    // shooterButton.onFalse(new TeleopSwerve(s
+    //         s_Swerve,
+    //         ()->joystick.getRawAxis(translationAxis),
+    //         ()->joystick.getRawAxis(strafeAxis),
+    //         () ->-joystick.getRawAxis(rotationAxis),
+    //         () -> 0, // rotation
+    //         () ->false
+    //         ));
+    lobButton.whileTrue(lobShot);
+    lobButton.onFalse(new TeleopSwerve(
             s_Swerve,
-            joysticks::getXVelocity,
-            joysticks::getYVelocity,
-            joysticks::getRotationVelocity,
-            joysticks::getRotationUp
+            ()->joystick.getRawAxis(translationAxis),
+            ()->joystick.getRawAxis(strafeAxis),
+            () ->-joystick.getRawAxis(rotationAxis),
+            () -> 0, // rotation
+            () ->false
             ));
-    joysticks.lobShot.whileTrue(lobShot)
-    .onFalse(new TeleopSwerve(
-            s_Swerve,
-            joysticks::getXVelocity,
-            joysticks::getYVelocity,
-            joysticks::getRotationVelocity,
-            joysticks::getRotationUp
-            ));
+    // joysticks.lobShot.whileTrue(lobShot)
+    // .onFalse(new TeleopSwerve(
+    //         s_Swerve,
+    //         joysticks::getXVelocity,
+    //         joysticks::getYVelocity,
+    //         joysticks::getRotationVelocity,
+    //         joysticks::getRotationUp, // rotation
+    //         joysticks::getSlow
+    //         ));
     // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-    joysticks.toWaypoint.whileTrue(new SequentialCommandGroup(
-      // s_Swerve.driveToWaypoint(new Pose2d(((DriverStation.getAlliance().get()==DriverStation.Alliance.Blue)?(72.5/39.37):(578.77/39.37)), (323.00/39.37) - 2, Rotation2d.fromDegrees(90))),
-      // new WaitCommand(0.2),
-      new GetToAmp(s_Swerve, false)
-    ));
+    // joysticks.toWaypoint.whileTrue(new SequentialCommandGroup(
+    //   // s_Swerve.driveToWaypoint(new Pose2d(((DriverStation.getAlliance().get()==DriverStation.Alliance.Blue)?(72.5/39.37):(578.77/39.37)), (323.00/39.37) - 2, Rotation2d.fromDegrees(90))),
+    //   // new WaitCommand(0.2),
+    //   new GetToAmp(s_Swerve, false)
+    // ));
 
-    joysticks.ShooterIntake.onTrue(new InstantCommand(() -> {m_Shooter.ReverseIndex();m_Index.runIndex(-0.75);}))
+    shooterIntakeButton.onTrue(new InstantCommand(() -> {m_Shooter.ReverseIndex();m_Index.runIndex(-0.75);}))
       .onFalse(new InstantCommand(() -> {m_Shooter.stopIndex();m_Index.stopIndex();}));
-    joysticks.pivotUp.onTrue(new InstantCommand(mPivot::PivotUp, mPivot)).onFalse(new InstantCommand(mPivot::stop, mPivot));
-    joysticks.pivotDown.onTrue(new InstantCommand(mPivot::PivotDown, mPivot)).onFalse(new InstantCommand(mPivot::stop, mPivot));
+    armUpButton.onTrue(new InstantCommand(mPivot::PivotUp, mPivot)).onFalse(new InstantCommand(mPivot::stop, mPivot));
+    armDownButton.onTrue(new InstantCommand(mPivot::PivotDown, mPivot)).onFalse(new InstantCommand(mPivot::stop, mPivot));
 
-    joysticks.ReallyOverrideShooter.onTrue(new InstantCommand(() -> m_Index.runIndex(1), m_Index)).onFalse(new InstantCommand(m_Index::stopIndex, m_Index));
+    //joysticks.ReallyOverrideShooter.onTrue(new InstantCommand(() -> m_Index.runIndex(1), m_Index)).onFalse(new InstantCommand(m_Index::stopIndex, m_Index));
     // joysticks.pivotGoSetpoint.onTrue(new InstantCommand(() -> mPivot.toSetpoint(45))).onFalse(new InstantCommand(mPivot::stop));
-    joysticks.DriveStraight.whileTrue(new TeleopSwerve(
+    driveStraightButton.whileTrue(new TeleopSwerve(
             s_Swerve,
             () -> 0.25, // translation
             () -> 0, // strafe
             () -> 0,
-            () -> 0 // rotation
-            ));
+            () -> 0, // rotation
+            () -> false));
 
   }
-  public OI getOI() {
-    return joysticks;
-  }
+  // public OI getOI() {
+  //   return joysticks;
+  // }
   public Swerve getSwerve(){
     return s_Swerve;
   }
