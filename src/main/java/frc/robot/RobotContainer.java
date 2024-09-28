@@ -196,7 +196,7 @@ public class RobotContainer {
 
 
     //joysticks.reverseIntake.onTrue(new InstantCommand(() -> m_Shooter.scoreAmp(m_Index, mPivot)));
-    shooterButton.onTrue(new InstantCommand(m_Shooter::AutoFire));
+    shooterButton.onTrue(new InstantCommand(m_Shooter::Fire));
 
     
 
@@ -246,7 +246,7 @@ public class RobotContainer {
 
     // }
 
-    shooterIntakeButton.onTrue(new InstantCommand(() -> {m_Shooter.ReverseIndex();m_Index.runIndex( -0.75);}))
+    shooterIntakeButton.onTrue(new InstantCommand(() -> {m_Shooter.ReverseIndex();m_Index.runIndex(0.75);}))
       .onFalse(new InstantCommand(() -> {m_Shooter.stopIndex();m_Index.stopIndex();}));
 
 
