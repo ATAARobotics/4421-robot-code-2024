@@ -60,6 +60,7 @@ public class RobotContainer {
   private final JoystickButton intakeButton = new JoystickButton(joystick, 6);
   private final JoystickButton shooterButton = new JoystickButton(joystick, 3);
   private final JoystickButton zeroGyro = new JoystickButton(joystick, 5);
+
   private final JoystickButton armUpButton = new JoystickButton(joystick, 4);
   private final JoystickButton armDownButton = new JoystickButton(joystick, 1);
   private final JoystickButton ampButton = new JoystickButton(joystick, 10);
@@ -116,7 +117,8 @@ public class RobotContainer {
                         () -> joystick.getRawAxis(strafeAxis),
                         () -> false);
     autoShoot = new AutoShooter(m_Shooter, mPivot, m_Index, s_Swerve);
-    intake = new IntakeCommand(m_Intake, m_Index);
+
+    intake = new IntakeCommand(m_Intake, m_Index, s_Swerve);
 
     NamedCommands.registerCommand("Intake", intake);
     NamedCommands.registerCommand("Fire Shooter", autoShoot);
@@ -160,6 +162,7 @@ public class RobotContainer {
             () -> joystick.getRawAxis(strafeAxis), // strafe
             () -> -joystick.getRawAxis(rotationAxis),
             () -> -joystick.getRawAxis(rotationAxis), // rotation
+
             ()->false
             ));
 
@@ -203,6 +206,7 @@ public class RobotContainer {
 
     shooterButton.whileTrue(shoot);
     shooterButton.onFalse(new TeleopSwerve(
+
             s_Swerve,
             ()->joystick.getRawAxis(translationAxis),
             ()->joystick.getRawAxis(strafeAxis),
@@ -218,6 +222,7 @@ public class RobotContainer {
             ()->joystick.getRawAxis(strafeAxis),
             () ->-joystick.getRawAxis(rotationAxis),
             () -> -joystick.getRawAxis(rotationAxis), // rotation
+
             () ->false
             ));
     // joysticks.lobShot.whileTrue(lobShot)
@@ -242,6 +247,7 @@ public class RobotContainer {
 
     armUpButton.onTrue(new InstantCommand(mPivot::PivotUp, mPivot)).onFalse(new InstantCommand(mPivot::stop, mPivot));
     armDownButton.onTrue(new InstantCommand(mPivot::PivotDown, mPivot)).onFalse(new InstantCommand(mPivot::stop, mPivot));
+
 
     //joysticks.ReallyOverrideShooter.onTrue(new InstantCommand(() -> m_Index.runIndex(1), m_Index)).onFalse(new InstantCommand(m_Index::stopIndex, m_Index));
     // joysticks.pivotGoSetpoint.onTrue(new InstantCommand(() -> mPivot.toSetpoint(45))).onFalse(new InstantCommand(mPivot::stop));

@@ -81,6 +81,7 @@ public final class Constants {
 
     /* Swerve Profiling Values */
     public static final double maxSpeed = 4; // meters per second
+
     public static final double maxAngularVelocity = Math.PI*2;
 
     /* Neutral Modes */
@@ -192,6 +193,11 @@ public final class Constants {
 
     public static final PIDConstants rotationPID = new PIDConstants(10, 20,1, 5);
     public static final int CandleID = 35; 
+
+    public static final double FRONT_CAMERA_HEIGHT = 23; //This is in centimeters
+    public static final double Y_CAMERA_DISTANCE_FROM_CENTER = 46.0375; //This is in centimeters
+    public static final double X_CAMERA_DISTANCE_FROM_CENTER = 0.635; //This is in centimeters
+
   }
 
   public static final class AutoConstants {

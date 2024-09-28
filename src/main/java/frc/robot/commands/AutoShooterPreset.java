@@ -114,7 +114,8 @@ public class AutoShooterPreset extends Command {
 
     @Override
     public void initialize(){
-        GoalPose = RedgoalPose;
+
+        GoalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
      //    mSwerve.setAutoLock(true);
         shootTimer.reset();
         shootTimer.stop();
