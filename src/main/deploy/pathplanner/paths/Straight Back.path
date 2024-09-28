@@ -20,7 +20,7 @@
         "y": 5.46
       },
       "prevControl": {
-        "x": 3.948119452545241,
+        "x": 3.9481194525452405,
         "y": 5.46
       },
       "nextControl": null,
@@ -32,18 +32,18 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 1.75,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
+    "rotation": 0.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "0 Note variants",
+  "folder": null,
   "previewStartingState": null,
   "useDefaultConstraints": false
 }

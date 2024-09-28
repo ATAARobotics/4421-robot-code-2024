@@ -58,12 +58,13 @@ public class RobotContainer {
   private final boolean shootOveride = false;
 
   private final JoystickButton intakeButton = new JoystickButton(joystick, 6);
+  private final JoystickButton shootOverride = new JoystickButton(joystick, 5);
   private final JoystickButton shooterButton = new JoystickButton(joystick, 3);
-  private final JoystickButton zeroGyro = new JoystickButton(joystick, 5);
+  private final JoystickButton zeroGyro = new JoystickButton(joystick, 8);
   private final JoystickButton armUpButton = new JoystickButton(joystick, 4);
   private final JoystickButton armDownButton = new JoystickButton(joystick, 1);
   private final JoystickButton ampButton = new JoystickButton(joystick, 10);
-  private final JoystickButton lobButton = new JoystickButton(joystick, 8);
+  // private final JoystickButton lobButton = new JoystickButton(joystick, 8);
   private final JoystickButton shooterIntakeButton = new JoystickButton(joystick, 2);
   private final JoystickButton driveStraightButton = new JoystickButton(joystick, 9);
 
@@ -211,15 +212,15 @@ public class RobotContainer {
             () ->false
             ));
 
-    lobButton.whileTrue(lobShot);
-    lobButton.onFalse(new TeleopSwerve(
-            s_Swerve,
-            ()->joystick.getRawAxis(translationAxis),
-            ()->joystick.getRawAxis(strafeAxis),
-            () ->-joystick.getRawAxis(rotationAxis),
-            () -> -joystick.getRawAxis(rotationAxis), // rotation
-            () ->false
-            ));
+    // lobButton.whileTrue(lobShot);
+    // lobButton.onFalse(new TeleopSwerve(
+    //         s_Swerve,
+    //         ()->joystick.getRawAxis(translationAxis),
+    //         ()->joystick.getRawAxis(strafeAxis),
+    //         () ->-joystick.getRawAxis(rotationAxis),
+    //         () -> -joystick.getRawAxis(rotationAxis), // rotation
+    //         () ->false
+    //         ));
     // joysticks.lobShot.whileTrue(lobShot)
     // .onFalse(new TeleopSwerve(
     //         s_Swerve,
@@ -232,12 +233,14 @@ public class RobotContainer {
     // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     // joysticks.toWaypoint.whileTrue(new SequentialCommandGroup(
     //   // s_Swerve.driveToWaypoint(new Pose2d(((DriverStation.getAlliance().get()==DriverStation.Alliance.Blue)?(72.5/39.37):(578.77/39.37)), (323.00/39.37) - 2, Rotation2d.fromDegrees(90))),
-    //   // new WaitCommand(0.2),
+    //   // new WaitCommand(0.2)
     //   new GetToAmp(s_Swerve, false)
     // ));
 
     shooterIntakeButton.onTrue(new InstantCommand(() -> {m_Shooter.ReverseIndex();m_Index.runIndex(-0.75);}))
       .onFalse(new InstantCommand(() -> {m_Shooter.stopIndex();m_Index.stopIndex();}));
+
+    shootOverride.onTrue(new InstantCommand(() -> m_Index.runIndex(0.75))).onFalse(new InstantCommand(() -> m_Index.stopIndex()));
 
 
     armUpButton.onTrue(new InstantCommand(mPivot::PivotUp, mPivot)).onFalse(new InstantCommand(mPivot::stop, mPivot));
@@ -247,11 +250,12 @@ public class RobotContainer {
     // joysticks.pivotGoSetpoint.onTrue(new InstantCommand(() -> mPivot.toSetpoint(45))).onFalse(new InstantCommand(mPivot::stop));
     driveStraightButton.whileTrue(new TeleopSwerve(
             s_Swerve,
-            () -> 0.25, // translation
-            () -> 0, // strafe
-            () -> 0,
-            () -> 0, // rotation
-            () -> false));
+            ()->joystick.getRawAxis(translationAxis),
+            ()->joystick.getRawAxis(strafeAxis),
+            () ->-joystick.getRawAxis(rotationAxis),
+            () -> -joystick.getRawAxis(rotationAxis), // rotation
+            () ->true
+            ));
 
   }
   // public OI getOI() {
