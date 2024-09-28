@@ -33,7 +33,8 @@ public class AutoShooter extends Command {
 
 
      // SIDE FLIP
-     private Translation3d GoalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
+     // private Translation3d GoalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
+     private Translation3d GoalPose = RedgoalPose;
 
     private Shooter mShooter;
     private Swerve mSwerve;
@@ -112,7 +113,7 @@ public class AutoShooter extends Command {
     public void initialize(){
         rotController.setTolerance(Math.toRadians(Constants.Subsystems.rotTolerance));
         rotController.setIZone(Math.toRadians(10));
-        GoalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
+        GoalPose = RedgoalPose;
      //    mSwerve.setAutoLock(true);
         shootTimer.reset();
         shootTimer.stop();

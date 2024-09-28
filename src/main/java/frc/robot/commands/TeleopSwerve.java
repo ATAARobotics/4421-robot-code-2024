@@ -68,6 +68,11 @@ public class TeleopSwerve extends Command {
     rotationVal =
         rotationLimiter.calculate(
             MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.Swerve.stickDeadband));
+    }
+    rotationVal =
+        rotationLimiter.calculate(
+            MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.Swerve.stickDeadband));
+
 
     /* Drive */
     if(!slowButton.getAsBoolean()){

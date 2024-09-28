@@ -8,11 +8,15 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.config.SwerveModuleConstants;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 public final class Constants {
 
 
   public static final class Swerve {
+    //alliance
+    private static Alliance alliance;
+
     //joysticks
     public static final double JOY_DEAD_ZONE = 0.3;
     public static final double JOYSTICK_SENSITIVITY = 1;
@@ -76,7 +80,8 @@ public final class Constants {
     public static final double angleConversionFactor = 360.0 / angleGearRatio;
 
     /* Swerve Profiling Values */
-    public static final double maxSpeed = 5; // meters per second
+    public static final double maxSpeed = 4; // meters per second
+
     public static final double maxAngularVelocity = Math.PI*2;
 
     /* Neutral Modes */
@@ -103,6 +108,13 @@ public final class Constants {
       
       public static final double E_DTOLERANCE = 0.0; // meters
       public static final double E_RTOLERANCE = 0.0; // degrees
+    }
+
+    public static void setAlliance(Alliance a) {
+      alliance = a;
+    } 
+    public static Alliance getAlliance() {
+      return alliance;
     }
 
     /* Module Specific Constants */
@@ -202,4 +214,6 @@ public final class Constants {
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
   }
+
+
 }

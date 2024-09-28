@@ -35,7 +35,7 @@ public class LobShot extends Command {
      }; //the 20 was 23.25
 
      // SIDE FLIP
-     private Translation3d[] GoalPoses = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
+     private Translation3d[] GoalPoses = RedgoalPose;
 
     private Shooter mShooter;
     private Pivot mPivot;
@@ -116,7 +116,7 @@ public class LobShot extends Command {
     @Override
     public void initialize(){
         rotController.setTolerance(Math.toRadians(Constants.Subsystems.rotTolerance));
-        GoalPoses = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
+        GoalPoses = RedgoalPose;
         shootTimer.reset();
         shootTimer.stop();
         rotController.setIZone(Math.toRadians(10));

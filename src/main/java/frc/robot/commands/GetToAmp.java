@@ -29,9 +29,9 @@ public class GetToAmp extends Command {
 
     // TODO: ADD BLUE GOAL POSE
     private Pose2d BluegoalPose =  new Pose2d((72.5/39.37), (323.00/39.37) - 0.5, Rotation2d.fromDegrees(270));
-    private Pose2d RedgoalPose = new Pose2d((578.77/39.37), (323.00/39.37) - 0.5, Rotation2d.fromDegrees(270));
+    private Pose2d RedgoalPose = new Pose2d((578.77/39.37), (323.00/39.37) - 0.5, Rotation2d.fromDegrees(90));
 
-    private Pose2d goalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
+    private Pose2d goalPose = RedgoalPose;
 
     // speed variables
     private double xSpeed;
@@ -74,7 +74,7 @@ public class GetToAmp extends Command {
 
     @Override
     public void initialize() {
-        goalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
+        goalPose = RedgoalPose;
         m_swerveDriveSubsystem.setBrakes(true);
 
 

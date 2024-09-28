@@ -7,6 +7,8 @@ package frc.robot;
 import java.io.File;
 import java.util.HashMap;
 
+import javax.print.attribute.standard.JobPrioritySupported;
+
 import org.ejml.dense.block.MatrixOps_DDRB;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -52,15 +54,20 @@ public class RobotContainer {
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
   private final int rotationAxis = XboxController.Axis.kRightX.value;
 
-  private final JoystickButton intakeButton = new JoystickButton(joystick, 5);
+  private final double manualShootAxis = XboxController.Axis.kRightTrigger.value;
+  private final boolean shootOveride = false;
+
+  private final JoystickButton intakeButton = new JoystickButton(joystick, 6);
   private final JoystickButton shooterButton = new JoystickButton(joystick, 3);
-  private final JoystickButton robotCentric = new JoystickButton(joystick, 6);
+  private final JoystickButton zeroGyro = new JoystickButton(joystick, 5);
+
   private final JoystickButton armUpButton = new JoystickButton(joystick, 4);
   private final JoystickButton armDownButton = new JoystickButton(joystick, 1);
   private final JoystickButton ampButton = new JoystickButton(joystick, 10);
   private final JoystickButton lobButton = new JoystickButton(joystick, 8);
   private final JoystickButton shooterIntakeButton = new JoystickButton(joystick, 2);
   private final JoystickButton driveStraightButton = new JoystickButton(joystick, 9);
+
 
   //private final OI joysticks = new OI();
 
@@ -92,7 +99,7 @@ public class RobotContainer {
   public RobotContainer() { 
     m_Index = new Index();
     m_Intake = new Intake();
-    
+
     m_Shooter = new Shooter();
     mPivot = new Pivot();
     // Register pathplanner commands
@@ -110,6 +117,7 @@ public class RobotContainer {
                         () -> joystick.getRawAxis(strafeAxis),
                         () -> false);
     autoShoot = new AutoShooter(m_Shooter, mPivot, m_Index, s_Swerve);
+
     intake = new IntakeCommand(m_Intake, m_Index, s_Swerve);
 
     NamedCommands.registerCommand("Intake", intake);
@@ -153,7 +161,8 @@ public class RobotContainer {
             () -> joystick.getRawAxis(translationAxis), // translation
             () -> joystick.getRawAxis(strafeAxis), // strafe
             () -> -joystick.getRawAxis(rotationAxis),
-            ()->0, // rotation
+            () -> -joystick.getRawAxis(rotationAxis), // rotation
+
             ()->false
             ));
 
@@ -184,35 +193,36 @@ public class RobotContainer {
     // joysticks.intake.onFalse(new InstantCommand(() -> {m_Intake.stopIntake(); m_Index.stopIndex();}));
     intakeButton.whileTrue(intake);
     //joysticks.intake.whileTrue(intake);
-    //joysticks.zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+    zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     // shooterButton.onTrue(new InstantCommand(m_Shooter::AutoFire));
-    shooterButton.onTrue(new InstantCommand(m_Shooter::Fire))
-    .onFalse(new InstantCommand(m_Shooter::stop));
 
     // ampButton.onTrue(new InstantCommand(() -> m_Shooter.scoreAmp(m_Index, mPivot)));
 
 
     //joysticks.reverseIntake.onTrue(new InstantCommand(() -> m_Shooter.scoreAmp(m_Index, mPivot)));
-    //joysticks.runShooter.onTrue(new InstantCommand(m_Shooter::AutoFire));
+    shooterButton.onTrue(new InstantCommand(m_Shooter::Fire));
 
     
 
-    // shooterButton.whileTrue(shoot);
-    // shooterButton.onFalse(new TeleopSwerve(s
-    //         s_Swerve,
-    //         ()->joystick.getRawAxis(translationAxis),
-    //         ()->joystick.getRawAxis(strafeAxis),
-    //         () ->-joystick.getRawAxis(rotationAxis),
-    //         () -> 0, // rotation
-    //         () ->false
-    //         ));
+    shooterButton.whileTrue(shoot);
+    shooterButton.onFalse(new TeleopSwerve(
+
+            s_Swerve,
+            ()->joystick.getRawAxis(translationAxis),
+            ()->joystick.getRawAxis(strafeAxis),
+            () ->-joystick.getRawAxis(rotationAxis),
+            () -> -joystick.getRawAxis(rotationAxis), // rotation
+            () ->false
+            ));
+
     lobButton.whileTrue(lobShot);
     lobButton.onFalse(new TeleopSwerve(
             s_Swerve,
             ()->joystick.getRawAxis(translationAxis),
             ()->joystick.getRawAxis(strafeAxis),
             () ->-joystick.getRawAxis(rotationAxis),
-            () -> 0, // rotation
+            () -> -joystick.getRawAxis(rotationAxis), // rotation
+
             () ->false
             ));
     // joysticks.lobShot.whileTrue(lobShot)
@@ -233,8 +243,11 @@ public class RobotContainer {
 
     shooterIntakeButton.onTrue(new InstantCommand(() -> {m_Shooter.ReverseIndex();m_Index.runIndex(-0.75);}))
       .onFalse(new InstantCommand(() -> {m_Shooter.stopIndex();m_Index.stopIndex();}));
+
+
     armUpButton.onTrue(new InstantCommand(mPivot::PivotUp, mPivot)).onFalse(new InstantCommand(mPivot::stop, mPivot));
     armDownButton.onTrue(new InstantCommand(mPivot::PivotDown, mPivot)).onFalse(new InstantCommand(mPivot::stop, mPivot));
+
 
     //joysticks.ReallyOverrideShooter.onTrue(new InstantCommand(() -> m_Index.runIndex(1), m_Index)).onFalse(new InstantCommand(m_Index::stopIndex, m_Index));
     // joysticks.pivotGoSetpoint.onTrue(new InstantCommand(() -> mPivot.toSetpoint(45))).onFalse(new InstantCommand(mPivot::stop));
@@ -263,11 +276,12 @@ public class RobotContainer {
   }
 
   public Boolean getSide(){
-    var alliance = DriverStation.getAlliance();
-    if (alliance.isPresent()) {
-      return alliance.get() == DriverStation.Alliance.Red;
-    }
-    return false;
+    // var alliance = DriverStation.getAlliance();
+    // if (alliance.isPresent()) {
+    //   return alliance.get() == DriverStation.Alliance.Red;
+    // }
+    // return false;
+    return true;
   }
   // public Swerve getSwerve(){
   //   return s_Swerve;

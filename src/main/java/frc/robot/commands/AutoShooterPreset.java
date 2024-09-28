@@ -33,7 +33,9 @@ public class AutoShooterPreset extends Command {
 
 
      // SIDE FLIP
-     private Translation3d GoalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
+     // private Translation3d GoalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
+     private Translation3d GoalPose = RedgoalPose;
+
 
     private Shooter mShooter;
     private Swerve mSwerve;
@@ -112,6 +114,7 @@ public class AutoShooterPreset extends Command {
 
     @Override
     public void initialize(){
+
         GoalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
      //    mSwerve.setAutoLock(true);
         shootTimer.reset();
