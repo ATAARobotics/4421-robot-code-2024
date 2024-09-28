@@ -55,10 +55,11 @@ public class RobotContainer {
   private final int rotationAxis = XboxController.Axis.kRightX.value;
 
   private final double manualShootAxis = XboxController.Axis.kRightTrigger.value;
+  private final boolean shootOveride = false;
 
-  private final JoystickButton intakeButton = new JoystickButton(joystick, 5);
+  private final JoystickButton intakeButton = new JoystickButton(joystick, 6);
   private final JoystickButton shooterButton = new JoystickButton(joystick, 3);
-  private final JoystickButton zeroGyro = new JoystickButton(joystick, 6);
+  private final JoystickButton zeroGyro = new JoystickButton(joystick, 5);
   private final JoystickButton armUpButton = new JoystickButton(joystick, 4);
   private final JoystickButton armDownButton = new JoystickButton(joystick, 1);
   private final JoystickButton ampButton = new JoystickButton(joystick, 10);
@@ -235,18 +236,7 @@ public class RobotContainer {
     //   new GetToAmp(s_Swerve, false)
     // ));
 
-    // if (manualShootAxis > 0.25) {
-      
-    //   m_Shooter.ReverseIndex();
-    //   m_Index.runIndex(0.75);
-
-    // } else {
-    //   m_Shooter.stopIndex();
-    //   m_Index.stopIndex();
-
-    // }
-
-    shooterIntakeButton.onTrue(new InstantCommand(() -> {m_Shooter.ReverseIndex();m_Index.runIndex(0.75);}))
+    shooterIntakeButton.onTrue(new InstantCommand(() -> {m_Shooter.ReverseIndex();m_Index.runIndex(-0.75);}))
       .onFalse(new InstantCommand(() -> {m_Shooter.stopIndex();m_Index.stopIndex();}));
 
 

@@ -80,7 +80,7 @@ public final class Constants {
     public static final double angleConversionFactor = 360.0 / angleGearRatio;
 
     /* Swerve Profiling Values */
-    public static final double maxSpeed = 5; // meters per second
+    public static final double maxSpeed = 4; // meters per second
     public static final double maxAngularVelocity = Math.PI*2;
 
     /* Neutral Modes */
