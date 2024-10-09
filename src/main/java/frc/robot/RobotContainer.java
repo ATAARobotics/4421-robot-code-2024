@@ -63,10 +63,11 @@ public class RobotContainer {
   private final JoystickButton zeroGyro = new JoystickButton(joystick, 8);
   private final JoystickButton armUpButton = new JoystickButton(joystick, 4);
   private final JoystickButton armDownButton = new JoystickButton(joystick, 1);
-  private final JoystickButton ampButton = new JoystickButton(joystick, 10);
+  private final JoystickButton ampButton = new JoystickButton(joystick, 7);
   // private final JoystickButton lobButton = new JoystickButton(joystick, 8);
   private final JoystickButton shooterIntakeButton = new JoystickButton(joystick, 2);
   private final JoystickButton driveStraightButton = new JoystickButton(joystick, 9);
+  //private final JoystickButton ampButton = new JoystickButton(joystick, 7);
 
 
   //private final OI joysticks = new OI();
@@ -194,7 +195,7 @@ public class RobotContainer {
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     // shooterButton.onTrue(new InstantCommand(m_Shooter::AutoFire));
 
-    // ampButton.onTrue(new InstantCommand(() -> m_Shooter.scoreAmp(m_Index, mPivot)));
+    ampButton.onTrue(new InstantCommand(() -> m_Shooter.scoreAmp(m_Index, mPivot)));
 
 
     //joysticks.reverseIntake.onTrue(new InstantCommand(() -> m_Shooter.scoreAmp(m_Index, mPivot)));
