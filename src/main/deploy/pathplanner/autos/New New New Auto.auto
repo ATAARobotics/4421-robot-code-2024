@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.7440052638151893,
+      "y": 5.527389345566705
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Fire Shooter"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Victoria",
+  "choreoAuto": false
+}

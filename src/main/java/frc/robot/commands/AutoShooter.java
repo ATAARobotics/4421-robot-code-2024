@@ -26,43 +26,44 @@ import frc.robot.Constants;
 import frc.robot.subsystems.*;
 
 public class AutoShooter extends Command {
-     private Translation3d BluegoalPose = new Translation3d((8.84/39.37), 5.5408, (80.91/39.37));
-     // private Translation3d RedgoalPose = new Translation3d(16.706342, 5.5408, 2.2);
-     private Translation3d RedgoalPose = new Translation3d((642.38/39.37), 5.5408, (80.91/39.37)); //the 20 was 23.25
 
+     private boolean isTrue = false;
 
+     private Translation3d BluegoalPose = new Translation3d((8.84 / 39.37), 5.5408, (80.91 / 39.37));
+     // private Translation3d RedgoalPose = new Translation3d(16.706342, 5.5408,
+     // 2.2);
+     private Translation3d RedgoalPose = new Translation3d((642.38 / 39.37), 5.5408, (80.91 / 39.37)); // the 20 was
+                                                                                                       // 23.25
 
      // SIDE FLIP
-     // private Translation3d GoalPose = (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose : BluegoalPose;
+     // private Translation3d GoalPose =
+     // (DriverStation.getAlliance().get()==Alliance.Red) ? RedgoalPose :
+     // BluegoalPose;
      private Translation3d GoalPose = RedgoalPose;
 
-    private Shooter mShooter;
-    private Swerve mSwerve;
-    private Pivot mPivot;
-    private Index mIndex;
-    
-    private final PIDController rotController = new PIDController(10, 20, 1);
+     private Shooter mShooter;
+     private Swerve mSwerve;
+     private Pivot mPivot;
+     private Index mIndex;
+
+     private final PIDController rotController = new PIDController(10, 20, 1);
 
      private double ShooterAngle = 2.0;
      private double RobotAngle = 1.0;
-     private DoubleSupplier translationSup;
-     private DoubleSupplier strafeSup;
-     private DoubleSupplier rotationSup;
-     private BooleanSupplier robotCentricSup;
 
      private SlewRateLimiter translationLimiter = new SlewRateLimiter(3.0);
      private SlewRateLimiter strafeLimiter = new SlewRateLimiter(3.0);
 
      private double G = 9.81;
-          // Note Postion
+     // Note Postion
      private double A = 0;
      private double B = 0.4572;
      private double C = 0;
-          //TODO change goal pose to be set based on color
+     // TODO change goal pose to be set based on color
      private double M = 0;
      private double N = 0;
      private double O = 0;
-          //Velocietys
+     // Velocietys
      private double P = 0;
      private double Q = 0;
      private double R = 0;
@@ -73,11 +74,11 @@ public class AutoShooter extends Command {
      private double K = N - B;
      private double L = -0.5 * G;
 
-     private double c0 = L*L;
-     private double c1 = -2*Q*L;
-     private double c2 = Q*Q - 2*K*L - S*S + P*P + R*R;
-     private double c3 = 2*K*Q + 2*H*P + 2*J*R;
-     private double c4 = K*K + H*H + J*J;
+     private double c0 = L * L;
+     private double c1 = -2 * Q * L;
+     private double c2 = Q * Q - 2 * K * L - S * S + P * P + R * R;
+     private double c3 = 2 * K * Q + 2 * H * P + 2 * J * R;
+     private double c4 = K * K + H * H + J * J;
 
      private double d = 0;
      private double e = 0;
@@ -89,44 +90,45 @@ public class AutoShooter extends Command {
 
      private boolean hasNote = true;
 
-    public AutoShooter(
-          Shooter m_shooter, 
-          Pivot m_Pivot,
-          Index m_Index,
-          Swerve m_swerve
-     ){
-        this.mShooter = m_shooter;
-        this.mSwerve = m_swerve;
-        this.mIndex = m_Index;
-        this.mPivot = m_Pivot;      
+     public AutoShooter(
+               Shooter m_shooter,
+               Pivot m_Pivot,
+               Index m_Index,
+               Swerve m_swerve) {
+          this.mShooter = m_shooter;
+          this.mSwerve = m_swerve;
+          this.mIndex = m_Index;
+          this.mPivot = m_Pivot;
 
-        addRequirements(mShooter);
-          SmartDashboard.putNumber("Rot P", 0);
+          addRequirements(mShooter);
+          SmartDashboard.putNumber("Rot P", 10);
           SmartDashboard.putNumber("Rot I", 0);
           SmartDashboard.putNumber("Rot D", 0);
+          SmartDashboard.putNumber("rotationVal DAFLKHALKSHDFJLKH", rotationVal);
+          SmartDashboard.putBoolean("IsTrue", isTrue);
+          
           rotController.enableContinuousInput(-Math.PI, Math.PI);
 
-    }
+     }
 
+     @Override
+     public void initialize() {
+          rotController.setTolerance(Math.toRadians(Constants.Subsystems.rotTolerance));
+          rotController.setIZone(Math.toRadians(10));
+          GoalPose = RedgoalPose;
+          // mSwerve.setAutoLock(true);
+          shootTimer.reset();
+          shootTimer.stop();
+          indexTimer.reset();
+          indexTimer.stop();
+          overrideTimer.reset();
+          overrideTimer.stop();
+          overrideTimer.start();
+          mIndex.runIndex(0);
+     }
 
-    @Override
-    public void initialize(){
-        rotController.setTolerance(Math.toRadians(Constants.Subsystems.rotTolerance));
-        rotController.setIZone(Math.toRadians(10));
-        GoalPose = RedgoalPose;
-     //    mSwerve.setAutoLock(true);
-        shootTimer.reset();
-        shootTimer.stop();
-        indexTimer.reset();
-        indexTimer.stop();
-        overrideTimer.reset();
-        overrideTimer.stop();
-        overrideTimer.start();
-        mIndex.runIndex(0);
-    }
-
-    @Override
-    public void execute(){
+     @Override
+     public void execute() {
           // # g = 9.81
           // # A = proj_pos.x
           // # B = proj_pos.y
@@ -138,7 +140,7 @@ public class AutoShooter extends Command {
           // # Q = target_velocity.y
           // # R = target_velocity.z
           // # S = proj_speed;
-          //velocity
+          // velocity
           // P = -mSwerve.getChassisSpeeds().vxMetersPerSecond;
           ChassisSpeeds vec = mSwerve.getVelocityFromChassisSpeeds();
           P = -vec.vxMetersPerSecond;
@@ -150,18 +152,17 @@ public class AutoShooter extends Command {
           SmartDashboard.putNumber("X velocity", -P);
           SmartDashboard.putNumber("Y velocity", -R);
           // Note Postion
-          A = mSwerve.getPose().getX() + (-P*0.05);
+          A = mSwerve.getPose().getX() + (-P * 0.05);
           B = 0.4572;
-          C = mSwerve.getPose().getY()+ (-R*0.05);
+          C = mSwerve.getPose().getY() + (-R * 0.05);
 
-          //TODO change goal pose to be set based on color
+          // TODO change goal pose to be set based on color
           rotationVal = 0;
           M = GoalPose.getX();
           N = GoalPose.getZ();
           O = GoalPose.getY();
-               // S = (17.0/5500.0) * (mShooter.getRPM()-rpmDrop);
+          // S = (17.0/5500.0) * (mShooter.getRPM()-rpmDrop);
           S = 12.2;
-          
 
           SmartDashboard.putNumber("x velocity", P);
           SmartDashboard.putNumber("y velocity", R);
@@ -171,101 +172,103 @@ public class AutoShooter extends Command {
           K = N - B;
           L = -0.5 * G;
 
-          c0 = L*L;
-          c1 = -2*Q*L;
-          c2 = Q*Q - 2*K*L - S*S + P*P + R*R;
-          c3 = 2*K*Q + 2*H*P + 2*J*R;
-          c4 = K*K + H*H + J*J;
-          double[] ts = solveQuartic(c0, c1, c2, c3, c4);  
+          c0 = L * L;
+          c1 = -2 * Q * L;
+          c2 = Q * Q - 2 * K * L - S * S + P * P + R * R;
+          c3 = 2 * K * Q + 2 * H * P + 2 * J * R;
+          c4 = K * K + H * H + J * J;
+          double[] ts = solveQuartic(c0, c1, c2, c3, c4);
           mShooter.AutoFire();
           double t = 1000000000;
-          if(ts != null){
-               for (int i=0; i<ts.length; i++){
-                    if (ts[i] >= 0 & ts[i]<t){
+          if (ts != null) {
+               for (int i = 0; i < ts.length; i++) {
+                    if (ts[i] >= 0 & ts[i] < t) {
                          t = ts[i];
                     }
                }
-               d = ((H+P*t)/t);
-               e = ((K+Q*t-L*t*t)/t);
-               f = ((J+R*t)/t);
-               ShooterAngle = Math.atan2(e, Math.sqrt(Math.pow(d,2) + Math.pow(f,2)));
-               RobotAngle = Math.atan2(f, d);   
+               d = ((H + P * t) / t);
+               e = ((K + Q * t - L * t * t) / t);
+               f = ((J + R * t) / t);
+               ShooterAngle = Math.atan2(e, Math.sqrt(Math.pow(d, 2) + Math.pow(f, 2)));
+               RobotAngle = Math.atan2(f, d);
                rotController.setSetpoint(RobotAngle);
-               rotationVal = MathUtil.clamp(rotController.calculate(mSwerve.getPose().getRotation().getRadians()), -Constants.Swerve.maxAngularVelocity, Constants.Swerve.maxAngularVelocity);
+               rotationVal = MathUtil.clamp(rotController.calculate(mSwerve.getPose().getRotation().getRadians()),
+                         -Constants.Swerve.maxAngularVelocity, Constants.Swerve.maxAngularVelocity);
                // if(shooterOverridden.getAsBoolean()){
-               if(true){
+               if (true) {
                     mPivot.toSetpoint(Math.toDegrees(ShooterAngle));
                     mSwerve.setAutoAngle(Math.toDegrees(RobotAngle));
-                    if (rotController.atSetpoint() && mPivot.AtSetpoint()){
+                    if (rotController.atSetpoint() && mPivot.AtSetpoint()) {
                          SmartDashboard.putBoolean("Can Shoot", true);
                          shootTimer.start();
                     }
-                    if(shootTimer.hasElapsed(0.1)){
-                         if(rotController.atSetpoint() && mPivot.AtSetpoint()){
+                    if (shootTimer.hasElapsed(1.0)) { // was 0.1
+                         if (rotController.atSetpoint() && mPivot.AtSetpoint()) {
                               mIndex.runIndex(1);
                               indexTimer.start();
-                         }else{
+                         } else {
                               shootTimer.reset();
                               shootTimer.stop();
                          }
-                    } 
+                    }
                }
-          }else{
+          } else {
                System.out.println(S);
 
-          }       
+          }
 
-          
           SmartDashboard.putBoolean("Shooter At Setpoint", mShooter.CanShoot());
           SmartDashboard.putBoolean("Rotation At Setpoint", rotController.atSetpoint());
           SmartDashboard.putBoolean("Pivot At Setpoint", mPivot.AtSetpoint());
           SmartDashboard.putNumber("Rotation Target", Math.toDegrees(RobotAngle));
           SmartDashboard.putNumber("Rotation Value", Math.toDegrees(mSwerve.getPose().getRotation().getRadians()));
-          
-  
+
           SmartDashboard.putNumber("x velocity", P);
           SmartDashboard.putNumber("y velocity", R);
- 
-          double translationVal =
-               translationLimiter.calculate(
-                    MathUtil.applyDeadband(0.0, Constants.Swerve.stickDeadband));
-          double strafeVal =
-               strafeLimiter.calculate(
-                    MathUtil.applyDeadband(0.0, Constants.Swerve.stickDeadband));
-          
-          if ((rotController.atSetpoint() && mShooter.CanShoot() && mPivot.AtSetpoint())){
-               SmartDashboard.putBoolean("Can Shoot", true);    
-          }
-          else{
+
+          double translationVal = translationLimiter.calculate(
+                    MathUtil.applyDeadband(0.4, Constants.Swerve.stickDeadband));
+          double strafeVal = strafeLimiter.calculate(
+                    MathUtil.applyDeadband(0.4, Constants.Swerve.stickDeadband));
+
+          if ((rotController.atSetpoint() && mShooter.CanShoot() && mPivot.AtSetpoint())) {
+               SmartDashboard.putBoolean("Can Shoot", true);
+          } else {
                SmartDashboard.putBoolean("Can Shoot", false);
           }
           mSwerve.setAutoLock(true);
-          if(Math.abs(P) <= 0.5 && Math.abs(R) <= 0.5){
+
+          SmartDashboard.putNumber("rotationVal DAFLKHALKSHDFJLKH", rotationVal);
+          isTrue = Math.abs(P) <= 0.5 && Math.abs(R) <= 0.5;
+          SmartDashboard.putBoolean("IsTrue", isTrue);
+          if (isTrue) {
+
                /* Drive */
                mSwerve.drive(
-                    new Translation2d(translationVal, strafeVal).times(2.0),
-                    rotationVal,
-                    true,
-                    true);
+                         new Translation2d(translationVal, strafeVal).times(2.0),
+                         rotationVal,
+                         true,
+                         true);
           }
      }
+
      @Override
      public boolean isFinished() {
           return indexTimer.hasElapsed(0.15);
      }
+
      @Override
      public void end(boolean interrupted) {
           System.out.println("Auto Shooter Ended");
           mSwerve.setAutoLock(false);
           indexTimer.reset();
           indexTimer.stop();
-     //  mPivot.stop();
+          // mPivot.stop();
 
-         // actuator down
+          // actuator down
      }
 
-
-    public static double[] solveQuartic(double a, double b, double c, double d, double e) {
+     public static double[] solveQuartic(double a, double b, double c, double d, double e) {
           double inva = 1 / a;
           double c1 = b * inva;
           double c2 = c * inva;
@@ -279,20 +282,20 @@ public class AutoShooter extends Command {
           double z = solveCubicForQuartic(-0.5 * p, -r, 0.5 * r * p - 0.125 * q * q);
           double d1 = 2.0 * z - p;
           if (d1 < 0) {
-          if (d1 > 1.0e-10)
-               d1 = 0;
-          else
-               return null;
+               if (d1 > 1.0e-10)
+                    d1 = 0;
+               else
+                    return null;
           }
           double d2;
           if (d1 < 1.0e-10) {
-          d2 = z * z - r;
-          if (d2 < 0)
-               return null;
-          d2 = Math.sqrt(d2);
+               d2 = z * z - r;
+               if (d2 < 0)
+                    return null;
+               d2 = Math.sqrt(d2);
           } else {
-          d1 = Math.sqrt(d1);
-          d2 = 0.5 * q / d1;
+               d1 = Math.sqrt(d1);
+               d2 = 0.5 * q / d1;
           }
           // setup usefull values for the quadratic factors
           double q1 = d1 * d1;
@@ -300,49 +303,49 @@ public class AutoShooter extends Command {
           double pm = q1 - 4 * (z - d2);
           double pp = q1 - 4 * (z + d2);
           if (pm >= 0 && pp >= 0) {
-          // 4 roots (!)
-          pm = Math.sqrt(pm);
-          pp = Math.sqrt(pp);
-          double[] results = new double[4];
-          results[0] = -0.5 * (d1 + pm) + q2;
-          results[1] = -0.5 * (d1 - pm) + q2;
-          results[2] = 0.5 * (d1 + pp) + q2;
-          results[3] = 0.5 * (d1 - pp) + q2;
-          // tiny insertion sort
-          for (int i = 1; i < 4; i++) {
-               for (int j = i; j > 0 && results[j - 1] > results[j]; j--) {
-                    double t = results[j];
-                    results[j] = results[j - 1];
-                    results[j - 1] = t;
+               // 4 roots (!)
+               pm = Math.sqrt(pm);
+               pp = Math.sqrt(pp);
+               double[] results = new double[4];
+               results[0] = -0.5 * (d1 + pm) + q2;
+               results[1] = -0.5 * (d1 - pm) + q2;
+               results[2] = 0.5 * (d1 + pp) + q2;
+               results[3] = 0.5 * (d1 - pp) + q2;
+               // tiny insertion sort
+               for (int i = 1; i < 4; i++) {
+                    for (int j = i; j > 0 && results[j - 1] > results[j]; j--) {
+                         double t = results[j];
+                         results[j] = results[j - 1];
+                         results[j - 1] = t;
+                    }
                }
-          }
-          return results;
+               return results;
           } else if (pm >= 0) {
-          pm = Math.sqrt(pm);
-          double[] results = new double[2];
-          results[0] = -0.5 * (d1 + pm) + q2;
-          results[1] = -0.5 * (d1 - pm) + q2;
-          return results;
+               pm = Math.sqrt(pm);
+               double[] results = new double[2];
+               results[0] = -0.5 * (d1 + pm) + q2;
+               results[1] = -0.5 * (d1 - pm) + q2;
+               return results;
           } else if (pp >= 0) {
-          pp = Math.sqrt(pp);
-          double[] results = new double[2];
-          results[0] = 0.5 * (d1 - pp) + q2;
-          results[1] = 0.5 * (d1 + pp) + q2;
-          return results;
+               pp = Math.sqrt(pp);
+               double[] results = new double[2];
+               results[0] = 0.5 * (d1 - pp) + q2;
+               results[1] = 0.5 * (d1 + pp) + q2;
+               return results;
           }
           return null;
      }
 
      /**
       * Return only one root for the specified cubic equation. This routine is
-     * only meant to be called by the quartic solver. It assumes the cubic is of
-     * the form: x^3+px^2+qx+r.
-     * 
-     * @param p
-     * @param q
-     * @param r
-     * @return
-     */
+      * only meant to be called by the quartic solver. It assumes the cubic is of
+      * the form: x^3+px^2+qx+r.
+      * 
+      * @param p
+      * @param q
+      * @param r
+      * @return
+      */
      private static final double solveCubicForQuartic(double p, double q, double r) {
           double A2 = p * p;
           double Q = (A2 - 3.0 * q) / 9.0;
@@ -352,20 +355,20 @@ public class AutoShooter extends Command {
           double d = Q3 - R2;
           double an = p / 3.0;
           if (d >= 0) {
-          d = R / Math.sqrt(Q3);
-          double theta = Math.acos(d) / 3.0;
-          double sQ = -2.0 * Math.sqrt(Q);
-          return sQ * Math.cos(theta) - an;
+               d = R / Math.sqrt(Q3);
+               double theta = Math.acos(d) / 3.0;
+               double sQ = -2.0 * Math.sqrt(Q);
+               return sQ * Math.cos(theta) - an;
           } else {
-          double sQ = Math.pow(Math.sqrt(R2 - Q3) + Math.abs(R), 1.0 / 3.0);
-          if (R < 0)
-               return (sQ + Q / sQ) - an;
-          else
-               return -(sQ + Q / sQ) - an;
+               double sQ = Math.pow(Math.sqrt(R2 - Q3) + Math.abs(R), 1.0 / 3.0);
+               if (R < 0)
+                    return (sQ + Q / sQ) - an;
+               else
+                    return -(sQ + Q / sQ) - an;
           }
      }
 
      public void setHasNote(boolean hasNote) {
-        this.hasNote = hasNote;
+          this.hasNote = hasNote;
      }
 }

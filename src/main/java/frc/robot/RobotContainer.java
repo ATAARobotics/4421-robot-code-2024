@@ -118,7 +118,19 @@ public class RobotContainer {
                         () -> joystick.getRawAxis(strafeAxis),
                         () -> false);
     autoShoot = new AutoShooter(m_Shooter, mPivot, m_Index, s_Swerve);
+
     intake = new IntakeCommand(m_Intake, m_Index);
+
+    s_Swerve.setDefaultCommand(
+        new TeleopSwerve(
+            s_Swerve,
+            () -> joystick.getRawAxis(translationAxis), // translation
+            () -> joystick.getRawAxis(strafeAxis), // strafe
+            () -> -joystick.getRawAxis(rotationAxis),
+            () -> -joystick.getRawAxis(rotationAxis), // rotation
+            ()->false
+            ));
+
 
     NamedCommands.registerCommand("Intake", intake);
     NamedCommands.registerCommand("Fire Shooter", autoShoot);
@@ -155,15 +167,8 @@ public class RobotContainer {
         ), this::getSide,
         s_Swerve // Reference to this subsystem to set requirements
     );
-    s_Swerve.setDefaultCommand(
-        new TeleopSwerve(
-            s_Swerve,
-            () -> joystick.getRawAxis(translationAxis), // translation
-            () -> joystick.getRawAxis(strafeAxis), // strafe
-            () -> -joystick.getRawAxis(rotationAxis),
-            () -> -joystick.getRawAxis(rotationAxis), // rotation
-            ()->false
-            ));
+
+    // .....................l,mkjinuhbygtfrdtgyjik
 
     PPHolonomicDriveController.setRotationTargetOverride(() -> s_Swerve.getRotationTargetOverride());
     // Configure the button bindings
