@@ -1,0 +1,50 @@
+package frc.robot.subsystems;
+
+
+import com.revrobotics.CANSparkFlex;
+import com.revrobotics.CANSparkLowLevel;
+import com.revrobotics.CANSparkBase.IdleMode;
+
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+
+public class Intake extends SubsystemBase {
+
+    public CANSparkFlex frontIntake;
+    public CANSparkFlex backIntake;
+    private DigitalInput intakeStop;
+
+
+    public Intake() {
+        frontIntake = new CANSparkFlex(Constants.Subsystems.intakeFront, CANSparkLowLevel.MotorType.kBrushless);
+        backIntake = new CANSparkFlex(Constants.Subsystems.intakeBack, CANSparkLowLevel.MotorType.kBrushless);
+        intakeStop = new DigitalInput(8);
+        frontIntake.setInverted(true);
+        backIntake.setInverted(false);
+        frontIntake.setIdleMode(IdleMode.kCoast);
+        backIntake.setIdleMode(IdleMode.kCoast);
+    }
+
+    @Override
+    public void periodic(){
+        SmartDashboard.putBoolean("Is Intaked", isIntaked());
+    }
+
+    public void runIntake(double speed) {
+        frontIntake.set(speed*1.2);
+        backIntake.set(speed);
+    }
+
+    public void stopIntake() {
+        frontIntake.stopMotor();
+        backIntake.stopMotor();
+    }
+
+    public boolean isIntaked(){
+        return !intakeStop.get();
+    }
+
+
+}
