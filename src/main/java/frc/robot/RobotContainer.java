@@ -172,7 +172,7 @@ public class RobotContainer {
 
     PPHolonomicDriveController.setRotationTargetOverride(() -> s_Swerve.getRotationTargetOverride());
     // Configure the button bindings
-    autoChooser = AutoBuilder.buildAutoChooser();
+    autoChooser = AutoBuilder.buildAutoChooser("Test two paths");
   
 
     // Another option that allows you to specify the default auto by its name

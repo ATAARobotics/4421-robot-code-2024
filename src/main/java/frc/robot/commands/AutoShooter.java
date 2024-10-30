@@ -202,7 +202,7 @@ public class AutoShooter extends Command {
                          SmartDashboard.putBoolean("Can Shoot", true);
                          shootTimer.start();
                     }
-                    if (shootTimer.hasElapsed(1.0)) { // was 0.1
+                    if (shootTimer.hasElapsed(0.1)) { // 
                          if (rotController.atSetpoint() && mPivot.AtSetpoint()) {
                               mIndex.runIndex(1);
                               indexTimer.start();
@@ -227,9 +227,9 @@ public class AutoShooter extends Command {
           SmartDashboard.putNumber("y velocity", R);
 
           double translationVal = translationLimiter.calculate(
-                    MathUtil.applyDeadband(0.4, Constants.Swerve.stickDeadband));
+                    MathUtil.applyDeadband(0.0, Constants.Swerve.stickDeadband));
           double strafeVal = strafeLimiter.calculate(
-                    MathUtil.applyDeadband(0.4, Constants.Swerve.stickDeadband));
+                    MathUtil.applyDeadband(0.0, Constants.Swerve.stickDeadband));
 
           if ((rotController.atSetpoint() && mShooter.CanShoot() && mPivot.AtSetpoint())) {
                SmartDashboard.putBoolean("Can Shoot", true);
