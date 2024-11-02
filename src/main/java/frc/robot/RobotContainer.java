@@ -168,18 +168,17 @@ public class RobotContainer {
         s_Swerve // Reference to this subsystem to set requirements
     );
 
-    // .....................l,mkjinuhbygtfrdtgyjik
 
     PPHolonomicDriveController.setRotationTargetOverride(() -> s_Swerve.getRotationTargetOverride());
     // Configure the button bindings
-    autoChooser = AutoBuilder.buildAutoChooser("Test two paths");
+    // autoChooser = AutoBuilder.buildAutoChooser("Test two paths");
   
 
     // Another option that allows you to specify the default auto by its name
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
     
 
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+    // SmartDashboard.putData("Auto Chooser", autoChooser);
     configureButtonBindings();
   }
 
