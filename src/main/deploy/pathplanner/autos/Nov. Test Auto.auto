@@ -1,11 +1,35 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 1.5408109828565335,
+      "y": 5.478383302445618
+    },
+    "rotation": 180.0
+  },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "go back"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Straight Back"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Test"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Fire Shooter"
@@ -14,37 +38,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "4 note(amp side) 3 ab"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Fire Shooter"
+            "pathName": "Copy of fire Path"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "5 note 4 a"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Fire Shooter"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "5 note 5(amp) a"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "5 note(amp side) 5 b"
+            "pathName": "Copy of Copy of fire Path"
           }
         },
         {

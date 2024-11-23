@@ -23,6 +23,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -171,14 +172,15 @@ public class RobotContainer {
 
     PPHolonomicDriveController.setRotationTargetOverride(() -> s_Swerve.getRotationTargetOverride());
     // Configure the button bindings
-    // autoChooser = AutoBuilder.buildAutoChooser("Test two paths");
-  
-
+    //autoChooser = AutoBuilder.buildAutoChooser("Test two paths");
+    //System.out.println(Timer.getFPGATimestamp() );
+    autoChooser = AutoBuilder.buildAutoChooser("6 note (center) - 1,2,3,4,5");
+    //autoChooser = AutoBuilder.buildAutoChooser();
     // Another option that allows you to specify the default auto by its name
-    // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
+    //autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
     
 
-    // SmartDashboard.putData("Auto Chooser", autoChooser);
+    SmartDashboard.putData("Auto Chooser", autoChooser);
     configureButtonBindings();
   }
 

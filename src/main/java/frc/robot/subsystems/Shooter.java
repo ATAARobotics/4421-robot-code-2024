@@ -110,6 +110,7 @@ public class Shooter extends SubsystemBase{
         SmartDashboard.putNumber("Right Shooter Ref", Constants.Subsystems.shooterSetPoint);
         SmartDashboard.setDefaultBoolean("SHOOTER REVVED", false);
         
+        SmartDashboard.putNumber("difference l", Math.abs(leftShooter.getEncoder().getVelocity()-Constants.Subsystems.shooterSetPoint));
         
         //SmartDashboard.putNumber("Left Index", 0.10);
        // SmartDashboard.putNumber("Right Index", 0.10);
@@ -122,7 +123,7 @@ public class Shooter extends SubsystemBase{
         SmartDashboard.putNumber("rpm l", leftShooter.getEncoder().getVelocity());
         SmartDashboard.putNumber("rpm r", rightShooter.getEncoder().getVelocity());
 
-
+        SmartDashboard.putNumber("difference l", Math.abs(leftShooter.getEncoder().getVelocity()-Constants.Subsystems.shooterSetPoint));
 
         SmartDashboard.putBoolean("SHOOTER REVVED", (leftShooter.getEncoder().getVelocity() > 5000));
 

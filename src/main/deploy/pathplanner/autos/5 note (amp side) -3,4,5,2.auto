@@ -30,12 +30,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": " 5 note (amp side) 4 b"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Fire Shooter"

@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2,
-      "y": 7.0
+      "x": 1.59,
+      "y": 5.48
     },
     "rotation": 180.0
   },
@@ -14,7 +14,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "fire Path"
+            "pathName": "Copy of go back"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Copy of Copy of go back"
           }
         },
         {
