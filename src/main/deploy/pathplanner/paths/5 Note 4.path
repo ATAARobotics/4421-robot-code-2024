@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 2.709748527444861,
-        "y": 6.7972584818242
+        "x": 2.6802607212317646,
+        "y": 6.88587765632801
       },
       "prevControl": {
-        "x": 1.2587578200067442,
-        "y": 6.018203068434607
+        "x": 1.2292700137936479,
+        "y": 6.106822242938417
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,24 +39,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.0,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Fire Shooter"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.4,
+      "waypointRelativePos": 0.75,
       "command": {
         "type": "parallel",
         "data": {
@@ -65,6 +48,23 @@
               "type": "named",
               "data": {
                 "name": "Intake"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Fire Shooter"
               }
             }
           ]

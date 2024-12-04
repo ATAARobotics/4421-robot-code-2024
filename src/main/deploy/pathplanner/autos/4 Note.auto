@@ -12,15 +12,33 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Fire Shooter"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "5 Note 1"
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Fire Shooter"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "5 Note 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Fire Shooter"
           }
         },
         {
@@ -36,9 +54,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Fire Shooter"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "5 Note 5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Fire Shooter"
           }
         },
         {

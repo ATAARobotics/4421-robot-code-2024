@@ -175,13 +175,15 @@ public class RobotContainer {
     // Configure the button bindings
     //autoChooser = AutoBuilder.buildAutoChooser("Test two paths");
     //System.out.println(Timer.getFPGATimestamp() );
-    autoChooser = AutoBuilder.buildAutoChooser("6 note (center) - 1,2,3,4,5");
+    autoChooser = AutoBuilder.buildAutoChooser("4 note");
     //autoChooser = AutoBuilder.buildAutoChooser();
     // Another option that allows you to specify the default auto by its name
     //autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
     
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
+
+
     configureButtonBindings();
   }
 
@@ -278,6 +280,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    System.out.println(autoChooser.getSelected().getName());
     return autoChooser.getSelected();
   }
 
