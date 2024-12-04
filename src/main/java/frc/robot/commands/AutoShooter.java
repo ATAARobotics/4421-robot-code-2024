@@ -87,6 +87,9 @@ public class AutoShooter extends Command {
      private Timer indexTimer = new Timer();
      private Timer overrideTimer = new Timer();
      private double rotationVal = 0;
+     private Lighting light;
+
+     private boolean isShot = false;
 
      private boolean hasNote = true;
 
@@ -94,11 +97,13 @@ public class AutoShooter extends Command {
                Shooter m_shooter,
                Pivot m_Pivot,
                Index m_Index,
-               Swerve m_swerve) {
+               Swerve m_swerve, 
+               Lighting m_light) {
           this.mShooter = m_shooter;
           this.mSwerve = m_swerve;
           this.mIndex = m_Index;
           this.mPivot = m_Pivot;
+          this.light = m_light;
 
           addRequirements(mShooter);
           SmartDashboard.putNumber("Rot P", 10);
@@ -108,7 +113,6 @@ public class AutoShooter extends Command {
           SmartDashboard.putBoolean("IsTrue", isTrue);
           
           rotController.enableContinuousInput(-Math.PI, Math.PI);
-
      }
 
      @Override
@@ -125,6 +129,7 @@ public class AutoShooter extends Command {
           overrideTimer.stop();
           overrideTimer.start();
           mIndex.runIndex(0);
+          light.setLights(255, 0, 255, 100);
      }
 
      @Override
@@ -217,6 +222,8 @@ public class AutoShooter extends Command {
 
           }
 
+          SmartDashboard.putBoolean("Has shot", isShot);
+
           SmartDashboard.putBoolean("Shooter At Setpoint", mShooter.CanShoot());
           SmartDashboard.putBoolean("Rotation At Setpoint", rotController.atSetpoint());
           SmartDashboard.putBoolean("Pivot At Setpoint", mPivot.AtSetpoint());
@@ -259,6 +266,8 @@ public class AutoShooter extends Command {
 
      @Override
      public void end(boolean interrupted) {
+          light.setLights(255, 100, 0, 10000);
+          isShot = true;
           System.out.println("Auto Shooter Ended");
           mSwerve.setAutoLock(false);
           indexTimer.reset();

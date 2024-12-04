@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.*;
+import frc.robot.Robot;
 
 public class Lighting extends SubsystemBase{
 
@@ -76,7 +77,7 @@ public class Lighting extends SubsystemBase{
     @Override
     public void periodic() {
 
-        if (DriverStation.isEnabled()) {
+        if (DriverStation.isEnabled() && !Robot.isAuto) {
             if (sIntake.isIntaked()) {
                 candle.setLEDs(255, 0 ,0, 0 ,9, 100000);
             }
@@ -98,6 +99,6 @@ public class Lighting extends SubsystemBase{
     }
 
     public void setLights(int r, int g, int b, int count) {
-        candle.setLEDs(r, g, b, 0, 0, count);
+        candle.setLEDs(r, g, b, 0, 9, count);
     }
 }

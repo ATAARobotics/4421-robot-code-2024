@@ -304,7 +304,7 @@ public class Swerve extends SubsystemBase {
       // Return an optional containing the rotation override (this should be a field relative rotation)
       return Optional.of(Rotation2dOut);
     } else {
-        System.out.println("not locked");
+        //System.out.println("not locked");
         // return an empty optional when we don't want to override the path's rotation
         return Optional.empty();
     }

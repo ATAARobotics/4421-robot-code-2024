@@ -23,6 +23,8 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
 
+  public static boolean isAuto;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -34,6 +36,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     System.out.println(Timer.getFPGATimestamp() );
     m_robotContainer = new RobotContainer();
+    isAuto = false;
   }
 
   /**
@@ -65,6 +68,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    isAuto = true;
     m_robotContainer.m_Shooter.AutoFire();
     m_robotContainer.getAutonomousCommand().schedule();
   }  
@@ -80,6 +84,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    isAuto = false;
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.function.BooleanSupplier;
 
 import javax.print.attribute.standard.JobPrioritySupported;
 
@@ -70,7 +71,6 @@ public class RobotContainer {
   private final JoystickButton driveStraightButton = new JoystickButton(joystick, 9);
   //private final JoystickButton ampButton = new JoystickButton(joystick, 7);
 
-
   //private final OI joysticks = new OI();
 
   
@@ -113,18 +113,18 @@ public class RobotContainer {
     shoot = new Shooting(m_Shooter, mPivot, m_Index, s_Swerve, 
                         () -> joystick.getRawAxis(translationAxis),
                         () -> joystick.getRawAxis(strafeAxis), 
-                        ()-> false);
+                        () -> shootOverride.getAsBoolean());
     lobShot = new LobShot(m_Shooter, mPivot, m_Index, s_Swerve,
                         () -> joystick.getRawAxis(translationAxis),
                         () -> joystick.getRawAxis(strafeAxis),
-                        () -> false);
-    autoShoot = new AutoShooter(m_Shooter, mPivot, m_Index, s_Swerve);
+                        () -> shootOverride.getAsBoolean());
+    autoShoot = new AutoShooter(m_Shooter, mPivot, m_Index, s_Swerve, s_Lighting);
 
     intake = new IntakeCommand(m_Intake, m_Index);
 
     s_Swerve.setDefaultCommand(
         new TeleopSwerve(
-            s_Swerve,
+            s_Swerve, 
             () -> joystick.getRawAxis(translationAxis), // translation
             () -> joystick.getRawAxis(strafeAxis), // strafe
             () -> -joystick.getRawAxis(rotationAxis),
@@ -132,6 +132,7 @@ public class RobotContainer {
             ()->false
             ));
 
+    
 
     NamedCommands.registerCommand("Intake", intake);
     NamedCommands.registerCommand("Fire Shooter", autoShoot);
