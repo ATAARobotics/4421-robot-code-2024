@@ -69,7 +69,7 @@ public class RobotContainer {
   //armUpButton = Y Button
   //armDownButton = A Button
   //ampButton = 7
-  //shooterIntakeButton = POVUp
+  //shooterIntakeButton = POVUp (slowmode)
   //driveStraightButton = Operator POVUp
   //################################################################################################
 
@@ -132,8 +132,9 @@ public class RobotContainer {
             s_Swerve, 
             () -> joystick.getRawAxis(translationAxis), // translation
             () -> joystick.getRawAxis(strafeAxis), // strafe
-            () -> -joystick.getRawAxis(rotationAxis),
-            () -> -joystick.getRawAxis(rotationAxis), // rotation
+            () -> joystick.getRawAxis(rotationAxis),
+            () -> 
+            joystick.getRawAxis(rotationAxis), // rotation
             ()->false
             ));
 
@@ -220,10 +221,10 @@ public class RobotContainer {
     joystick.x().whileTrue(shoot);
     joystick.x().onFalse(new TeleopSwerve(
             s_Swerve,
-            ()->joystick.getRawAxis(translationAxis),
-            ()->joystick.getRawAxis(strafeAxis),
+            ()-> joystick.getRawAxis(translationAxis),
+            ()-> joystick.getRawAxis(strafeAxis),
             () ->-joystick.getRawAxis(rotationAxis),
-            () -> -joystick.getRawAxis(rotationAxis), // rotation
+            () ->-joystick.getRawAxis(rotationAxis), // rotation
             () ->false
             ));
 

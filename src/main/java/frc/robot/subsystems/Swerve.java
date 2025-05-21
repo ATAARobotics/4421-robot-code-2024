@@ -93,11 +93,17 @@ public class Swerve extends SubsystemBase {
 
   public void drive(
       Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
-    SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
+        SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                translation.getX(), translation.getY(), rotation, getYaw())
-            : new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
+                translation.getX(), 
+                translation.getY(), 
+                rotation,          
+                Rotation2d.fromDegrees(getYaw().getDegrees() + 180))
+            : new ChassisSpeeds(
+                translation.getX(), 
+                translation.getY(), 
+                rotation));
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
 
     for (SwerveModule mod : mSwerveMods) {
@@ -106,7 +112,11 @@ public class Swerve extends SubsystemBase {
     }
   }
   public void autoDrive(ChassisSpeeds speeds) {
-    SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(speeds);
+    SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
+        new ChassisSpeeds(
+            speeds.vxMetersPerSecond, 
+            speeds.vyMetersPerSecond, 
+            speeds.omegaRadiansPerSecond)); 
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
 
     for (SwerveModule mod : mSwerveMods) {
@@ -193,9 +203,10 @@ public class Swerve extends SubsystemBase {
 
   public Rotation2d getYaw() {
     return (Constants.Swerve.invertGyro)
-       ? Rotation2d.fromDegrees(360 - gyro.getYaw())
-       : Rotation2d.fromDegrees(gyro.getYaw());
+       ? Rotation2d.fromDegrees(360 - gyro.getYaw()) // ?
+       : Rotation2d.fromDegrees(-gyro.getYaw());
   }
+
   public Rotation2d getAngle(){
     return (PoseEstimator.getEstimatedPosition().getRotation());
   }

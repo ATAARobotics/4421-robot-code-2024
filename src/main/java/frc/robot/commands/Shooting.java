@@ -42,7 +42,7 @@ public class Shooting extends Command {
     private Swerve mSwerve;
     private Index mIndex;
     
-    private final PIDController rotController = new PIDController(10, 20, 1);
+    private final PIDController rotController = new PIDController(5, 10, 0.5);
 
      private double ShooterAngle = 2.0;
      private double RobotAngle = 1.0;

@@ -61,6 +61,7 @@ public class Pivot extends SubsystemBase{
         SmartDashboard.putBoolean("GoingToSetpoint", GoingToSetpoint);
 
         angle = 360 - pivotEncoder.getAbsolutePosition();
+        SmartDashboard.putNumber("Pivot Encoder", pivotEncoder.getAbsolutePosition());
         SmartDashboard.putNumber("Pivot Angle", angle);
         SmartDashboard.putNumber("Pivot Setpoint", pivotPID.getSetpoint());
         SmartDashboard.putNumber("Pivot Error", (Math.abs(pivotPID.getSetpoint()-angle)));
