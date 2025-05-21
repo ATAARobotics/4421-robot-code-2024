@@ -185,7 +185,6 @@ public class Swerve extends SubsystemBase {
             gyro.setYaw(poseR.getDegrees());
             // this.lastPose = new Pose2d(poseX, poseY, poseR);
             // if(!DriverStation.isEnabled() || check.getAsBoolean()){
-             
             // }
             //PoseEstimator.resetPosition(poseR, getPositions(), new Pose2d(poseX, poseY, poseR));
         }
