@@ -17,6 +17,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
@@ -60,7 +62,8 @@ public class Shooting extends Command {
      private double rpmDrop = 0;
      private double lowestRMP = 7000;
      private boolean isShooting = false;
-     private double G = 9.81;
+
+     private double gravity = 9.81;
           // Note Postion
      private double A = 0;
      private double B = 0.4572;
@@ -69,20 +72,20 @@ public class Shooting extends Command {
      private double N = 0;
      private double O = 0;
           //Velocietys
-     private double P = 0;
+     private double botVelocityX = 0;
      private double Q = 0;
-     private double R = 0;
+     private double botVelocityY = 0;
      private double S = 15.2;
 
      private double H = M - A;
      private double J = O - C;
      private double K = N - B;
-     private double L = -0.5 * G;
+     private double L = -0.5 * gravity;
 
      private double c0 = L*L;
      private double c1 = -2*Q*L;
-     private double c2 = Q*Q - 2*K*L - S*S + P*P + R*R;
-     private double c3 = 2*K*Q + 2*H*P + 2*J*R;
+     private double c2 = Q*Q - 2*K*L - S*S + botVelocityX*botVelocityX + botVelocityY*botVelocityY;
+     private double c3 = 2*K*Q + 2*H*botVelocityX + 2*J*botVelocityY;
      private double c4 = K*K + H*H + J*J;
 
      private double d = 0;
@@ -125,6 +128,9 @@ public class Shooting extends Command {
         shootTimer.stop();
         rotController.setIZone(Math.toRadians(10));
         isShooting = false;
+        M = GoalPose.getX();
+          N = GoalPose.getZ();
+          O = GoalPose.getY();
     }
 
     @Override
@@ -143,42 +149,62 @@ public class Shooting extends Command {
           //velocity
           // P = -mSwerve.getChassisSpeeds().vxMetersPerSecond;
           ChassisSpeeds vec = mSwerve.getVelocityFromChassisSpeeds();
-          P = -vec.vxMetersPerSecond;
+          botVelocityX = -vec.vxMetersPerSecond;
           // Q = 0;
           // R = -mSwerve.getChassisSpeeds().vyMetersPerSecond;
-          R = -vec.vyMetersPerSecond;
+          botVelocityY = -vec.vyMetersPerSecond;
           // P = 0;
           // R = 0;
-          SmartDashboard.putNumber("X velocity", -P);
-          SmartDashboard.putNumber("Y velocity", -R);
+          SmartDashboard.putNumber("X velocity", -botVelocityX);
+          SmartDashboard.putNumber("Y velocity", -botVelocityY);
           // Note Postion
-          A = mSwerve.getPose().getX() + (-P*0.05);
+          A = mSwerve.getPose().getX() + (-botVelocityX*0.05);
           B = 0.4572;
-          C = mSwerve.getPose().getY()+ (-R*0.05);
+          C = mSwerve.getPose().getY()+ (-botVelocityY*0.05);
 
           //TODO change goal pose to be set based on color
           rotationVal = 0;
-          M = GoalPose.getX();
-          N = GoalPose.getZ();
-          O = GoalPose.getY();
+          
+
+          //--------------------------------------------------------------------------------------------
+          //                        Get the point in space to shoot at
+          double tagBeingSeen = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getDouble(-1);
+          boolean tagValid = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0.0) == 1 ? true : false ;
+
+          double[] tagPose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
+
+          if (tagBeingSeen == 4 && tagValid){
+               double tagX = tagPose[0];
+               double tagY = tagPose[1];
+               double tagZ = tagPose[2];
+
+               double pointAboveX = tagX;
+               double pointAboveY = tagY;
+               double pointAboveZ = tagZ + 1.0;
+               M = pointAboveX;
+               N = pointAboveZ;
+               O = pointAboveY;
+          }
+
+          //--------------------------------------------------------------------------------------------
           if(!isShooting){
                // S = (17.0/5500.0) * (mShooter.getRPM()-rpmDrop);
                S = 12.2;
           }
           
 
-          SmartDashboard.putNumber("x velocity", P);
-          SmartDashboard.putNumber("y velocity", R);
+          SmartDashboard.putNumber("x velocity", botVelocityX);
+          SmartDashboard.putNumber("y velocity", botVelocityY);
 
           H = M - A;
           J = O - C;
           K = N - B;
-          L = -0.5 * G;
+          L = -0.5 * gravity;
 
           c0 = L*L;
           c1 = -2*Q*L;
-          c2 = Q*Q - 2*K*L - S*S + P*P + R*R;
-          c3 = 2*K*Q + 2*H*P + 2*J*R;
+          c2 = Q*Q - 2*K*L - S*S + botVelocityX*botVelocityX + botVelocityY*botVelocityY;
+          c3 = 2*K*Q + 2*H*botVelocityX + 2*J*botVelocityY;
           c4 = K*K + H*H + J*J;
           double[] ts = solveQuartic(c0, c1, c2, c3, c4);  
           mShooter.AutoFire();
@@ -189,9 +215,9 @@ public class Shooting extends Command {
                          t = ts[i];
                     }
                }
-               d = ((H+P*t)/t);
+               d = ((H+botVelocityX*t)/t);
                e = ((K+Q*t-L*t*t)/t);
-               f = ((J+R*t)/t);
+               f = ((J+botVelocityY*t)/t);
                ShooterAngle = Math.atan2(e, Math.sqrt(Math.pow(d,2) + Math.pow(f,2)));
                RobotAngle = Math.atan2(f, d);   
                rotController.setSetpoint(RobotAngle);
@@ -200,7 +226,7 @@ public class Shooting extends Command {
                if(true){
                     forceShoot = true;
                     mPivot.toSetpoint(Math.toDegrees(ShooterAngle));
-                    if(Math.abs(P) <= 0.1 && Math.abs(R) <= 0.1){
+                    if(Math.abs(botVelocityX) <= 0.1 && Math.abs(botVelocityY) <= 0.1){
                          if (rotController.atSetpoint()&& mShooter.CanShoot() && mPivot.AtSetpoint()){
                               SmartDashboard.putBoolean("Can Shoot", true);
                               shootTimer.start();
@@ -238,8 +264,8 @@ public class Shooting extends Command {
           SmartDashboard.putNumber("Rotation Value", Math.toDegrees(mSwerve.getPose().getRotation().getRadians()));
           
   
-          SmartDashboard.putNumber("x velocity", P);
-          SmartDashboard.putNumber("y velocity", R);
+          SmartDashboard.putNumber("x velocity", botVelocityX);
+          SmartDashboard.putNumber("y velocity", botVelocityY);
  
           double translationVal =
                translationLimiter.calculate(
